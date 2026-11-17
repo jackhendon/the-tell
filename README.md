@@ -17,8 +17,8 @@ each one, and why.
 | Step | What | State |
 |---|---|---|
 | 1 | Synthetic invoice generator with labels known by construction | Done |
-| 2 | Deterministic pre-checks and the prompt | Next |
-| 3 | Open-model run: answers, samples and internal activations | |
+| 2 | Deterministic pre-checks and the prompt | Done |
+| 3 | Open-model run: answers, samples and internal activations | Next |
 | 4 | Probes vs baselines, risk-coverage chart | |
 | 5 | Same test on Claude (output-based signals only) | |
 | 6 | Write-ups: one for engineers, one for a finance director | |
@@ -27,9 +27,10 @@ each one, and why.
 
 ```bash
 uv sync
-uv run pytest                                   # 11 tests on the generator
+uv run pytest                                   # 22 tests
 uv run python -m the_tell.generate --n 2000     # writes data/generated/cases.jsonl
 uv run python -m the_tell.review_sample         # writes data/review_sample.md
+uv run python -m the_tell.prompt                # writes data/prompt_examples.md
 ```
 
 ## How the data works

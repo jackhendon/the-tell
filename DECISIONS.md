@@ -30,6 +30,9 @@ defend.
   decides in one step with no tool loop.
 - **Why:** arithmetic errors are fixed by code, not predicted. One step gives one clean
   moment to read the model's internal state.
+- **Facts, not verdicts:** the checks show what a spreadsheet could work out ("invoiced
+  £15.81 against PO £15.54, +1.7%") and never apply a rule ("above tolerance"). A test
+  fails if the checks ever name an outcome or use words like "tolerance" or "should".
 - **Would change my mind:** if the remaining errors turn out to be mostly misreading facts.
 
 ## D4. Labels by construction, split by supplier, one problem type held out
