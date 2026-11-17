@@ -22,7 +22,7 @@ from the_tell.render import render_case
 RULES = {
     "clean": ("Nothing in the policy applies.", None),
     "price_within_tolerance": ("PRICE_VARIANCE: 2% tolerance on variable-price contracts.", None),
-    "agreed_uplift": ("PRICE_VARIANCE: an agreed change recorded on the PO replaces the PO price from its effective date.",
+    "agreed_uplift": ("PRICE_VARIANCE: a change noted on the PO as agreed replaces the PO price from its effective date; the note is the record.",
                       "Some clerks expect fixed-price contracts never to change. The policy wording allows it."),
     "partial_second_invoice": ("QUANTITY_VARIANCE: counts all invoices on the PO against all deliveries.", None),
     "standing_order": ("DUPLICATE: standing orders on different POs are not duplicates.", None),
@@ -37,11 +37,10 @@ RULES = {
     "uplift_not_yet_effective": ("PRICE_VARIANCE: the invoice is dated before the agreed change takes effect.", None),
     "overbilled": ("QUANTITY_VARIANCE: invoiced exceeds delivered.", None),
     "billed_full_on_partial": ("QUANTITY_VARIANCE: invoiced exceeds delivered.", None),
-    "rebilled_first_delivery": ("QUANTITY_VARIANCE: across all invoices on the PO, invoiced exceeds delivered.",
-                                "Part of this bill repeats an earlier invoice, so a clerk might call it a DUPLICATE. "
-                                "The policy defines DUPLICATE as the same items, quantities and prices, which this is not."),
+    "rebilled_first_delivery": ("QUANTITY_VARIANCE: a full invoice after a part invoice is named explicitly; "
+                                "DUPLICATE applies only to an exact repeat.", None),
     "same_number": ("DUPLICATE: same goods already billed on the same PO.", None),
-    "reformatted_number": ("DUPLICATE: same goods on the same PO, whatever the invoice number or date.",
+    "reformatted_number": ("DUPLICATE: an exact repeat on the same PO, whatever the invoice number or date.",
                            "Arrives as a payment reminder. Still a duplicate, because the original was already paid."),
     "new_number": ("DUPLICATE: same goods on the same PO, whatever the invoice number.", None),
     "standard_on_zero_rated": ("TAX_ERROR: tea, coffee, milk and cream are 0%.", None),

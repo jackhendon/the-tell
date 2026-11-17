@@ -34,19 +34,23 @@ SUPPLIER_MISMATCH
   before payment, so an invoice showing new bank details is always held.
 
 DUPLICATE
-  The invoice bills the same goods as an invoice already received on the same purchase
+  The invoice is an exact repeat of an invoice already received on the same purchase
   order (same items, quantities and prices), whatever its invoice number or date.
   Standing orders billed against different purchase orders are not duplicates.
 
 QUANTITY_VARIANCE
   Across all invoices on the purchase order, including this one, the quantity invoiced for
   any item exceeds the quantity delivered according to the goods received notes.
+  This includes an invoice that bills goods already invoiced together with newly delivered
+  goods, for example a full invoice after a part invoice. That is not a DUPLICATE, because
+  it is not an exact repeat.
 
 PRICE_VARIANCE
   A unit price is higher than the purchase order price by more than the tolerance.
   Tolerance: 2% for suppliers on variable-price contracts, 0% for fixed-price contracts.
-  A price change agreed in writing and recorded on the purchase order replaces the PO
+  A price change noted on the purchase order as agreed with the supplier replaces the PO
   price from its effective date, provided the invoice is dated on or after that date.
+  The note on the purchase order is the record of the agreement; no other evidence is needed.
   The tolerance then applies to the agreed price. Lower prices are always acceptable.
 
 TAX_ERROR
@@ -73,71 +77,31 @@ If more than one problem applies, choose the first in this order:
 
 ```
 SUPPLIER RECORD
-  Name: Millbeck Dairies Ltd
-  Also trades as: Millbeck Dairies
-  VAT number: GB 928 1590 13
-  Bank account on file: ending 6164
-  Contract pricing: fixed
+  Name: Elstow Catering Disposables Ltd
+  Also trades as: Elstow Catering Disposables, Elstow Catering
+  VAT number: GB 114 7104 97
+  Bank account on file: ending 4662
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-2020 (raised 17 Sep 2026)
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  18 @     £8.17
-  DRY-CRM-1L     Double cream 1L                                  qty  29 @     £4.22
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  34 @     £8.20
-  Note: Supplier price review: 6% uplift agreed by Purchasing, applies from 23 September 2026.
-
-GOODS RECEIVED
-  GRN-93687 (23 Sep 2026): DRY-SSK-6 x18, DRY-CRM-1L x29, DRY-WHL-6 x34
-
-INVOICE MIL-31197 (dated 27 Sep 2026)
-  From: Millbeck Dairies Ltd
-  VAT number: GB 928 1590 13
-  Pay to: account ending 6164
-  Your PO: PO-2026-2020
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  18 @     £8.66  VAT  0%  net    £155.88
-  DRY-CRM-1L     Double cream 1L                                  qty  29 @     £4.47  VAT  0%  net    £129.63
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  34 @     £8.69  VAT  0%  net    £295.46
-  Net: £580.97   VAT: £0.00
-  Total due: £580.97
-
-PREVIOUS INVOICES FROM THIS SUPPLIER
-  MIL-30871 (11 Jun 2026), PO PO-2026-1613, total £308.49, paid
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  39 @     £7.91  VAT  0%  net    £308.49
-  MIL-30914 (25 Jun 2026), PO PO-2026-1679, total £110.76, paid
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  13 @     £8.52  VAT  0%  net    £110.76
-  MIL-31130 (5 Sep 2026), PO PO-2026-1957, total £118.58, paid
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  14 @     £8.47  VAT  0%  net    £118.58
-
-OPEN CREDIT NOTES FROM THIS SUPPLIER
-  (none)
-```
-
-## Case 2
-
-```
-SUPPLIER RECORD
-  Name: Calder Wholesale Ltd
-  Also trades as: Calder Wholesale
-  VAT number: GB 154 7280 38
-  Bank account on file: ending 5926
-  Contract pricing: fixed
-
-PURCHASE ORDER PO-2026-2063 (raised 27 Sep 2026)
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  59 @     £7.41
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   5 @    £23.67
-  Note: Deliver before 8am.
+PURCHASE ORDER PO-2026-1688 (raised 26 Jun 2026)
+  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   5 @    £27.35
+  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   2 @    £61.20
+  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   5 @    £29.93
 
 GOODS RECEIVED
-  GRN-39386 (30 Sep 2026): DRY-SSK-6 x59, COF-COL-1K x5
+  GRN-68383 (1 Jul 2026): PKG-NAP-5000 x5, PKG-CUP-1000 x2, PKG-LID-1000 x5
+    Note: Left with front-of-house staff.
 
-INVOICE CAL-34614 (dated 3 Oct 2026)
-  From: Calder Wholesale Ltd
-  VAT number: GB 154 7280 38
-  Pay to: account ending 5926
-  Your PO: PO-2026-2063
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  59 @     £7.41  VAT 20%  net    £437.19
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   5 @    £23.67  VAT  0%  net    £118.35
-  Net: £555.54   VAT: £87.44
-  Total due: £642.98
+INVOICE ELS-19039 (dated 3 Jul 2026)
+  From: Elstow Catering
+  VAT number: GB 114 7104 97
+  Pay to: account ending 4662
+  Your PO: PO-2026-1688
+  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   5 @    £27.35  VAT 20%  net    £136.75
+  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   2 @    £61.20  VAT 20%  net    £122.40
+  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   5 @    £29.93  VAT 20%  net    £149.65
+  Net: £408.80   VAT: £81.76
+  Total due: £490.56
   Note: Please quote the invoice number on your remittance.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
@@ -147,43 +111,83 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
 ```
 
+## Case 2
+
+```
+SUPPLIER RECORD
+  Name: Norland Biscuit Company Ltd
+  Also trades as: Norland Biscuit Company, Norland Biscuit
+  VAT number: GB 507 5291 70
+  Bank account on file: ending 3575
+  Contract pricing: variable
+
+PURCHASE ORDER PO-2026-1574 (raised 28 May 2026)
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   3 @     £9.72
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   9 @    £11.18
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   8 @    £14.37
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   5 @    £13.99
+  Note: Contact the duty manager on arrival.
+
+GOODS RECEIVED
+  GRN-20416 (29 May 2026): SNK-SPW-24 x3, BAK-DIG-12 x9, SNK-CSB-12 x8, BAK-SCN-24 x5
+
+INVOICE NOR-20637 (dated 30 May 2026)
+  From: Norland Biscuit Company Ltd
+  VAT number: GB 507 5291 70
+  Pay to: account ending 3575
+  Your PO: PO-2026-1574
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   3 @     £9.72  VAT 20%  net     £29.16
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   9 @    £11.18  VAT  0%  net    £100.62
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   8 @    £14.37  VAT 20%  net    £114.96
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   5 @    £13.99  VAT  0%  net     £69.95
+  Net: £314.69   VAT: £28.82
+  Total due: £343.51
+
+PREVIOUS INVOICES FROM THIS SUPPLIER
+  NOR-20276 (30 Jan 2026), PO PO-2026-1087, total £211.03, paid
+    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £10.79  VAT 20%  net     £86.32
+    BAK-SCN-24     Fruit scones (tray of 24)                        qty   7 @    £15.35  VAT  0%  net    £107.45
+
+OPEN CREDIT NOTES FROM THIS SUPPLIER
+  (none)
+```
+
 ## Case 3
 
 ```
 SUPPLIER RECORD
-  Name: Langdon Tea Company Ltd
-  Also trades as: Langdon Tea Company, Langdon Tea
-  VAT number: GB 116 3726 51
-  Bank account on file: ending 6485
-  Contract pricing: variable
+  Name: Brockley Fine Foods Ltd
+  Also trades as: Brockley Fine Foods, Brockley Fine
+  VAT number: GB 595 7117 77
+  Bank account on file: ending 7927
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1597 (raised 3 Jun 2026)
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   5 @    £17.57
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   4 @    £21.61
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £23.40
+PURCHASE ORDER PO-2026-1828 (raised 31 Jul 2026)
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  15 @    £15.07
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  10 @    £11.11
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty   7 @    £17.16
+  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   2 @    £12.35
 
 GOODS RECEIVED
-  GRN-67229 (6 Jun 2026): TEA-EBT-1100 x5, COF-COL-1K x4, TEA-ASM-1K x5
+  GRN-26525 (5 Aug 2026): BAK-SCN-24 x15, BAK-DIG-12 x10, BAK-VSP-12 x7, SNK-CDG-12 x2
 
-INVOICE LAN-42758 (dated 6 Jun 2026)
-  From: Langdon Tea Company Ltd
-  VAT number: GB 116 3726 51
-  Pay to: account ending 6485
-  Your PO: PO-2026-1597
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   5 @    £17.57  VAT  0%  net     £87.85
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   4 @    £21.61  VAT  0%  net     £86.44
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £23.40  VAT  0%  net    £117.00
-  Net: £291.29   VAT: £0.00
-  Less credit CN-4161: £11.61
-  Total due: £279.68
-  Note: Payment terms: 30 days from invoice date.
-  Note: Less credit note CN-4161.
+INVOICE BRO-32751 (dated 10 Aug 2026)
+  From: Brockley Fine Foods Ltd
+  VAT number: GB 595 7117 77
+  Pay to: account ending 7927
+  Your PO: PO-2026-1828
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  15 @    £15.07  VAT  0%  net    £226.05
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  10 @    £11.11  VAT  0%  net    £111.10
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty   7 @    £17.16  VAT  0%  net    £120.12
+  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   2 @    £12.35  VAT 20%  net     £24.70
+  Net: £481.97   VAT: £4.94
+  Total due: £486.91
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
   (none)
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-4161 (1 Jun 2026), £23.22, PO PO-2026-1597: Items missing from previous delivery. To be deducted from your next invoice against PO-2026-1597.
+  (none)
 ```
 
 ## Case 4
@@ -196,67 +200,81 @@ SUPPLIER RECORD
   Bank account on file: ending 7057
   Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-2120 (raised 12 Oct 2026)
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty  12 @    £19.94
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   4 @    £15.89
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   6 @    £24.76
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty  11 @    £23.90
+PURCHASE ORDER PO-2026-1568 (raised 27 May 2026)
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   2 @    £26.26
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty  11 @    £15.84
+  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £24.16
 
 GOODS RECEIVED
-  GRN-81633 (17 Oct 2026): TEA-EBT-1100 x12, TEA-EGL-500 x4, TEA-ASM-1K x6, COF-DEC-1K x11
-    Note: Left with front-of-house staff.
+  GRN-35316 (28 May 2026): COF-DEC-1K x2, TEA-EGL-500 x11, COF-COL-1K x8
+    Note: Delivered to rear entrance.
 
-INVOICE OAK-77156 (dated 17 Oct 2026)
+INVOICE OAK-76741 (dated 1 Jun 2026)
   From: Oakhurst Tea Company Ltd
   VAT number: GB 326 5020 14
   Pay to: account ending 7057
-  Your PO: PO-2026-2120
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty  12 @    £19.94  VAT  0%  net    £239.28
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   6 @    £15.89  VAT  0%  net     £95.34
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   6 @    £24.76  VAT  0%  net    £148.56
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty  11 @    £23.90  VAT  0%  net    £262.90
-  Net: £746.08   VAT: £0.00
-  Total due: £746.08
+  Your PO: PO-2026-1568
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   2 @    £26.26  VAT  0%  net     £52.52
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty  11 @    £15.84  VAT  0%  net    £174.24
+  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £24.16  VAT  0%  net    £193.28
+  Net: £420.04   VAT: £0.00
+  Total due: £420.04
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  (none)
+  OAK-76448 (23 Feb 2026), PO PO-2026-1175, total £501.70, paid
+    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £27.08  VAT  0%  net    £135.40
+    COF-COL-1K     Colombian coffee beans 1kg                       qty   6 @    £23.28  VAT  0%  net    £139.68
+    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   9 @    £25.18  VAT  0%  net    £226.62
+  OAK-76522 (20 Mar 2026), PO PO-2026-1274, total £356.04, paid
+    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   4 @    £25.77  VAT  0%  net    £103.08
+    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   6 @    £19.80  VAT  0%  net    £118.80
+    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   8 @    £16.77  VAT  0%  net    £134.16
+  OAK-76638 (27 Apr 2026), PO PO-2026-1433, total £391.01, paid
+    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  11 @    £26.27  VAT  0%  net    £288.97
+    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   4 @    £25.51  VAT  0%  net    £102.04
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  (none)
+  CN-7958 (31 May 2026), £38.02, PO PO-2026-1568: Damaged items on delivery GRN-35316. To be deducted from your next invoice against PO-2026-1568.
 ```
 
 ## Case 5
 
 ```
 SUPPLIER RECORD
-  Name: Farleigh Dairies Ltd
-  Also trades as: Farleigh Dairies
-  VAT number: GB 304 3483 95
-  Bank account on file: ending 4249
+  Name: Hatherley Espresso Services Ltd
+  Also trades as: Hatherley Espresso Services, Hatherley Espresso
+  VAT number: GB 373 5379 90
+  Bank account on file: ending 7855
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1925 (raised 24 Aug 2026)
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  59 @     £7.75
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  41 @     £8.08
-  DRY-CRM-1L     Double cream 1L                                  qty  22 @     £4.00
+PURCHASE ORDER PO-2026-1939 (raised 27 Aug 2026)
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £156.48
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £63.88
 
 GOODS RECEIVED
-  GRN-75879 (25 Aug 2026): DRY-WHL-6 x59, DRY-SSK-6 x41, DRY-CRM-1L x22
+  GRN-80775 (30 Aug 2026): EQP-SVC-VISIT x2, EQP-FLT-CART x1
 
-INVOICE FAR-48112 (dated 30 Aug 2026)
-  From: Farleigh Dairies Ltd
-  VAT number: GB 304 3483 95
-  Pay to: account ending 6701
-  Your PO: PO-2026-1925
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  59 @     £7.75  VAT  0%  net    £457.25
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  41 @     £8.08  VAT  0%  net    £331.28
-  DRY-CRM-1L     Double cream 1L                                  qty  22 @     £4.00  VAT  0%  net     £88.00
-  Net: £876.53   VAT: £0.00
-  Total due: £876.53
-  Note: Please note our bank details have changed. New account ending 6701. Kindly update your records.
+INVOICE HAT-41323 (dated 3 Sep 2026)
+  From: Hatherley Espresso Services Group Ltd
+  VAT number: (not shown)
+  Pay to: account ending 7855
+  Your PO: PO-2026-1939
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £156.48  VAT 20%  net    £312.96
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £63.88  VAT 20%  net     £63.88
+  Net: £376.84   VAT: £75.37
+  Total due: £452.21
+  Note: Please quote the invoice number on your remittance.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  (none)
+  HAT-41090 (17 Jun 2026), PO PO-2026-1640, total £347.82, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £144.97  VAT 20%  net    £144.97
+    EQP-FLT-CART   Water filter cartridge                           qty   2 @    £72.44  VAT 20%  net    £144.88
+  HAT-41265 (14 Aug 2026), PO PO-2026-1878, total £259.48, paid
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £66.25  VAT 20%  net     £66.25
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £149.98  VAT 20%  net    £149.98
+  HAT-41280 (19 Aug 2026), PO PO-2026-1886, total £261.16, paid
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £65.37  VAT 20%  net     £65.37
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £152.27  VAT 20%  net    £152.27
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -266,34 +284,35 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Ingleby Foodservice Ltd
-  Also trades as: Ingleby Foodservice
-  VAT number: GB 261 4014 19
-  Bank account on file: ending 3643
+  Name: Burnell Catering Engineers Ltd
+  Also trades as: Burnell Catering Engineers, Burnell Catering
+  VAT number: GB 846 5632 12
+  Bank account on file: ending 2478
   Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-2075 (raised 30 Sep 2026)
-  DRY-CRM-1L     Double cream 1L                                  qty  58 @     £4.37
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   4 @    £14.71
+PURCHASE ORDER PO-2026-1776 (raised 18 Jul 2026)
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £156.59
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £66.23
 
 GOODS RECEIVED
-  GRN-16499 (4 Oct 2026): DRY-CRM-1L x58, SNK-CSB-12 x4
+  GRN-79333 (19 Jul 2026): EQP-SVC-VISIT x1, EQP-FLT-CART x1
 
-INVOICE ING-68630 (dated 8 Oct 2026)
-  From: Ingleby Foodservice Ltd
-  VAT number: GB 261 4014 19
-  Pay to: account ending 3643
-  Your PO: PO-2026-2075
-  DRY-CRM-1L     Double cream 1L                                  qty  58 @     £4.37  VAT  0%  net    £253.46
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   4 @    £14.71  VAT 20%  net     £58.84
-  Net: £312.30   VAT: £11.77
-  Total due: £324.07
+INVOICE BUR-24186 (dated 19 Jul 2026)
+  From: Burnell Catering
+  VAT number: GB 846 5632 12
+  Pay to: account ending 2478
+  Your PO: PO-2026-1776
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £156.59  VAT 20%  net    £156.59
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £66.23  VAT 20%  net     £66.23
+  Net: £222.82   VAT: £44.57
+  Total due: £267.39
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  ING-68433 (4 Aug 2026), PO PO-2026-1814, total £375.49, paid
-    COF-COL-1K     Colombian coffee beans 1kg                       qty  10 @    £22.14  VAT  0%  net    £221.40
-    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   7 @    £10.07  VAT 20%  net     £70.49
-    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   4 @    £14.48  VAT 20%  net     £57.92
+  BUR-24038 (31 May 2026), PO PO-2026-1576, total £80.47, paid
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £67.06  VAT 20%  net     £67.06
+  BUR-24158 (10 Jul 2026), PO PO-2026-1715, total £340.77, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £147.59  VAT 20%  net    £147.59
+    EQP-FLT-CART   Water filter cartridge                           qty   2 @    £68.19  VAT 20%  net    £136.38
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -303,122 +322,122 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Wexcombe Tea Merchants Ltd
-  Also trades as: Wexcombe Tea Merchants, Wexcombe Tea
-  VAT number: GB 993 5181 90
-  Bank account on file: ending 3374
+  Name: Lowther Packaging Ltd
+  Also trades as: Lowther Packaging
+  VAT number: GB 705 8649 20
+  Bank account on file: ending 8632
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1802 (raised 24 Jul 2026)
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   6 @    £18.00
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   4 @    £16.92
+PURCHASE ORDER PO-2026-1684 (raised 25 Jun 2026)
+  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   3 @    £61.96
+  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   3 @    £29.80
+  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   6 @    £31.56
 
 GOODS RECEIVED
-  GRN-12714 (30 Jul 2026): TEA-EBT-1100 x6, TEA-EGL-500 x4
+  GRN-25032 (1 Jul 2026): PKG-CUP-1000 x3, PKG-NAP-5000 x3, PKG-LID-1000 x6
+    Note: Left with front-of-house staff.
 
-INVOICE WEX-12320 (dated 30 Jul 2026)
-  From: Wexcombe Tea Merchants Ltd
-  VAT number: GB 993 5181 90
-  Pay to: account ending 3374
-  Your PO: PO-2026-1802
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   6 @    £18.00  VAT 20%  net    £108.00
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   4 @    £16.92  VAT  0%  net     £67.68
-  Net: £175.68   VAT: £21.60
-  Total due: £197.28
+INVOICE LOW-70031 (dated 1 Jul 2026)
+  From: Lowther Packaging Ltd
+  VAT number: GB 705 8649 20
+  Pay to: account ending 8632
+  Your PO: PO-2026-1684
+  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   3 @    £61.96  VAT 20%  net    £185.88
+  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   3 @    £29.80  VAT 20%  net     £89.40
+  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   6 @    £31.56  VAT 20%  net    £189.36
+  Net: £464.64   VAT: £92.93
+  Total due: £557.57
+  Note: Please quote the invoice number on your remittance.
+  Note: Credit CN-7772 is not included here and will be settled separately.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  WEX-12067 (7 May 2026), PO PO-2026-1469, total £40.34, paid
-    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   2 @    £20.17  VAT  0%  net     £40.34
-  WEX-12233 (1 Jul 2026), PO PO-2026-1690, total £310.06, paid
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   6 @    £25.99  VAT  0%  net    £155.94
-    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   3 @    £26.72  VAT  0%  net     £80.16
-    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   4 @    £18.49  VAT  0%  net     £73.96
-  WEX-12249 (7 Jul 2026), PO PO-2026-1710, total £117.00, paid
-    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   3 @    £16.10  VAT  0%  net     £48.30
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   3 @    £22.90  VAT  0%  net     £68.70
+  LOW-69678 (5 Mar 2026), PO PO-2026-1231, total £315.49, paid
+    PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   1 @    £63.16  VAT 20%  net     £63.16
+    PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   5 @    £27.95  VAT 20%  net    £139.75
+    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   2 @    £30.00  VAT 20%  net     £60.00
+  LOW-69736 (24 Mar 2026), PO PO-2026-1289, total £230.54, paid
+    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   6 @    £32.02  VAT 20%  net    £192.12
+  LOW-69887 (14 May 2026), PO PO-2026-1486, total £406.26, paid
+    PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   4 @    £26.79  VAT 20%  net    £107.16
+    PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   3 @    £66.47  VAT 20%  net    £199.41
+    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   1 @    £31.98  VAT 20%  net     £31.98
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-4608 (12 Jul 2026), £26.29, PO PO-2026-1710: Items missing from previous delivery. To be deducted from your next invoice against PO-2026-1710.
+  CN-7772 (1 Jul 2026), £89.19, PO PO-2026-1684: Goods on delivery GRN-25032 below specification. To be deducted from your next invoice against PO-2026-1684.
 ```
 
 ## Case 8
 
 ```
 SUPPLIER RECORD
-  Name: Millbeck Dairies Ltd
-  Also trades as: Millbeck Dairies
-  VAT number: GB 928 1590 13
-  Bank account on file: ending 6164
-  Contract pricing: fixed
+  Name: Corrie Leaf & Bean Ltd
+  Also trades as: Corrie Leaf & Bean, Corrie Leaf
+  VAT number: GB 528 8200 18
+  Bank account on file: ending 2281
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1923 (raised 23 Aug 2026)
-  DRY-CRM-1L     Double cream 1L                                  qty  45 @     £4.14
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  45 @     £7.73
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  43 @     £7.77
+PURCHASE ORDER PO-2026-2021 (raised 17 Sep 2026)
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty  12 @    £17.15
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty  12 @    £27.41
+  COF-COL-1K     Colombian coffee beans 1kg                       qty  10 @    £24.59
 
 GOODS RECEIVED
-  GRN-25255 (26 Aug 2026): DRY-CRM-1L x45, DRY-WHL-6 x45, DRY-SSK-6 x43
+  GRN-25142 (19 Sep 2026): TEA-EGL-500 x12, COF-DEC-1K x12, COF-COL-1K x10
 
-INVOICE MIL-31108 (dated 29 Aug 2026)
-  From: Millbeck Dairies Ltd
-  VAT number: GB 928 1590 13
-  Pay to: account ending 6164
-  Your PO: PO-2026-1923
-  DRY-CRM-1L     Double cream 1L                                  qty  45 @     £4.14  VAT 20%  net    £186.30
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  45 @     £7.73  VAT  0%  net    £347.85
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  43 @     £7.77  VAT  0%  net    £334.11
-  Net: £868.26   VAT: £37.26
-  Total due: £905.52
+INVOICE COR-46488 (dated 24 Sep 2026)
+  From: Corrie Leaf & Bean Ltd
+  VAT number: GB 528 8200 18
+  Pay to: account ending 2281
+  Your PO: PO-2026-2021
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty  12 @    £17.15  VAT  0%  net    £205.80
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty  12 @    £27.41  VAT  0%  net    £328.92
+  COF-COL-1K     Colombian coffee beans 1kg                       qty  10 @    £24.59  VAT  0%  net    £245.90
+  Net: £780.62   VAT: £0.00
+  Less credit CN-3057: £87.13
+  Total due: £693.49
+  Note: Thank you for your custom.
+  Note: Less credit note CN-3057.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
   (none)
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  (none)
+  CN-3057 (23 Sep 2026), £174.26, PO PO-2026-2021: Short-dated stock on delivery GRN-25142 returned. To be deducted from your next invoice against PO-2026-2021.
 ```
 
 ## Case 9
 
 ```
 SUPPLIER RECORD
-  Name: Penrith Vale Tea Merchants Ltd
-  Also trades as: Penrith Vale Tea Merchants, Penrith Vale Tea
-  VAT number: GB 079 2440 26
-  Bank account on file: ending 8758
-  Contract pricing: variable
+  Name: Oakhurst Tea Company Ltd
+  Also trades as: Oakhurst Tea Company, Oakhurst Tea
+  VAT number: GB 326 5020 14
+  Bank account on file: ending 7057
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-2106 (raised 8 Oct 2026)
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   8 @    £19.28
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   3 @    £24.70
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   7 @    £26.72
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £26.22
+PURCHASE ORDER PO-2026-1630 (raised 11 Jun 2026)
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £27.23
+  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   5 @    £19.74
 
 GOODS RECEIVED
-  GRN-70150 (13 Oct 2026): TEA-EBT-1100 x8, COF-COL-1K x3, COF-DEC-1K x7, TEA-ASM-1K x5
+  GRN-28463 (14 Jun 2026): COF-DEC-1K x4, TEA-EBT-1100 x4
+    Note: Partial shipment. Outstanding quantity to follow.
+  GRN-72761 (18 Jun 2026): COF-DEC-1K x1, TEA-EBT-1100 x1
 
-INVOICE PEN-26148 (dated 14 Oct 2026)
-  From: Penrith Vale Tea Merchants
-  VAT number: GB 079 2440 26
-  Pay to: account ending 8758
-  Your PO: PO-2026-2106
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   8 @    £19.28  VAT  0%  net    £154.24
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   3 @    £24.70  VAT  0%  net     £74.10
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   7 @    £26.72  VAT  0%  net    £187.04
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £26.22  VAT  0%  net    £131.10
-  Net: £546.48   VAT: £0.00
-  Total due: £546.48
+INVOICE OAK-76797 (dated 19 Jun 2026)
+  From: Oakhurst Tea Company Ltd
+  VAT number: GB 326 5020 14
+  Pay to: account ending 7057
+  Your PO: PO-2026-1630
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £27.23  VAT  0%  net    £136.15
+  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   5 @    £19.74  VAT  0%  net     £98.70
+  Net: £234.85   VAT: £0.00
+  Total due: £234.85
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  PEN-25834 (2 Jul 2026), PO PO-2026-1707, total £340.26, paid
-    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   7 @    £27.15  VAT  0%  net    £190.05
-    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   9 @    £16.69  VAT  0%  net    £150.21
-  PEN-25863 (11 Jul 2026), PO PO-2026-1717, total £401.04, paid
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  10 @    £25.48  VAT  0%  net    £254.80
-    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   8 @    £18.28  VAT  0%  net    £146.24
-  PEN-25954 (11 Aug 2026), PO PO-2026-1845, total £482.14, paid
-    COF-COL-1K     Colombian coffee beans 1kg                       qty  11 @    £21.29  VAT  0%  net    £234.19
-    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   7 @    £20.41  VAT  0%  net    £142.87
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   4 @    £26.27  VAT  0%  net    £105.08
+  OAK-76784 (15 Jun 2026), PO PO-2026-1630, total £187.88, paid
+    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   4 @    £27.23  VAT  0%  net    £108.92
+    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   4 @    £19.74  VAT  0%  net     £78.96
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -428,42 +447,35 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Elstow Catering Disposables Ltd
-  Also trades as: Elstow Catering Disposables, Elstow Catering
-  VAT number: GB 114 7104 97
-  Bank account on file: ending 4662
+  Name: Ormsby Packaging Ltd
+  Also trades as: Ormsby Packaging
+  VAT number: GB 841 4852 53
+  Bank account on file: ending 8725
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-2018 (raised 16 Sep 2026)
-  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   5 @    £26.21
-  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   4 @    £33.24
-  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   4 @    £62.24
+PURCHASE ORDER PO-2026-1593 (raised 2 Jun 2026)
+  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   6 @    £64.32
+  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   1 @    £29.09
+  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   1 @    £26.48
 
 GOODS RECEIVED
-  GRN-36087 (18 Sep 2026): PKG-NAP-5000 x4, PKG-LID-1000 x3, PKG-CUP-1000 x3
-    Note: Partial shipment. Outstanding quantity to follow.
-  GRN-22241 (25 Sep 2026): PKG-NAP-5000 x1, PKG-LID-1000 x1, PKG-CUP-1000 x1
+  GRN-56761 (7 Jun 2026): PKG-CUP-1000 x6, PKG-LID-1000 x1, PKG-NAP-5000 x1
+    Note: Left with front-of-house staff.
 
-INVOICE ELS-19291 (dated 25 Sep 2026)
-  From: Elstow Catering Disposables Ltd
-  VAT number: GB 114 7104 97
-  Pay to: account ending 4662
-  Your PO: PO-2026-2018
-  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   5 @    £26.21  VAT 20%  net    £131.05
-  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   4 @    £33.24  VAT 20%  net    £132.96
-  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   4 @    £62.24  VAT 20%  net    £248.96
-  Net: £512.97   VAT: £102.59
-  Total due: £615.56
+INVOICE ORM-35969 (dated 10 Jun 2026)
+  From: Ormsby Packaging Ltd
+  VAT number: GB 841 4852 53
+  Pay to: account ending 5087
+  Your PO: PO-2026-1593
+  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   6 @    £64.32  VAT 20%  net    £385.92
+  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   1 @    £29.09  VAT 20%  net     £29.09
+  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   1 @    £26.48  VAT 20%  net     £26.48
+  Net: £441.49   VAT: £88.30
+  Total due: £529.79
+  Note: Remittance: please use our new account ending 5087.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  ELS-19013 (25 Jun 2026), PO PO-2026-1668, total £154.18, paid
-    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   4 @    £32.12  VAT 20%  net    £128.48
-  ELS-19164 (14 Aug 2026), PO PO-2026-1870, total £195.66, paid
-    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   5 @    £32.61  VAT 20%  net    £163.05
-  ELS-19271 (19 Sep 2026), PO PO-2026-2018, total £469.53, paid
-    PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   4 @    £26.21  VAT 20%  net    £104.84
-    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   3 @    £33.24  VAT 20%  net     £99.72
-    PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   3 @    £62.24  VAT 20%  net    £186.72
+  (none)
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -473,218 +485,113 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Aldwick Wholesale Ltd
-  Also trades as: Aldwick Wholesale
-  VAT number: GB 729 0222 79
-  Bank account on file: ending 1971
-  Contract pricing: variable
+  Name: Oakhurst Tea Company Ltd
+  Also trades as: Oakhurst Tea Company, Oakhurst Tea
+  VAT number: GB 326 5020 14
+  Bank account on file: ending 7057
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1675 (raised 22 Jun 2026)
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   8 @    £10.72
-  DRY-CRM-1L     Double cream 1L                                  qty  26 @     £4.53
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   8 @    £13.45
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   7 @    £26.40
+PURCHASE ORDER PO-2026-2021 (raised 17 Sep 2026)
+  COF-COL-1K     Colombian coffee beans 1kg                       qty  12 @    £21.41
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   8 @    £23.44
+  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   2 @    £17.47
 
 GOODS RECEIVED
-  GRN-26222 (23 Jun 2026): BAK-DIG-12 x8, DRY-CRM-1L x26, SNK-CDG-12 x8, TEA-ASM-1K x7
-    Note: Delivered to rear entrance.
+  GRN-52918 (23 Sep 2026): COF-COL-1K x12, COF-DEC-1K x8, TEA-EBT-1100 x2
 
-INVOICE ALD-51313 (dated 25 Jun 2026)
-  From: Aldwick Wholesale Ltd
-  VAT number: GB 729 0222 79
-  Pay to: account ending 1971
-  Your PO: PO-2026-1675
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   8 @    £10.72  VAT  0%  net     £85.76
-  DRY-CRM-1L     Double cream 1L                                  qty  26 @     £4.53  VAT  0%  net    £117.78
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   8 @    £13.45  VAT 20%  net    £107.60
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   7 @    £26.40  VAT  0%  net    £184.80
-  Net: £495.94   VAT: £21.52
-  Total due: £517.46
-  Note: Goods remain our property until paid in full.
-  Note: Credit CN-5065 is not included here and will be settled separately.
+INVOICE OAK-77083 (dated 23 Sep 2026)
+  From: Oakhurst Tea Company Ltd
+  VAT number: GB 541 3775 70
+  Pay to: account ending 7057
+  Your PO: PO-2026-2021
+  COF-COL-1K     Colombian coffee beans 1kg                       qty  12 @    £21.41  VAT  0%  net    £256.92
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   8 @    £23.44  VAT  0%  net    £187.52
+  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   2 @    £17.47  VAT  0%  net     £34.94
+  Net: £479.38   VAT: £0.00
+  Total due: £479.38
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  (none)
+  OAK-76872 (14 Jul 2026), PO PO-2026-1733, total £503.85, paid
+    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   9 @    £23.61  VAT  0%  net    £212.49
+    COF-COL-1K     Colombian coffee beans 1kg                       qty  12 @    £24.28  VAT  0%  net    £291.36
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-5065 (30 May 2026), £42.92, PO PO-2026-1675: Pricing error on previous invoice. To be deducted from your next invoice against PO-2026-1675.
+  (none)
 ```
 
 ## Case 12
 
 ```
 SUPPLIER RECORD
-  Name: Aldwick Wholesale Ltd
-  Also trades as: Aldwick Wholesale
-  VAT number: GB 729 0222 79
-  Bank account on file: ending 1971
+  Name: Netherby Catering Engineers Ltd
+  Also trades as: Netherby Catering Engineers, Netherby Catering
+  VAT number: GB 371 6786 84
+  Bank account on file: ending 3525
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1993 (raised 10 Sep 2026)
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  10 @    £25.45
-  COF-COL-1K     Colombian coffee beans 1kg                       qty  12 @    £21.69
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   8 @    £16.13
-  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   5 @    £14.65
+PURCHASE ORDER PO-2026-2117 (raised 11 Oct 2026)
+  EQP-FLT-CART   Water filter cartridge                           qty   2 @    £63.50
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £133.41
 
 GOODS RECEIVED
-  GRN-73233 (12 Sep 2026): TEA-ASM-1K x10, COF-COL-1K x12, SNK-CSB-12 x8, BAK-SHB-12 x5
-    Note: Left with front-of-house staff.
+  GRN-87676 (16 Oct 2026): EQP-FLT-CART x2, EQP-SVC-VISIT x2
 
-INVOICE ALD-51551 (dated 12 Sep 2026)
-  From: Aldwick Wholesale Ltd
-  VAT number: GB 729 0222 79
-  Pay to: account ending 1971
-  Your PO: PO-2026-1993
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  10 @    £25.45  VAT  0%  net    £254.50
-  COF-COL-1K     Colombian coffee beans 1kg                       qty  12 @    £21.69  VAT  0%  net    £260.28
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   8 @    £16.13  VAT 20%  net    £129.04
-  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   5 @    £14.65  VAT  0%  net     £73.25
-  Net: £717.07   VAT: £25.81
-  Total due: £742.88
+INVOICE NET-75461 (dated 19 Oct 2026)
+  From: Netherby Catering Engineers Ltd
+  VAT number: GB 371 6786 84
+  Pay to: account ending 3525
+  Your PO: PO-2026-2117
+  EQP-FLT-CART   Water filter cartridge                           qty   2 @    £63.50  VAT 20%  net    £127.00
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £133.41  VAT 20%  net    £266.82
+  Net: £393.82   VAT: £78.76
+  Total due: £472.58
   Note: Goods remain our property until paid in full.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  ALD-51516 (31 Aug 2026), PO PO-2026-1932, total £531.08, paid
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  41 @     £8.00  VAT  0%  net    £328.00
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   4 @    £26.24  VAT  0%  net    £104.96
-    COF-COL-1K     Colombian coffee beans 1kg                       qty   4 @    £24.53  VAT  0%  net     £98.12
+  (none)
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  (none)
+  CN-9191 (19 Oct 2026), £20.72, PO PO-2026-2117: Damaged items on delivery GRN-87676. To be deducted from your next invoice against PO-2026-2117.
 ```
 
 ## Case 13
 
 ```
 SUPPLIER RECORD
-  Name: Stanwick Bakery Supplies Ltd
-  Also trades as: Stanwick Bakery Supplies, Stanwick Bakery
-  VAT number: GB 878 0175 98
-  Bank account on file: ending 9930
-  Contract pricing: variable
-
-PURCHASE ORDER PO-2026-1735 (raised 7 Jul 2026)
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  12 @    £12.99
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  15 @    £10.99
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty  15 @    £15.67
-
-GOODS RECEIVED
-  GRN-97609 (9 Jul 2026): SNK-CDG-12 x12, BAK-DIG-12 x15, BAK-VSP-12 x15
-
-INVOICE STA-54763 (dated 11 Jul 2026)
-  From: Stanwick Bakery Supplies Ltd
-  VAT number: GB 878 0175 98
-  Pay to: account ending 9930
-  Your PO: PO-2026-1735
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  12 @    £12.99  VAT 20%  net    £155.88
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  15 @    £10.99  VAT  0%  net    £164.85
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty  15 @    £15.67  VAT  0%  net    £235.05
-  Net: £555.78   VAT: £31.18
-  Total due: £586.96
-
-PREVIOUS INVOICES FROM THIS SUPPLIER
-  STA-54441 (26 Mar 2026), PO PO-2026-1309, total £278.10, paid
-    BAK-SCN-24     Fruit scones (tray of 24)                        qty  10 @    £14.53  VAT  0%  net    £145.30
-    BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty  10 @    £13.28  VAT  0%  net    £132.80
-  STA-54730 (30 Jun 2026), PO PO-2026-1685, total £168.24, paid
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  10 @    £14.02  VAT 20%  net    £140.20
-  STA-54739 (3 Jul 2026), PO PO-2026-1735, total £586.96, paid
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  12 @    £12.99  VAT 20%  net    £155.88
-    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  15 @    £10.99  VAT  0%  net    £164.85
-    BAK-VSP-12     Victoria sponge, 12 slices                       qty  15 @    £15.67  VAT  0%  net    £235.05
-
-OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-4050 (8 Jul 2026), £108.81, PO PO-2026-1685: Items missing from previous delivery. To be deducted from your next invoice against PO-2026-1685.
-```
-
-## Case 14
-
-```
-SUPPLIER RECORD
-  Name: Thornbury Catering Disposables Ltd
-  Also trades as: Thornbury Catering Disposables, Thornbury Catering
-  VAT number: GB 888 7180 33
-  Bank account on file: ending 4537
+  Name: Brockley Fine Foods Ltd
+  Also trades as: Brockley Fine Foods, Brockley Fine
+  VAT number: GB 595 7117 77
+  Bank account on file: ending 7927
   Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1657 (raised 18 Jun 2026)
-  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   5 @    £64.05
-  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   4 @    £25.67
-  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   2 @    £30.10
+PURCHASE ORDER PO-2026-2069 (raised 29 Sep 2026)
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   9 @     £9.82
+  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   9 @    £13.91
 
 GOODS RECEIVED
-  GRN-90316 (19 Jun 2026): PKG-CUP-1000 x5, PKG-NAP-5000 x4, PKG-LID-1000 x2
-    Note: Delivered to rear entrance.
+  GRN-12191 (1 Oct 2026): SNK-SPW-24 x9, SNK-CDG-12 x9
 
-INVOICE THO-53009 (dated 23 Jun 2026)
-  From: Thornbury Catering Disposables Ltd
-  VAT number: GB 888 7180 33
-  Pay to: account ending 4537
-  Your PO: PO-2026-1657
-  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   5 @    £64.05  VAT 20%  net    £320.25
-  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   4 @    £25.67  VAT 20%  net    £102.68
-  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   2 @    £30.10  VAT 20%  net     £60.20
-  Net: £483.13   VAT: £96.63
-  Total due: £579.76
-
-PREVIOUS INVOICES FROM THIS SUPPLIER
-  THO-52810 (18 Apr 2026), PO PO-2026-1390, total £697.37, paid
-    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   6 @    £31.28  VAT 20%  net    £187.68
-    PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   4 @    £65.94  VAT 20%  net    £263.76
-    PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   5 @    £25.94  VAT 20%  net    £129.70
-  THO-52928 (27 May 2026), PO PO-2026-1548, total £286.70, paid
-    PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   4 @    £59.73  VAT 20%  net    £238.92
-  THO-52951 (4 Jun 2026), PO PO-2026-1593, total £695.95, paid
-    PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   5 @    £67.33  VAT 20%  net    £336.65
-    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   5 @    £32.00  VAT 20%  net    £160.00
-    PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   3 @    £27.77  VAT 20%  net     £83.31
-
-OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-8958 (14 May 2026), £25.65, PO PO-2026-1657: Items missing from previous delivery. To be deducted from your next invoice against PO-2026-1657.
-```
-
-## Case 15
-
-```
-SUPPLIER RECORD
-  Name: Elstow Catering Disposables Ltd
-  Also trades as: Elstow Catering Disposables, Elstow Catering
-  VAT number: GB 114 7104 97
-  Bank account on file: ending 4662
-  Contract pricing: variable
-
-PURCHASE ORDER PO-2026-1654 (raised 17 Jun 2026)
-  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   4 @    £32.64
-  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   6 @    £29.22
-  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   4 @    £64.29
-
-GOODS RECEIVED
-  GRN-33240 (18 Jun 2026): PKG-LID-1000 x4, PKG-NAP-5000 x6, PKG-CUP-1000 x4
-
-INVOICE ELS-19001 (dated 21 Jun 2026)
-  From: Elstow Catering Disposables Ltd
-  VAT number: GB 114 7104 97
-  Pay to: account ending 4662
-  Your PO: PO-2026-1654
-  PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   4 @    £32.64  VAT 20%  net    £130.56
-  PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   6 @    £29.44  VAT 20%  net    £176.64
-  PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   4 @    £64.29  VAT 20%  net    £257.16
-  Net: £564.36   VAT: £112.87
-  Total due: £677.23
+INVOICE BRO-32916 (dated 4 Oct 2026)
+  From: Brockley Fine Foods & Co Ltd
+  VAT number: (not shown)
+  Pay to: account ending 7927
+  Your PO: PO-2026-2069
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   9 @     £9.82  VAT 20%  net     £88.38
+  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   9 @    £13.91  VAT 20%  net    £125.19
+  Net: £213.57   VAT: £42.72
+  Total due: £256.29
+  Note: Goods remain our property until paid in full.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  ELS-18631 (17 Feb 2026), PO PO-2026-1154, total £31.34, paid
-    PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   1 @    £26.12  VAT 20%  net     £26.12
-  ELS-18805 (16 Apr 2026), PO PO-2026-1390, total £208.19, paid
-    PKG-CUP-1000   12oz takeaway cups (case of 1,000)               qty   1 @    £61.37  VAT 20%  net     £61.37
-    PKG-NAP-5000   Paper napkins (case of 5,000)                    qty   2 @    £26.22  VAT 20%  net     £52.44
-    PKG-LID-1000   Sip lids for 12oz cups (case of 1,000)           qty   2 @    £29.84  VAT 20%  net     £59.68
+  BRO-32573 (11 Jun 2026), PO PO-2026-1621, total £171.38, paid
+    BAK-VSP-12     Victoria sponge, 12 slices                       qty   4 @    £16.89  VAT  0%  net     £67.56
+    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   7 @    £12.36  VAT 20%  net     £86.52
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
 ```
 
-## Case 16
+## Case 14
 
 ```
 SUPPLIER RECORD
@@ -694,25 +601,114 @@ SUPPLIER RECORD
   Bank account on file: ending 8477
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1679 (raised 23 Jun 2026)
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   3 @    £22.65
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   6 @    £15.43
-  Note: Contact the duty manager on arrival.
+PURCHASE ORDER PO-2026-1761 (raised 14 Jul 2026)
+  COF-COL-1K     Colombian coffee beans 1kg                       qty  11 @    £23.21
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £24.60
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   6 @    £25.48
+  Note: Supplier price review: 6% uplift agreed by Purchasing, applies from 1 August 2026.
 
 GOODS RECEIVED
-  GRN-13021 (26 Jun 2026): COF-COL-1K x3, TEA-EGL-500 x6
+  GRN-89940 (19 Jul 2026): COF-COL-1K x11, TEA-ASM-1K x5, COF-DEC-1K x6
+
+INVOICE MAR-63292 (dated 21 Jul 2026)
+  From: Marston Leaf & Bean Ltd
+  VAT number: GB 505 8770 65
+  Pay to: account ending 8477
+  Your PO: PO-2026-1761
+  COF-COL-1K     Colombian coffee beans 1kg                       qty  11 @    £24.60  VAT  0%  net    £270.60
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £26.08  VAT  0%  net    £130.40
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   6 @    £27.01  VAT  0%  net    £162.06
+  Net: £563.06   VAT: £0.00
+  Total due: £563.06
+  Note: Thank you for your custom.
+
+PREVIOUS INVOICES FROM THIS SUPPLIER
+  (none)
+
+OPEN CREDIT NOTES FROM THIS SUPPLIER
+  (none)
+```
+
+## Case 15
+
+```
+SUPPLIER RECORD
+  Name: Tarrant Provisions Ltd
+  Also trades as: Tarrant Provisions
+  VAT number: GB 232 6865 63
+  Bank account on file: ending 5842
+  Contract pricing: fixed
+
+PURCHASE ORDER PO-2026-1732 (raised 7 Jul 2026)
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   4 @    £25.79
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  14 @    £12.12
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty   5 @    £15.50
+  Note: Standing weekly order.
+
+GOODS RECEIVED
+  GRN-95204 (13 Jul 2026): TEA-ASM-1K x4, BAK-DIG-12 x14, BAK-VSP-12 x5
     Note: Left with front-of-house staff.
 
-INVOICE MAR-63218 (dated 26 Jun 2026)
-  From: Marston Leaf & Bean & Co Ltd
-  VAT number: (not shown)
-  Pay to: account ending 8477
-  Your PO: PO-2026-1679
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   3 @    £22.65  VAT  0%  net     £67.95
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   6 @    £15.43  VAT  0%  net     £92.58
-  Net: £160.53   VAT: £0.00
-  Total due: £160.53
-  Note: Please quote the invoice number on your remittance.
+INVOICE TAR-61572 (dated 14 Jul 2026)
+  From: Tarrant Provisions Ltd
+  VAT number: GB 232 6865 63
+  Pay to: account ending 5842
+  Your PO: PO-2026-1732
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   4 @    £25.79  VAT  0%  net    £103.16
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  14 @    £12.12  VAT  0%  net    £169.68
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty   5 @    £15.50  VAT  0%  net     £77.50
+  Net: £350.34   VAT: £0.00
+  Total due: £350.34
+
+PREVIOUS INVOICES FROM THIS SUPPLIER
+  TAR-61238 (25 Mar 2026), PO PO-2026-1301, total £269.76, paid
+    COF-COL-1K     Colombian coffee beans 1kg                       qty   5 @    £24.18  VAT  0%  net    £120.90
+    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   3 @    £17.66  VAT  0%  net     £52.98
+    BAK-VSP-12     Victoria sponge, 12 slices                       qty   6 @    £15.98  VAT  0%  net     £95.88
+  TAR-61383 (12 May 2026), PO PO-2026-1491, total £296.92, paid
+    BAK-SCN-24     Fruit scones (tray of 24)                        qty   2 @    £13.43  VAT  0%  net     £26.86
+    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   2 @    £12.38  VAT 20%  net     £24.76
+    COF-COL-1K     Colombian coffee beans 1kg                       qty  11 @    £21.85  VAT  0%  net    £240.35
+  TAR-61549 (7 Jul 2026), PO PO-2026-1704, total £350.34, paid
+    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   4 @    £25.79  VAT  0%  net    £103.16
+    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  14 @    £12.12  VAT  0%  net    £169.68
+    BAK-VSP-12     Victoria sponge, 12 slices                       qty   5 @    £15.50  VAT  0%  net     £77.50
+
+OPEN CREDIT NOTES FROM THIS SUPPLIER
+  (none)
+```
+
+## Case 16
+
+```
+SUPPLIER RECORD
+  Name: Upton Foodservice Ltd
+  Also trades as: Upton Foodservice
+  VAT number: GB 245 0400 08
+  Bank account on file: ending 9028
+  Contract pricing: variable
+
+PURCHASE ORDER PO-2026-2035 (raised 20 Sep 2026)
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  13 @    £14.37
+  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  54 @     £8.48
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  11 @    £15.91
+  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   8 @    £14.58
+
+GOODS RECEIVED
+  GRN-15784 (21 Sep 2026): BAK-SCN-24 x13, DRY-WHL-6 x54, SNK-CSB-12 x11, BAK-SHB-12 x8
+
+INVOICE UPT-73678 (dated 21 Sep 2026)
+  From: Upton Foodservice Ltd
+  VAT number: GB 245 0400 08
+  Pay to: account ending 9028
+  Your PO: PO-2026-2035
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  13 @    £14.37  VAT  0%  net    £186.81
+  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  54 @     £8.48  VAT  0%  net    £457.92
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  11 @    £15.91  VAT 20%  net    £175.01
+  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   8 @    £14.58  VAT 20%  net    £116.64
+  Net: £936.38   VAT: £58.33
+  Total due: £994.71
+  Note: Goods remain our property until paid in full.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
   (none)
@@ -725,34 +721,33 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Millbeck Dairies Ltd
-  Also trades as: Millbeck Dairies
-  VAT number: GB 928 1590 13
-  Bank account on file: ending 6164
-  Contract pricing: fixed
+  Name: Ashby Leaf & Bean Ltd
+  Also trades as: Ashby Leaf & Bean, Ashby Leaf
+  VAT number: GB 412 5242 73
+  Bank account on file: ending 1542
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1640 (raised 14 Jun 2026)
-  DRY-CRM-1L     Double cream 1L                                  qty  45 @     £4.43
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  59 @     £7.74
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  16 @     £8.09
+PURCHASE ORDER PO-2026-1551 (raised 22 May 2026)
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   4 @    £25.66
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   3 @    £15.90
 
 GOODS RECEIVED
-  GRN-52964 (16 Jun 2026): DRY-CRM-1L x45, DRY-SSK-6 x59, DRY-WHL-6 x16
+  GRN-94788 (27 May 2026): TEA-ASM-1K x4, TEA-EGL-500 x3
+    Note: Delivered to rear entrance.
 
-INVOICE MIL-30892 (dated 18 Jun 2026)
-  From: Millbeck Dairies
-  VAT number: GB 928 1590 13
-  Pay to: account ending 6164
-  Your PO: PO-2026-1640
-  DRY-CRM-1L     Double cream 1L                                  qty  45 @     £4.43  VAT  0%  net    £199.35
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  59 @     £7.74  VAT  0%  net    £456.66
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  16 @     £8.09  VAT  0%  net    £129.44
-  Net: £785.45   VAT: £0.00
-  Total due: £785.45
+INVOICE ASH-59737 (dated 30 May 2026)
+  From: Ashby Leaf & Bean Ltd
+  VAT number: GB 412 5242 73
+  Pay to: account ending 1542
+  Your PO: PO-2026-1551
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   4 @    £25.66  VAT 20%  net    £102.64
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   3 @    £15.90  VAT  0%  net     £47.70
+  Net: £150.34   VAT: £20.53
+  Total due: £170.87
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  MIL-30638 (25 Mar 2026), PO PO-2026-1295, total £116.34, paid
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  14 @     £8.31  VAT  0%  net    £116.34
+  ASH-59670 (8 May 2026), PO PO-2026-1477, total £260.48, paid
+    COF-COL-1K     Colombian coffee beans 1kg                       qty  11 @    £23.68  VAT  0%  net    £260.48
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -762,74 +757,79 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Selby Foodservice Ltd
-  Also trades as: Selby Foodservice
-  VAT number: GB 122 2029 72
-  Bank account on file: ending 9762
-  Contract pricing: variable
+  Name: Burnell Catering Engineers Ltd
+  Also trades as: Burnell Catering Engineers, Burnell Catering
+  VAT number: GB 846 5632 12
+  Bank account on file: ending 2478
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1800 (raised 24 Jul 2026)
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   9 @    £16.59
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty   5 @    £14.06
+PURCHASE ORDER PO-2026-1789 (raised 21 Jul 2026)
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £143.62
+  EQP-FLT-CART   Water filter cartridge                           qty   2 @    £67.37
+  Note: Contact the duty manager on arrival.
 
 GOODS RECEIVED
-  GRN-71411 (28 Jul 2026): SNK-CSB-12 x9, BAK-SCN-24 x5
+  GRN-89074 (26 Jul 2026): EQP-SVC-VISIT x1, EQP-FLT-CART x2
 
-INVOICE SEL-44613 (dated 28 Jul 2026)
-  From: Selby Foodservice Ltd
-  VAT number: GB 122 2029 72
-  Pay to: account ending 9762
-  Your PO: PO-2026-1800
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   9 @    £16.59  VAT 20%  net    £149.31
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty   5 @    £14.06  VAT  0%  net     £70.30
-  Net: £219.61   VAT: £29.86
-  Total due: £249.47
-  Note: Please quote the invoice number on your remittance.
+INVOICE BUR-24210 (dated 27 Jul 2026)
+  From: Burnell Catering Engineers Ltd
+  VAT number: GB 846 5632 12
+  Pay to: account ending 2478
+  Your PO: PO-2026-1789
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £143.62  VAT 20%  net    £287.24
+  EQP-FLT-CART   Water filter cartridge                           qty   2 @    £67.37  VAT 20%  net    £134.74
+  Net: £421.98   VAT: £84.40
+  Total due: £506.38
+  Note: Thank you for your custom.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  SEL-44526 (29 Jun 2026), PO PO-2026-1679, total £471.19, paid
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  12 @    £12.21  VAT 20%  net    £146.52
-    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   9 @    £11.46  VAT 20%  net    £103.14
-    BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty  12 @    £14.30  VAT  0%  net    £171.60
+  BUR-23869 (4 Apr 2026), PO PO-2026-1343, total £357.10, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £148.79  VAT 20%  net    £297.58
+  BUR-23929 (24 Apr 2026), PO PO-2026-1428, total £243.25, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £133.77  VAT 20%  net    £133.77
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £68.94  VAT 20%  net     £68.94
+  BUR-23979 (11 May 2026), PO PO-2026-1476, total £171.36, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £142.80  VAT 20%  net    £142.80
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-1228 (16 Jul 2026), £41.94, PO PO-2026-1679: Pricing error on previous invoice. To be deducted from your next invoice against PO-2026-1679.
+  (none)
 ```
 
 ## Case 19
 
 ```
 SUPPLIER RECORD
-  Name: Quarrendon Bakery Supplies Ltd
-  Also trades as: Quarrendon Bakery Supplies, Quarrendon Bakery
-  VAT number: GB 240 2344 83
-  Bank account on file: ending 4750
+  Name: Hatherley Espresso Services Ltd
+  Also trades as: Hatherley Espresso Services, Hatherley Espresso
+  VAT number: GB 373 5379 90
+  Bank account on file: ending 7855
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-2009 (raised 14 Sep 2026)
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty   5 @    £16.15
-  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   6 @    £12.98
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty  10 @    £13.32
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   4 @    £12.06
+PURCHASE ORDER PO-2026-1535 (raised 18 May 2026)
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £151.71
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £72.14
 
 GOODS RECEIVED
-  GRN-50570 (17 Sep 2026): BAK-VSP-12 x5, BAK-SHB-12 x6, BAK-SCN-24 x10, BAK-DIG-12 x4
-    Note: Delivered to rear entrance.
+  GRN-91791 (21 May 2026): EQP-SVC-VISIT x2, EQP-FLT-CART x1
 
-INVOICE QUA-71971 (dated 19 Sep 2026)
-  From: Quarrendon Bakery Supplies Ltd
-  VAT number: GB 240 2344 83
-  Pay to: account ending 4750
-  Your PO: PO-2026-2009
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty   5 @    £16.15  VAT  0%  net     £80.75
-  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   6 @    £15.15  VAT  0%  net     £90.90
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty  10 @    £13.32  VAT  0%  net    £133.20
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   4 @    £12.06  VAT  0%  net     £48.24
-  Net: £353.09   VAT: £0.00
-  Total due: £353.09
+INVOICE HAT-41014 (dated 23 May 2026)
+  From: Hatherley Espresso Services Ltd
+  VAT number: GB 373 5379 90
+  Pay to: account ending 7855
+  Your PO: PO-2026-1535
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £156.30  VAT 20%  net    £312.60
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £72.14  VAT 20%  net     £72.14
+  Net: £384.74   VAT: £76.95
+  Total due: £461.69
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  (none)
+  HAT-40764 (28 Feb 2026), PO PO-2026-1201, total £325.66, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £135.69  VAT 20%  net    £271.38
+  HAT-40807 (15 Mar 2026), PO PO-2026-1252, total £169.97, paid
+    EQP-FLT-CART   Water filter cartridge                           qty   2 @    £70.82  VAT 20%  net    £141.64
+  HAT-40941 (28 Apr 2026), PO PO-2026-1426, total £342.64, paid
+    EQP-FLT-CART   Water filter cartridge                           qty   2 @    £67.36  VAT 20%  net    £134.72
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £150.82  VAT 20%  net    £150.82
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -839,134 +839,118 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Redmire Biscuit Company Ltd
-  Also trades as: Redmire Biscuit Company, Redmire Biscuit
-  VAT number: GB 539 3363 38
-  Bank account on file: ending 8073
-  Contract pricing: variable
+  Name: Glenholt Espresso Services Ltd
+  Also trades as: Glenholt Espresso Services, Glenholt Espresso
+  VAT number: GB 726 1675 13
+  Bank account on file: ending 7017
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-2067 (raised 28 Sep 2026)
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty   5 @    £15.51
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   3 @    £11.64
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty  11 @    £15.23
-  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   2 @     £9.86
+PURCHASE ORDER PO-2026-1542 (raised 20 May 2026)
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £73.73
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £147.09
+  Note: Price increase of 5% on all lines agreed with supplier, effective 16 June 2026.
 
 GOODS RECEIVED
-  GRN-16501 (29 Sep 2026): BAK-VSP-12 x5, BAK-DIG-12 x3, BAK-SCN-24 x11, SNK-SPW-24 x2
+  GRN-42391 (26 May 2026): EQP-FLT-CART x1, EQP-SVC-VISIT x2
 
-INVOICE RED-38012 (dated 2 Oct 2026)
-  From: Redmire Biscuit Company Ltd
-  VAT number: GB 539 3363 38
-  Pay to: account ending 8073
-  Your PO: PO-2026-2067
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty   5 @    £15.51  VAT  0%  net     £77.55
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   3 @    £11.64  VAT  0%  net     £34.92
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty  11 @    £15.23  VAT  0%  net    £167.53
-  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   2 @     £9.86  VAT 20%  net     £19.72
-  Net: £299.72   VAT: £3.94
-  Less credit CN-9140: £11.37
-  Total due: £292.29
-  Note: Less credit note CN-9140.
+INVOICE GLE-58028 (dated 27 May 2026)
+  From: Glenholt Espresso Services Ltd
+  VAT number: GB 726 1675 13
+  Pay to: account ending 7017
+  Your PO: PO-2026-1542
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £77.42  VAT 20%  net     £77.42
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £154.44  VAT 20%  net    £308.88
+  Net: £386.30   VAT: £77.26
+  Total due: £463.56
+  Note: Payment terms: 30 days from invoice date.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  RED-37717 (26 Jun 2026), PO PO-2026-1681, total £58.32, paid
-    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £9.72  VAT 20%  net     £48.60
-  RED-37957 (14 Sep 2026), PO PO-2026-1976, total £391.49, paid
-    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  11 @    £12.25  VAT  0%  net    £134.75
-    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   5 @    £15.59  VAT 20%  net     £77.95
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  10 @    £13.60  VAT 20%  net    £136.00
-  RED-37974 (20 Sep 2026), PO PO-2026-2023, total £303.36, paid
-    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £11.05  VAT 20%  net     £88.40
-    BAK-VSP-12     Victoria sponge, 12 slices                       qty  12 @    £16.44  VAT  0%  net    £197.28
+  GLE-57921 (22 Apr 2026), PO PO-2026-1413, total £267.08, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £150.78  VAT 20%  net    £150.78
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £71.78  VAT 20%  net     £71.78
+  GLE-57975 (10 May 2026), PO PO-2026-1491, total £521.98, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £152.35  VAT 20%  net    £304.70
+    EQP-FLT-CART   Water filter cartridge                           qty   2 @    £65.14  VAT 20%  net    £130.28
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-9140 (16 Sep 2026), £22.75, PO PO-2026-2067: Damaged items on delivery. To be deducted from your next invoice against PO-2026-2067.
+  (none)
 ```
 
 ## Case 21
 
 ```
 SUPPLIER RECORD
-  Name: Fenwick Wholesale Ltd
-  Also trades as: Fenwick Wholesale
-  VAT number: GB 684 9340 72
-  Bank account on file: ending 2581
-  Contract pricing: fixed
+  Name: Quarrendon Bakery Supplies Ltd
+  Also trades as: Quarrendon Bakery Supplies, Quarrendon Bakery
+  VAT number: GB 240 2344 83
+  Bank account on file: ending 4750
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1755 (raised 12 Jul 2026)
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   7 @    £25.96
-  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £9.24
-  DRY-CRM-1L     Double cream 1L                                  qty  43 @     £3.93
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   9 @    £12.21
-  Note: Deliver to Market Street branch.
+PURCHASE ORDER PO-2026-1616 (raised 8 Jun 2026)
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  11 @    £14.51
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty  13 @    £17.78
+  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   2 @    £14.25
 
 GOODS RECEIVED
-  GRN-17097 (13 Jul 2026): COF-DEC-1K x7, SNK-SPW-24 x5, DRY-CRM-1L x43, BAK-DIG-12 x9
-    Note: Chilled items checked on arrival.
+  GRN-58960 (10 Jun 2026): BAK-SCN-24 x11, BAK-VSP-12 x13, SNK-CDG-12 x2
+    Note: Delivered to rear entrance.
 
-INVOICE FEN-78569 (dated 13 Jul 2026)
-  From: Fenwick Wholesale Ltd
-  VAT number: GB 684 9340 72
-  Pay to: account ending 2581
-  Your PO: PO-2026-1755
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   7 @    £25.96  VAT  0%  net    £181.72
-  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £9.24  VAT 20%  net     £46.20
-  DRY-CRM-1L     Double cream 1L                                  qty  43 @     £3.93  VAT  0%  net    £168.99
-  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   9 @    £12.21  VAT 20%  net    £109.89
-  Net: £506.80   VAT: £31.22
-  Total due: £538.02
+INVOICE QUA-71672 (dated 11 Jun 2026)
+  From: Quarrendon Bakery Supplies Ltd
+  VAT number: GB 240 2344 83
+  Pay to: account ending 4750
+  Your PO: PO-2026-1616
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  11 @    £14.51  VAT  0%  net    £159.61
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty  13 @    £17.78  VAT  0%  net    £231.14
+  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   2 @    £14.25  VAT 20%  net     £28.50
+  Net: £419.25   VAT: £5.70
+  Less credit CN-8505: £38.36
+  Total due: £386.59
+  Note: Goods remain our property until paid in full.
+  Note: Less credit note CN-8505.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  FEN-78384 (13 May 2026), PO PO-2026-1486, total £269.04, paid
-    DRY-CRM-1L     Double cream 1L                                  qty  26 @     £3.87  VAT  0%  net    £100.62
-    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  14 @    £12.03  VAT  0%  net    £168.42
+  QUA-71522 (22 Apr 2026), PO PO-2026-1405, total £75.80, paid
+    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   3 @    £12.46  VAT 20%  net     £37.38
+    BAK-SCN-24     Fruit scones (tray of 24)                        qty   2 @    £15.47  VAT  0%  net     £30.94
+  QUA-71556 (3 May 2026), PO PO-2026-1453, total £407.50, paid
+    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  11 @    £15.00  VAT 20%  net    £165.00
+    BAK-SCN-24     Fruit scones (tray of 24)                        qty  13 @    £13.52  VAT  0%  net    £175.76
+    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   2 @    £14.06  VAT 20%  net     £28.12
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  (none)
+  CN-8505 (11 Jun 2026), £76.72, PO PO-2026-1616: Goods on delivery GRN-58960 below specification. To be deducted from your next invoice against PO-2026-1616.
 ```
 
 ## Case 22
 
 ```
 SUPPLIER RECORD
-  Name: Netherby Catering Engineers Ltd
-  Also trades as: Netherby Catering Engineers, Netherby Catering
-  VAT number: GB 371 6786 84
-  Bank account on file: ending 3525
-  Contract pricing: variable
+  Name: Tarrant Provisions Ltd
+  Also trades as: Tarrant Provisions
+  VAT number: GB 232 6865 63
+  Bank account on file: ending 5842
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-2097 (raised 6 Oct 2026)
-  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £70.76
-  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £143.07
+PURCHASE ORDER PO-2026-1884 (raised 14 Aug 2026)
+  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   3 @    £13.25
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  10 @    £16.08
 
 GOODS RECEIVED
-  GRN-73843 (12 Oct 2026): EQP-FLT-CART x1, EQP-SVC-VISIT x2
-    Note: Engineer visit completed.
+  GRN-20486 (18 Aug 2026): SNK-CDG-12 x3, SNK-CSB-12 x10
 
-INVOICE NET-75456 (dated 1 Nov 2026)
-  From: Netherby Catering Engineers Ltd
-  VAT number: GB 371 6786 84
-  Pay to: account ending 3525
-  Your PO: PO-2026-2097
-  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £70.76  VAT 20%  net     £70.76
-  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £143.07  VAT 20%  net    £286.14
-  Net: £356.90   VAT: £71.38
-  Total due: £428.28
-  Note: Please quote the invoice number on your remittance.
-  Note: Second request for payment.
+INVOICE TAR-61680 (dated 19 Aug 2026)
+  From: Tarrant Provisions Ltd
+  VAT number: GB 232 6865 63
+  Pay to: account ending 5842
+  Your PO: PO-2026-1884
+  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   3 @    £13.25  VAT  0%  net     £39.75
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  10 @    £16.08  VAT 20%  net    £160.80
+  Net: £200.55   VAT: £32.16
+  Total due: £232.71
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  NET-75219 (30 Jul 2026), PO PO-2026-1800, total £185.62, paid
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £154.68  VAT 20%  net    £154.68
-  NET-75231 (3 Aug 2026), PO PO-2026-1830, total £453.95, paid
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £153.67  VAT 20%  net    £307.34
-    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £70.95  VAT 20%  net     £70.95
-  NET-75240 (6 Aug 2026), PO PO-2026-1839, total £414.34, paid
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £139.32  VAT 20%  net    £278.64
-    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £66.64  VAT 20%  net     £66.64
-  net-75456 (17 Oct 2026), PO PO-2026-2097, total £428.28, paid
-    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £70.76  VAT 20%  net     £70.76
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £143.07  VAT 20%  net    £286.14
+  (none)
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -976,36 +960,36 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Glenholt Espresso Services Ltd
-  Also trades as: Glenholt Espresso Services, Glenholt Espresso
-  VAT number: GB 726 1675 13
-  Bank account on file: ending 7017
+  Name: Ingleby Foodservice Ltd
+  Also trades as: Ingleby Foodservice
+  VAT number: GB 261 4014 19
+  Bank account on file: ending 3643
   Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1965 (raised 3 Sep 2026)
-  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £68.78
-  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £142.58
+PURCHASE ORDER PO-2026-1603 (raised 4 Jun 2026)
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  12 @    £16.37
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   2 @    £25.89
+  COF-COL-1K     Colombian coffee beans 1kg                       qty   3 @    £21.75
 
 GOODS RECEIVED
-  GRN-17780 (6 Sep 2026): EQP-FLT-CART x1, EQP-SVC-VISIT x2
+  GRN-48194 (6 Jun 2026): SNK-CSB-12 x7, COF-DEC-1K x2, COF-COL-1K x3
+    Note: Short delivery: remaining items on back order.
 
-INVOICE GLE-58335 (dated 7 Sep 2026)
-  From: Glenholt Espresso Services Ltd
-  VAT number: GB 726 1675 13
-  Pay to: account ending 7017
-  Your PO: PO-2026-1965
-  EQP-FLT-CART   Water filter cartridge                           qty   2 @    £68.78  VAT 20%  net    £137.56
-  EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £142.58  VAT 20%  net    £285.16
-  Net: £422.72   VAT: £84.54
-  Total due: £507.26
+INVOICE ING-68269 (dated 10 Jun 2026)
+  From: Ingleby Foodservice Ltd
+  VAT number: GB 261 4014 19
+  Pay to: account ending 3643
+  Your PO: PO-2026-1603
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  12 @    £16.37  VAT 20%  net    £196.44
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   2 @    £25.89  VAT  0%  net     £51.78
+  COF-COL-1K     Colombian coffee beans 1kg                       qty   3 @    £21.75  VAT  0%  net     £65.25
+  Net: £313.47   VAT: £39.29
+  Total due: £352.76
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  GLE-58153 (8 Jul 2026), PO PO-2026-1718, total £87.10, paid
-    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £72.58  VAT 20%  net     £72.58
-  GLE-58168 (13 Jul 2026), PO PO-2026-1744, total £359.62, paid
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £149.84  VAT 20%  net    £299.68
-  GLE-58296 (25 Aug 2026), PO PO-2026-1919, total £185.10, paid
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £154.25  VAT 20%  net    £154.25
+  ING-68081 (8 Apr 2026), PO PO-2026-1351, total £247.49, paid
+    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   2 @     £9.37  VAT 20%  net     £18.74
+    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   9 @    £25.00  VAT  0%  net    £225.00
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1015,33 +999,42 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Farleigh Dairies Ltd
-  Also trades as: Farleigh Dairies
-  VAT number: GB 304 3483 95
-  Bank account on file: ending 4249
-  Contract pricing: variable
+  Name: Burnell Catering Engineers Ltd
+  Also trades as: Burnell Catering Engineers, Burnell Catering
+  VAT number: GB 846 5632 12
+  Bank account on file: ending 2478
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1861 (raised 8 Aug 2026)
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  38 @     £7.88
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  53 @     £7.00
-  DRY-CRM-1L     Double cream 1L                                  qty  49 @     £4.31
+PURCHASE ORDER PO-2026-2119 (raised 11 Oct 2026)
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £141.29
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £64.84
 
 GOODS RECEIVED
-  GRN-62469 (9 Aug 2026): DRY-WHL-6 x38, DRY-SSK-6 x53, DRY-CRM-1L x49
+  GRN-44594 (12 Oct 2026): EQP-SVC-VISIT x1, EQP-FLT-CART x1
 
-INVOICE FAR-48048 (dated 9 Aug 2026)
-  From: Farleigh Dairies Ltd
-  VAT number: GB 304 3483 95
-  Pay to: account ending 4249
-  Your PO: PO-2026-1861
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  38 @     £7.88  VAT  0%  net    £299.44
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  53 @     £7.24  VAT  0%  net    £383.72
-  DRY-CRM-1L     Double cream 1L                                  qty  49 @     £4.31  VAT  0%  net    £211.19
-  Net: £894.35   VAT: £0.00
-  Total due: £894.35
+INVOICE BUR-24444 (dated 31 Oct 2026)
+  From: Burnell Catering Engineers Ltd
+  VAT number: GB 846 5632 12
+  Pay to: account ending 2478
+  Your PO: PO-2026-2119
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £141.29  VAT 20%  net    £141.29
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £64.84  VAT 20%  net     £64.84
+  Net: £206.13   VAT: £41.23
+  Total due: £247.36
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  (none)
+  BUR-24088 (16 Jun 2026), PO PO-2026-1625, total £330.43, paid
+    EQP-FLT-CART   Water filter cartridge                           qty   2 @    £67.26  VAT 20%  net    £134.52
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £140.84  VAT 20%  net    £140.84
+  BUR-24176 (16 Jul 2026), PO PO-2026-1757, total £343.17, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £147.53  VAT 20%  net    £147.53
+    EQP-FLT-CART   Water filter cartridge                           qty   2 @    £69.22  VAT 20%  net    £138.44
+  BUR-24287 (22 Aug 2026), PO PO-2026-1910, total £255.96, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £148.99  VAT 20%  net    £148.99
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £64.31  VAT 20%  net     £64.31
+  BUR-24444 (13 Oct 2026), PO PO-2026-2119, total £247.36, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £141.29  VAT 20%  net    £141.29
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £64.84  VAT 20%  net     £64.84
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1051,83 +1044,84 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Marston Leaf & Bean Ltd
-  Also trades as: Marston Leaf & Bean, Marston Leaf
-  VAT number: GB 505 8770 65
-  Bank account on file: ending 8477
-  Contract pricing: variable
+  Name: Brockley Fine Foods Ltd
+  Also trades as: Brockley Fine Foods, Brockley Fine
+  VAT number: GB 595 7117 77
+  Bank account on file: ending 7927
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1878 (raised 12 Aug 2026)
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   7 @    £15.85
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £21.53
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £22.98
+PURCHASE ORDER PO-2026-1526 (raised 16 May 2026)
+  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty  12 @    £13.90
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty  11 @     £9.19
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty  10 @    £17.24
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  15 @    £11.88
   Note: Deliver before 8am.
 
 GOODS RECEIVED
-  GRN-77612 (16 Aug 2026): TEA-EGL-500 x7, COF-COL-1K x8, TEA-ASM-1K x5
-    Note: Left with front-of-house staff.
+  GRN-91926 (18 May 2026): BAK-SHB-12 x12, SNK-SPW-24 x11, BAK-VSP-12 x10, BAK-DIG-12 x15
 
-INVOICE MAR-63379 (dated 19 Aug 2026)
-  From: Marston Leaf & Bean Ltd
-  VAT number: GB 972 2820 81
-  Pay to: account ending 8477
-  Your PO: PO-2026-1878
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   7 @    £15.85  VAT  0%  net    £110.95
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £21.53  VAT  0%  net    £172.24
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £22.98  VAT  0%  net    £114.90
-  Net: £398.09   VAT: £0.00
-  Total due: £398.09
+INVOICE BRO-32510 (dated 21 May 2026)
+  From: Brockley Fine Foods Ltd
+  VAT number: GB 595 7117 77
+  Pay to: account ending 7927
+  Your PO: PO-2026-1526
+  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty  12 @    £13.90  VAT  0%  net    £166.80
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty  11 @     £9.19  VAT 20%  net    £101.09
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty  10 @    £17.24  VAT  0%  net    £172.40
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  15 @    £11.88  VAT  0%  net    £178.20
+  Net: £618.49   VAT: £20.22
+  Less credit CN-8539: £58.17
+  Total due: £580.54
+  Note: Less credit note CN-8539.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  (none)
+  BRO-32182 (1 Feb 2026), PO PO-2026-1097, total £52.66, paid
+    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   2 @    £10.26  VAT 20%  net     £20.52
+    BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   2 @    £14.02  VAT  0%  net     £28.04
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  (none)
+  CN-8539 (21 May 2026), £116.35, PO PO-2026-1526: Goods on delivery GRN-91926 below specification. To be deducted from your next invoice against PO-2026-1526.
 ```
 
 ## Case 26
 
 ```
 SUPPLIER RECORD
-  Name: Ingleby Foodservice Ltd
-  Also trades as: Ingleby Foodservice
-  VAT number: GB 261 4014 19
-  Bank account on file: ending 3643
-  Contract pricing: fixed
+  Name: Penrith Vale Tea Merchants Ltd
+  Also trades as: Penrith Vale Tea Merchants, Penrith Vale Tea
+  VAT number: GB 079 2440 26
+  Bank account on file: ending 8758
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-2018 (raised 16 Sep 2026)
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty  14 @    £17.17
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £23.35
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   2 @    £13.30
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   4 @    £15.82
-  Note: Supplier price review: 6% uplift agreed by Purchasing, applies from 27 October 2026.
+PURCHASE ORDER PO-2026-1721 (raised 4 Jul 2026)
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £25.69
+  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   7 @    £19.83
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   9 @    £17.34
+  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £23.60
 
 GOODS RECEIVED
-  GRN-97188 (17 Sep 2026): BAK-VSP-12 x14, COF-COL-1K x8, SNK-CDG-12 x2, SNK-CSB-12 x4
+  GRN-67607 (9 Jul 2026): COF-DEC-1K x5, TEA-EBT-1100 x7, TEA-EGL-500 x9, COF-COL-1K x8
 
-INVOICE ING-68565 (dated 17 Sep 2026)
-  From: Ingleby Foodservice Ltd
-  VAT number: GB 261 4014 19
-  Pay to: account ending 3643
-  Your PO: PO-2026-2018
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty  14 @    £18.20  VAT  0%  net    £254.80
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £24.75  VAT  0%  net    £198.00
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   2 @    £14.10  VAT 20%  net     £28.20
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   4 @    £16.77  VAT 20%  net     £67.08
-  Net: £548.08   VAT: £19.06
-  Total due: £567.14
+INVOICE PEN-25869 (dated 13 Jul 2026)
+  From: Penrith Vale Tea Merchants Ltd
+  VAT number: GB 079 2440 26
+  Pay to: account ending 8758
+  Your PO: PO-2026-1721
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £25.69  VAT  0%  net    £128.45
+  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   7 @    £19.83  VAT  0%  net    £138.81
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   9 @    £17.34  VAT  0%  net    £156.06
+  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £23.83  VAT  0%  net    £190.64
+  Net: £613.96   VAT: £0.00
+  Total due: £613.96
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  ING-68226 (27 May 2026), PO PO-2026-1563, total £245.01, paid
-    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   9 @    £10.33  VAT 20%  net     £92.97
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  17 @     £7.85  VAT  0%  net    £133.45
-  ING-68300 (20 Jun 2026), PO PO-2026-1648, total £396.42, paid
-    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty  11 @    £18.17  VAT  0%  net    £199.87
-    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  11 @    £14.89  VAT 20%  net    £163.79
-  ING-68469 (16 Aug 2026), PO PO-2026-1877, total £557.88, paid
-    COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £22.29  VAT  0%  net    £178.32
-    DRY-CRM-1L     Double cream 1L                                  qty  54 @     £4.10  VAT  0%  net    £221.40
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  10 @    £13.18  VAT 20%  net    £131.80
+  PEN-25655 (3 May 2026), PO PO-2026-1454, total £203.26, paid
+    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   3 @    £16.42  VAT  0%  net     £49.26
+    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   8 @    £19.25  VAT  0%  net    £154.00
+  PEN-25782 (14 Jun 2026), PO PO-2026-1609, total £534.10, paid
+    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   9 @    £24.90  VAT  0%  net    £224.10
+    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   5 @    £19.82  VAT  0%  net     £99.10
+    COF-COL-1K     Colombian coffee beans 1kg                       qty  10 @    £21.09  VAT  0%  net    £210.90
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1137,42 +1131,43 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Redmire Biscuit Company Ltd
-  Also trades as: Redmire Biscuit Company, Redmire Biscuit
-  VAT number: GB 539 3363 38
-  Bank account on file: ending 8073
+  Name: Ilsley Dairies Ltd
+  Also trades as: Ilsley Dairies
+  VAT number: GB 131 1440 24
+  Bank account on file: ending 2122
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1886 (raised 14 Aug 2026)
-  SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £11.22
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty   4 @    £15.08
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  10 @    £15.86
+PURCHASE ORDER PO-2026-1930 (raised 25 Aug 2026)
+  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  44 @     £7.27
+  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  51 @     £8.31
+  Note: Deliver before 8am.
 
 GOODS RECEIVED
-  GRN-49231 (19 Aug 2026): SNK-CRS-24 x8, BAK-SCN-24 x4, SNK-CSB-12 x10
+  GRN-28806 (31 Aug 2026): DRY-SSK-6 x44, DRY-WHL-6 x51
 
-INVOICE RED-37885 (dated 21 Aug 2026)
-  From: Redmire Biscuit Company Ltd
-  VAT number: GB 539 3363 38
-  Pay to: account ending 8073
-  Your PO: PO-2026-1886
-  SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £11.22  VAT 20%  net     £89.76
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty   4 @    £15.08  VAT  0%  net     £60.32
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  10 @    £15.86  VAT 20%  net    £158.60
-  Net: £308.68   VAT: £49.67
-  Total due: £358.35
+INVOICE ILS-65123 (dated 17 Sep 2026)
+  From: Ilsley Dairies Ltd
+  VAT number: GB 131 1440 24
+  Pay to: account ending 2122
+  Your PO: PO-2026-1930
+  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  44 @     £7.27  VAT  0%  net    £319.88
+  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  51 @     £8.31  VAT  0%  net    £423.81
+  Net: £743.69   VAT: £0.00
+  Total due: £743.69
+  Note: Statement reminder: please arrange payment.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  RED-37694 (18 Jun 2026), PO PO-2026-1644, total £300.05, paid
-    BAK-VSP-12     Victoria sponge, 12 slices                       qty   6 @    £16.19  VAT  0%  net     £97.14
-    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   6 @    £12.23  VAT  0%  net     £73.38
-    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   7 @    £15.42  VAT 20%  net    £107.94
-  RED-37735 (2 Jul 2026), PO PO-2026-1687, total £166.44, paid
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  10 @    £13.87  VAT 20%  net    £138.70
-  RED-37885 (11 Aug 2026), PO PO-2026-1886, total £358.35, paid
-    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £11.22  VAT 20%  net     £89.76
-    BAK-SCN-24     Fruit scones (tray of 24)                        qty   4 @    £15.08  VAT  0%  net     £60.32
-    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty  10 @    £15.86  VAT 20%  net    £158.60
+  ILS-64935 (2 Jul 2026), PO PO-2026-1703, total £575.24, paid
+    DRY-CRM-1L     Double cream 1L                                  qty  34 @     £4.07  VAT  0%  net    £138.38
+    DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  54 @     £8.09  VAT  0%  net    £436.86
+  ILS-64990 (20 Jul 2026), PO PO-2026-1760, total £429.70, paid
+    DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  35 @     £7.74  VAT  0%  net    £270.90
+    DRY-CRM-1L     Double cream 1L                                  qty  40 @     £3.97  VAT  0%  net    £158.80
+  ILS-65056 (11 Aug 2026), PO PO-2026-1856, total £105.36, paid
+    DRY-CRM-1L     Double cream 1L                                  qty  24 @     £4.39  VAT  0%  net    £105.36
+  ILS-065123 (3 Sep 2026), PO PO-2026-1930, total £743.69, paid
+    DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  44 @     £7.27  VAT  0%  net    £319.88
+    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  51 @     £8.31  VAT  0%  net    £423.81
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1182,82 +1177,78 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Eskdale Wholesale Ltd
-  Also trades as: Eskdale Wholesale
-  VAT number: GB 047 4395 75
-  Bank account on file: ending 5974
+  Name: Glenholt Espresso Services Ltd
+  Also trades as: Glenholt Espresso Services, Glenholt Espresso
+  VAT number: GB 726 1675 13
+  Bank account on file: ending 7017
   Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1621 (raised 9 Jun 2026)
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   8 @    £23.53
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £25.31
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  16 @     £7.39
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   3 @    £15.35
+PURCHASE ORDER PO-2026-1735 (raised 7 Jul 2026)
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £151.69
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £73.16
+  Note: Deliver to Market Street branch.
+  Note: Supplier price review: 4% uplift agreed by Purchasing, applies from 9 July 2026.
 
 GOODS RECEIVED
-  GRN-80782 (14 Jun 2026): TEA-ASM-1K x8, COF-DEC-1K x5, DRY-SSK-6 x16, SNK-CSB-12 x3
-    Note: Delivered to rear entrance.
+  GRN-99698 (10 Jul 2026): EQP-SVC-VISIT x1, EQP-FLT-CART x1
 
-INVOICE ESK-39397 (dated 19 Jun 2026)
-  From: Eskdale Wholesale Ltd
-  VAT number: GB 047 4395 75
-  Pay to: account ending 5974
-  Your PO: PO-2026-1621
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   8 @    £23.53  VAT  0%  net    £188.24
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £25.31  VAT  0%  net    £126.55
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  16 @     £7.39  VAT  0%  net    £118.24
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   3 @    £15.35  VAT  0%  net     £46.05
-  Net: £479.08   VAT: £0.00
-  Total due: £479.08
+INVOICE GLE-58160 (dated 10 Jul 2026)
+  From: Glenholt Espresso Services Ltd
+  VAT number: GB 726 1675 13
+  Pay to: account ending 7017
+  Your PO: PO-2026-1735
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £157.76  VAT 20%  net    £157.76
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £76.09  VAT 20%  net     £76.09
+  Net: £233.85   VAT: £46.77
+  Total due: £280.62
+  Note: Thank you for your custom.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  ESK-39017 (13 Feb 2026), PO PO-2026-1133, total £328.94, paid
-    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   6 @    £15.47  VAT  0%  net     £92.82
-    COF-COL-1K     Colombian coffee beans 1kg                       qty   2 @    £23.02  VAT  0%  net     £46.04
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  24 @     £7.92  VAT  0%  net    £190.08
+  GLE-57838 (25 Mar 2026), PO PO-2026-1289, total £255.37, paid
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £140.47  VAT 20%  net    £140.47
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £72.34  VAT 20%  net     £72.34
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  (none)
+  CN-7664 (31 May 2026), £39.30, PO PO-2026-1289: Damaged items on delivery GRN-75585. To be deducted from your next invoice against PO-2026-1289.
 ```
 
 ## Case 29
 
 ```
 SUPPLIER RECORD
-  Name: Radley Tea Company Ltd
-  Also trades as: Radley Tea Company, Radley Tea
-  VAT number: GB 603 1372 15
-  Bank account on file: ending 9842
-  Contract pricing: fixed
+  Name: Kirkham Bakery Supplies Ltd
+  Also trades as: Kirkham Bakery Supplies, Kirkham Bakery
+  VAT number: GB 057 9868 28
+  Bank account on file: ending 2487
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1801 (raised 24 Jul 2026)
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   5 @    £17.99
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty  11 @    £17.74
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £23.25
+PURCHASE ORDER PO-2026-1602 (raised 4 Jun 2026)
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   2 @    £15.07
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   6 @    £12.04
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £9.33
+  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty  10 @    £14.36
 
 GOODS RECEIVED
-  GRN-61464 (28 Jul 2026): TEA-EBT-1100 x3, TEA-EGL-500 x11, TEA-ASM-1K x5
-    Note: Partial shipment. Outstanding quantity to follow.
+  GRN-31283 (5 Jun 2026): BAK-SCN-24 x2, BAK-DIG-12 x6, SNK-SPW-24 x5, BAK-SHB-12 x10
 
-INVOICE RAD-29324 (dated 1 Aug 2026)
-  From: Radley Tea Company Ltd
-  VAT number: GB 603 1372 15
-  Pay to: account ending 9842
-  Your PO: PO-2026-1801
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   5 @    £17.99  VAT  0%  net     £89.95
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty  11 @    £17.74  VAT  0%  net    £195.14
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £23.25  VAT  0%  net    £116.25
-  Net: £401.34   VAT: £0.00
-  Total due: £401.34
+INVOICE KIR-49555 (dated 5 Jun 2026)
+  From: Kirkham Bakery Supplies Ltd
+  VAT number: GB 057 9868 28
+  Pay to: account ending 2487
+  Your PO: PO-2026-1602
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   2 @    £15.07  VAT  0%  net     £30.14
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   6 @    £12.04  VAT 20%  net     £72.24
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £9.33  VAT 20%  net     £46.65
+  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty  10 @    £14.36  VAT  0%  net    £143.60
+  Net: £292.63   VAT: £23.78
+  Total due: £316.41
+  Note: Please quote the invoice number on your remittance.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  RAD-28960 (1 Apr 2026), PO PO-2026-1317, total £290.41, paid
-    COF-COL-1K     Colombian coffee beans 1kg                       qty   4 @    £24.34  VAT  0%  net     £97.36
-    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty  11 @    £17.55  VAT  0%  net    £193.05
-  RAD-29022 (22 Apr 2026), PO PO-2026-1400, total £288.97, paid
-    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty  11 @    £26.27  VAT  0%  net    £288.97
-  RAD-29274 (15 Jul 2026), PO PO-2026-1758, total £273.13, paid
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  11 @    £24.83  VAT  0%  net    £273.13
+  KIR-49362 (2 Apr 2026), PO PO-2026-1328, total £261.41, paid
+    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £11.48  VAT 20%  net     £91.84
+    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   3 @    £15.66  VAT 20%  net     £46.98
+    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   6 @    £13.17  VAT 20%  net     £79.02
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1267,38 +1258,48 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Oakhurst Tea Company Ltd
-  Also trades as: Oakhurst Tea Company, Oakhurst Tea
-  VAT number: GB 326 5020 14
-  Bank account on file: ending 7057
-  Contract pricing: fixed
+  Name: Aldwick Wholesale Ltd
+  Also trades as: Aldwick Wholesale
+  VAT number: GB 729 0222 79
+  Bank account on file: ending 1971
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1520 (raised 15 May 2026)
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   2 @    £23.30
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty  12 @    £26.15
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   5 @    £22.36
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   8 @    £17.55
-  Note: Deliver to Market Street branch.
+PURCHASE ORDER PO-2026-1735 (raised 7 Jul 2026)
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   8 @    £11.58
+  SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £10.49
+  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  29 @     £8.14
+  DRY-CRM-1L     Double cream 1L                                  qty  23 @     £4.48
 
 GOODS RECEIVED
-  GRN-84003 (17 May 2026): TEA-ASM-1K x2, COF-DEC-1K x12, COF-COL-1K x5, TEA-EBT-1100 x8
+  GRN-37338 (11 Jul 2026): BAK-DIG-12 x8, SNK-CRS-24 x8, DRY-SSK-6 x29, DRY-CRM-1L x23
+    Note: Chilled items checked on arrival.
 
-INVOICE OAK-76708 (dated 21 May 2026)
-  From: Oakhurst Tea Company Ltd
-  VAT number: GB 326 5020 14
-  Pay to: account ending 7057
-  Your PO: PO-2026-1520
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   2 @    £23.30  VAT  0%  net     £46.60
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty  12 @    £26.15  VAT  0%  net    £313.80
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   5 @    £22.36  VAT  0%  net    £111.80
-  TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   8 @    £17.55  VAT  0%  net    £140.40
-  Net: £612.60   VAT: £0.00
-  Total due: £612.60
-  Note: Thank you for your custom.
+INVOICE ALD-51367 (dated 5 Aug 2026)
+  From: Aldwick Wholesale Ltd
+  VAT number: GB 729 0222 79
+  Pay to: account ending 1971
+  Your PO: PO-2026-1735
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   8 @    £11.58  VAT  0%  net     £92.64
+  SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £10.49  VAT 20%  net     £83.92
+  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  29 @     £8.14  VAT  0%  net    £236.06
+  DRY-CRM-1L     Double cream 1L                                  qty  23 @     £4.48  VAT  0%  net    £103.04
+  Net: £515.66   VAT: £16.78
+  Total due: £532.44
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  OAK-76578 (7 Apr 2026), PO PO-2026-1354, total £106.20, paid
-    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   4 @    £26.55  VAT  0%  net    £106.20
+  ALD-51064 (3 Apr 2026), PO PO-2026-1346, total £177.96, paid
+    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  17 @     £8.42  VAT  0%  net    £143.14
+    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   2 @    £14.51  VAT 20%  net     £29.02
+  ALD-51174 (9 May 2026), PO PO-2026-1467, total £179.31, paid
+    COF-COL-1K     Colombian coffee beans 1kg                       qty   6 @    £23.88  VAT  0%  net    £143.28
+    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   3 @    £12.01  VAT  0%  net     £36.03
+  ALD-51322 (28 Jun 2026), PO PO-2026-1668, total £74.59, paid
+    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   7 @     £8.88  VAT 20%  net     £62.16
+  ALD-51367 (13 Jul 2026), PO PO-2026-1735, total £532.44, paid
+    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   8 @    £11.58  VAT  0%  net     £92.64
+    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   8 @    £10.49  VAT 20%  net     £83.92
+    DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  29 @     £8.14  VAT  0%  net    £236.06
+    DRY-CRM-1L     Double cream 1L                                  qty  23 @     £4.48  VAT  0%  net    £103.04
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1308,39 +1309,42 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Brockley Fine Foods Ltd
-  Also trades as: Brockley Fine Foods, Brockley Fine
-  VAT number: GB 595 7117 77
-  Bank account on file: ending 7927
-  Contract pricing: fixed
+  Name: Kirkham Bakery Supplies Ltd
+  Also trades as: Kirkham Bakery Supplies, Kirkham Bakery
+  VAT number: GB 057 9868 28
+  Bank account on file: ending 2487
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1531 (raised 17 May 2026)
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty   6 @    £15.49
-  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   6 @     £9.75
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   6 @    £14.08
+PURCHASE ORDER PO-2026-1709 (raised 1 Jul 2026)
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   4 @    £15.89
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty  12 @    £15.47
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  15 @    £14.44
+  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   4 @    £14.58
+  Note: Contact the duty manager on arrival.
 
 GOODS RECEIVED
-  GRN-24994 (19 May 2026): BAK-VSP-12 x6, SNK-SPW-24 x6, SNK-CDG-12 x6
+  GRN-90743 (7 Jul 2026): SNK-CSB-12 x3, BAK-VSP-12 x8, BAK-SCN-24 x9, BAK-SHB-12 x3
+    Note: Partial shipment. Outstanding quantity to follow.
+  GRN-20563 (14 Jul 2026): SNK-CSB-12 x1, BAK-VSP-12 x4, BAK-SCN-24 x6, BAK-SHB-12 x1
 
-INVOICE BRO-32515 (dated 23 May 2026)
-  From: Brockley Fine Foods Ltd
-  VAT number: GB 595 7117 77
-  Pay to: account ending 7927
-  Your PO: PO-2026-1531
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty   6 @    £15.49  VAT  0%  net     £92.94
-  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   6 @     £9.75  VAT 20%  net     £58.50
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   6 @    £14.08  VAT 20%  net     £84.48
-  Net: £235.92   VAT: £28.60
-  Total due: £264.52
+INVOICE KIR-49681 (dated 17 Jul 2026)
+  From: Kirkham Bakery Supplies Ltd
+  VAT number: GB 057 9868 28
+  Pay to: account ending 2487
+  Your PO: PO-2026-1709
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   1 @    £15.89  VAT 20%  net     £15.89
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty   4 @    £15.47  VAT  0%  net     £61.88
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   6 @    £14.44  VAT  0%  net     £86.64
+  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   1 @    £14.58  VAT  0%  net     £14.58
+  Net: £178.99   VAT: £3.18
+  Total due: £182.17
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  BRO-32259 (27 Feb 2026), PO PO-2026-1183, total £336.08, paid
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  11 @    £13.04  VAT 20%  net    £143.44
-    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  15 @    £10.93  VAT  0%  net    £163.95
-  BRO-32470 (8 May 2026), PO PO-2026-1531, total £264.52, paid
-    BAK-VSP-12     Victoria sponge, 12 slices                       qty   6 @    £15.49  VAT  0%  net     £92.94
-    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   6 @     £9.75  VAT 20%  net     £58.50
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty   6 @    £14.08  VAT 20%  net     £84.48
+  KIR-49655 (9 Jul 2026), PO PO-2026-1709, total £354.66, paid
+    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   3 @    £15.89  VAT 20%  net     £47.67
+    BAK-VSP-12     Victoria sponge, 12 slices                       qty   8 @    £15.47  VAT  0%  net    £123.76
+    BAK-SCN-24     Fruit scones (tray of 24)                        qty   9 @    £14.44  VAT  0%  net    £129.96
+    BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   3 @    £14.58  VAT  0%  net     £43.74
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1350,42 +1354,43 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Stanwick Bakery Supplies Ltd
-  Also trades as: Stanwick Bakery Supplies, Stanwick Bakery
-  VAT number: GB 878 0175 98
-  Bank account on file: ending 9930
+  Name: Redmire Biscuit Company Ltd
+  Also trades as: Redmire Biscuit Company, Redmire Biscuit
+  VAT number: GB 539 3363 38
+  Bank account on file: ending 8073
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-2047 (raised 23 Sep 2026)
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty  12 @    £13.81
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty   4 @    £17.01
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   6 @    £16.74
+PURCHASE ORDER PO-2026-1643 (raised 14 Jun 2026)
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  13 @    £14.76
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £9.40
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   7 @    £14.79
+  Note: Deliver before 8am.
 
 GOODS RECEIVED
-  GRN-18837 (25 Sep 2026): BAK-SCN-24 x8, BAK-VSP-12 x3, SNK-CSB-12 x4
-    Note: Short delivery: remaining items on back order.
-  GRN-25748 (2 Oct 2026): BAK-SCN-24 x4, BAK-VSP-12 x1, SNK-CSB-12 x2
+  GRN-69724 (15 Jun 2026): BAK-SCN-24 x13, SNK-SPW-24 x5, SNK-CSB-12 x7
 
-INVOICE STA-55016 (dated 4 Oct 2026)
-  From: Stanwick Bakery Supplies Ltd
-  VAT number: GB 878 0175 98
-  Pay to: account ending 9930
-  Your PO: PO-2026-2047
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty   4 @    £13.81  VAT  0%  net     £55.24
-  BAK-VSP-12     Victoria sponge, 12 slices                       qty   1 @    £17.01  VAT  0%  net     £17.01
-  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   2 @    £16.74  VAT 20%  net     £33.48
-  Net: £105.73   VAT: £6.70
-  Total due: £112.43
-  Note: Thank you for your custom.
+INVOICE RED-37683 (dated 15 Jun 2026)
+  From: Redmire Biscuit Company Ltd
+  VAT number: GB 539 3363 38
+  Pay to: account ending 8073
+  Your PO: PO-2026-1643
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  13 @    £14.76  VAT  0%  net    £191.88
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £9.40  VAT 20%  net     £47.00
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   7 @    £14.79  VAT 20%  net    £103.53
+  Net: £342.41   VAT: £35.95
+  Total due: £378.36
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  STA-54729 (30 Jun 2026), PO PO-2026-1691, total £241.57, paid
-    BAK-SCN-24     Fruit scones (tray of 24)                        qty  11 @    £13.61  VAT  0%  net    £149.71
-    BAK-VSP-12     Victoria sponge, 12 slices                       qty   6 @    £15.31  VAT  0%  net     £91.86
-  STA-54991 (25 Sep 2026), PO PO-2026-2047, total £241.86, paid
-    BAK-SCN-24     Fruit scones (tray of 24)                        qty   8 @    £13.81  VAT  0%  net    £110.48
-    BAK-VSP-12     Victoria sponge, 12 slices                       qty   3 @    £17.01  VAT  0%  net     £51.03
-    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   4 @    £16.74  VAT 20%  net     £66.96
+  RED-37358 (26 Feb 2026), PO PO-2026-1201, total £370.83, paid
+    BAK-SCN-24     Fruit scones (tray of 24)                        qty  13 @    £14.79  VAT  0%  net    £192.27
+    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty  12 @     £9.73  VAT 20%  net    £116.76
+    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty   3 @    £10.68  VAT 20%  net     £32.04
+  RED-37416 (18 Mar 2026), PO PO-2026-1264, total £201.56, paid
+    BAK-VSP-12     Victoria sponge, 12 slices                       qty   4 @    £17.12  VAT  0%  net     £68.48
+    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  12 @    £11.09  VAT  0%  net    £133.08
+  RED-37435 (24 Mar 2026), PO PO-2026-1300, total £182.64, paid
+    BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   4 @    £13.11  VAT  0%  net     £52.44
+    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty  10 @    £10.85  VAT 20%  net    £108.50
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1395,37 +1400,35 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Calder Wholesale Ltd
-  Also trades as: Calder Wholesale
-  VAT number: GB 154 7280 38
-  Bank account on file: ending 5926
-  Contract pricing: fixed
+  Name: Denholm Wholesale Ltd
+  Also trades as: Denholm Wholesale
+  VAT number: GB 760 1895 55
+  Bank account on file: ending 9738
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1696 (raised 28 Jun 2026)
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  10 @    £23.59
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   7 @    £21.30
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  12 @    £12.72
-  Note: Standing weekly order.
+PURCHASE ORDER PO-2026-1561 (raised 25 May 2026)
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   2 @    £25.61
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   4 @    £14.76
+  Note: Deliver before 8am.
+  Note: Revised pricing (+3%) confirmed in writing, effective 26 May 2026.
 
 GOODS RECEIVED
-  GRN-21733 (3 Jul 2026): TEA-ASM-1K x10, COF-COL-1K x7, SNK-CDG-12 x12
+  GRN-75372 (26 May 2026): TEA-ASM-1K x2, BAK-SCN-24 x4
+    Note: Signed for by shift manager.
 
-INVOICE CAL-34338 (dated 3 Jul 2026)
-  From: Calder Wholesale Ltd
-  VAT number: GB 154 7280 38
-  Pay to: account ending 5926
-  Your PO: PO-2026-1696
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  10 @    £23.59  VAT  0%  net    £235.90
-  COF-COL-1K     Colombian coffee beans 1kg                       qty   7 @    £21.30  VAT  0%  net    £149.10
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  12 @    £12.72  VAT 20%  net    £152.64
-  Net: £537.64   VAT: £30.53
-  Total due: £568.17
+INVOICE DEN-17237 (dated 30 May 2026)
+  From: Denholm Wholesale Ltd
+  VAT number: GB 760 1895 55
+  Pay to: account ending 9738
+  Your PO: PO-2026-1561
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   2 @    £27.27  VAT  0%  net     £54.54
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   4 @    £15.72  VAT  0%  net     £62.88
+  Net: £117.42   VAT: £0.00
+  Total due: £117.42
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  CAL-34295 (19 Jun 2026), PO PO-2026-1670, total £568.17, paid
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  10 @    £23.59  VAT  0%  net    £235.90
-    COF-COL-1K     Colombian coffee beans 1kg                       qty   7 @    £21.30  VAT  0%  net    £149.10
-    SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  12 @    £12.72  VAT 20%  net    £152.64
+  DEN-17134 (26 Apr 2026), PO PO-2026-1423, total £172.14, paid
+    DRY-CRM-1L     Double cream 1L                                  qty  38 @     £4.53  VAT  0%  net    £172.14
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1435,127 +1438,132 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Harrowby Foodservice Ltd
-  Also trades as: Harrowby Foodservice
-  VAT number: GB 528 9078 66
-  Bank account on file: ending 6536
-  Contract pricing: variable
+  Name: Brockley Fine Foods Ltd
+  Also trades as: Brockley Fine Foods, Brockley Fine
+  VAT number: GB 595 7117 77
+  Bank account on file: ending 7927
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1968 (raised 4 Sep 2026)
-  COF-COL-1K     Colombian coffee beans 1kg                       qty  12 @    £22.67
-  DRY-CRM-1L     Double cream 1L                                  qty  37 @     £4.01
-  Note: Contact the duty manager on arrival.
+PURCHASE ORDER PO-2026-1870 (raised 10 Aug 2026)
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £8.97
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty  12 @    £16.54
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  11 @    £11.54
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  14 @    £15.53
+  Note: Deliver before 8am.
 
 GOODS RECEIVED
-  GRN-42142 (9 Sep 2026): COF-COL-1K x12, DRY-CRM-1L x37
-    Note: Signed for by shift manager.
+  GRN-80961 (13 Aug 2026): SNK-SPW-24 x5, BAK-VSP-12 x12, BAK-DIG-12 x11, BAK-SCN-24 x14
 
-INVOICE HAR-27754 (dated 13 Sep 2026)
-  From: Harrowby Foodservice Ltd
-  VAT number: GB 528 9078 66
-  Pay to: account ending 6536
-  Your PO: PO-2026-1968
-  COF-COL-1K     Colombian coffee beans 1kg                       qty  12 @    £22.67  VAT  0%  net    £272.04
-  DRY-CRM-1L     Double cream 1L                                  qty  37 @     £4.01  VAT  0%  net    £148.37
-  Net: £420.41   VAT: £0.00
-  Total due: £420.41
-  Note: Please quote the invoice number on your remittance.
+INVOICE BRO-32776 (dated 18 Aug 2026)
+  From: Brockley Fine Foods Ltd
+  VAT number: GB 595 7117 77
+  Pay to: account ending 7927
+  Your PO: PO-2026-1870
+  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @     £8.97  VAT 20%  net     £44.85
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty  12 @    £16.54  VAT  0%  net    £198.48
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  11 @    £11.54  VAT  0%  net    £126.94
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  14 @    £15.53  VAT  0%  net    £217.42
+  Net: £587.69   VAT: £8.97
+  Less credit CN-5354: £92.17
+  Total due: £504.49
+  Note: Less credit note CN-5354.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  HAR-27400 (18 May 2026), PO PO-2026-1501, total £425.81, paid
-    BAK-SCN-24     Fruit scones (tray of 24)                        qty  11 @    £14.22  VAT  0%  net    £156.42
-    COF-COL-1K     Colombian coffee beans 1kg                       qty  11 @    £24.49  VAT  0%  net    £269.39
-  HAR-27455 (5 Jun 2026), PO PO-2026-1590, total £501.92, paid
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  20 @     £7.42  VAT  0%  net    £148.40
-    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   3 @    £26.87  VAT  0%  net     £80.61
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  11 @    £24.81  VAT  0%  net    £272.91
-  HAR-27548 (6 Jul 2026), PO PO-2026-1716, total £708.33, paid
-    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty  12 @    £10.86  VAT 20%  net    £130.32
-    DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  52 @     £7.07  VAT  0%  net    £367.64
-    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   7 @    £26.33  VAT  0%  net    £184.31
+  BRO-32465 (6 May 2026), PO PO-2026-1465, total £149.16, paid
+    SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty  11 @    £11.30  VAT 20%  net    £124.30
+  BRO-32693 (21 Jul 2026), PO PO-2026-1760, total £470.40, paid
+    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   8 @    £14.50  VAT 20%  net    £116.00
+    BAK-SCN-24     Fruit scones (tray of 24)                        qty  10 @    £14.88  VAT  0%  net    £148.80
+    BAK-VSP-12     Victoria sponge, 12 slices                       qty  12 @    £15.20  VAT  0%  net    £182.40
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-8282 (10 Sep 2026), £36.88, PO PO-2026-1968: Pricing error on previous invoice. To be deducted from your next invoice against PO-2026-1968.
+  CN-5354 (16 Aug 2026), £92.17, PO PO-2026-1870: Damaged items on delivery GRN-80961. To be deducted from your next invoice against PO-2026-1870.
 ```
 
 ## Case 35
 
 ```
 SUPPLIER RECORD
-  Name: Kenley Farm Dairy Ltd
-  Also trades as: Kenley Farm Dairy, Kenley Farm
-  VAT number: GB 579 7543 23
-  Bank account on file: ending 1341
-  Contract pricing: variable
+  Name: Fenwick Wholesale Ltd
+  Also trades as: Fenwick Wholesale
+  VAT number: GB 684 9340 72
+  Bank account on file: ending 2581
+  Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1534 (raised 18 May 2026)
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  58 @     £7.83
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  37 @     £7.21
-  DRY-CRM-1L     Double cream 1L                                  qty  33 @     £4.26
+PURCHASE ORDER PO-2026-1848 (raised 5 Aug 2026)
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  13 @    £13.97
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   2 @    £24.80
 
 GOODS RECEIVED
-  GRN-90060 (23 May 2026): DRY-WHL-6 x58, DRY-SSK-6 x37, DRY-CRM-1L x33
+  GRN-79551 (9 Aug 2026): BAK-SCN-24 x13, COF-DEC-1K x2
 
-INVOICE KEN-13815 (dated 23 May 2026)
-  From: Kenley Farm Dairy Ltd
-  VAT number: GB 579 7543 23
-  Pay to: account ending 1341
-  Your PO: PO-2026-1534
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  58 @     £7.83  VAT  0%  net    £454.14
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  37 @     £7.21  VAT  0%  net    £266.77
-  DRY-CRM-1L     Double cream 1L                                  qty  33 @     £4.26  VAT  0%  net    £140.58
-  Net: £861.49   VAT: £1.15
-  Total due: £862.64
+INVOICE FEN-78664 (dated 14 Aug 2026)
+  From: Fenwick Wholesale Ltd
+  VAT number: GB 684 9340 72
+  Pay to: account ending 2581
+  Your PO: PO-2026-1848
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty  13 @    £13.97  VAT  0%  net    £181.61
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   2 @    £25.22  VAT  0%  net     £50.44
+  Net: £232.05   VAT: £0.00
+  Total due: £232.05
+  Note: Please quote the invoice number on your remittance.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  KEN-13598 (12 Mar 2026), PO PO-2026-1252, total £374.76, paid
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  25 @     £8.43  VAT  0%  net    £210.75
-    DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  21 @     £7.81  VAT  0%  net    £164.01
-  KEN-13613 (17 Mar 2026), PO PO-2026-1271, total £244.26, paid
-    DRY-CRM-1L     Double cream 1L                                  qty  59 @     £4.14  VAT  0%  net    £244.26
-  KEN-13628 (22 Mar 2026), PO PO-2026-1289, total £198.45, paid
-    DRY-CRM-1L     Double cream 1L                                  qty  49 @     £4.05  VAT  0%  net    £198.45
+  FEN-78543 (5 Jul 2026), PO PO-2026-1699, total £154.56, paid
+    BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty  12 @    £12.88  VAT  0%  net    £154.56
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  (none)
+  CN-5635 (7 Jul 2026), £53.96, PO PO-2026-1699: Damaged items on delivery GRN-79327. To be deducted from your next invoice against PO-2026-1699.
 ```
 
 ## Case 36
 
 ```
 SUPPLIER RECORD
-  Name: Burnell Catering Engineers Ltd
-  Also trades as: Burnell Catering Engineers, Burnell Catering
-  VAT number: GB 846 5632 12
-  Bank account on file: ending 2478
-  Contract pricing: fixed
+  Name: Harrowby Foodservice Ltd
+  Also trades as: Harrowby Foodservice
+  VAT number: GB 528 9078 66
+  Bank account on file: ending 6536
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-2072 (raised 30 Sep 2026)
-  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £73.43
-  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £145.23
-  Note: Deliver before 8am.
-  Note: Price increase of 3% on all lines agreed with supplier, effective 3 October 2026.
+PURCHASE ORDER PO-2026-1682 (raised 24 Jun 2026)
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   5 @    £12.05
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   8 @    £14.43
+  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  10 @     £7.93
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   8 @    £15.54
 
 GOODS RECEIVED
-  GRN-70274 (2 Oct 2026): EQP-FLT-CART x1, EQP-SVC-VISIT x1
+  GRN-71178 (30 Jun 2026): BAK-DIG-12 x5, BAK-SCN-24 x8, DRY-WHL-6 x10, SNK-CSB-12 x8
 
-INVOICE BUR-24423 (dated 6 Oct 2026)
-  From: Burnell Catering Engineers Ltd
-  VAT number: GB 846 5632 12
-  Pay to: account ending 2478
-  Your PO: PO-2026-2072
-  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £78.29  VAT 20%  net     £78.29
-  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £154.84  VAT 20%  net    £154.84
-  Net: £233.13   VAT: £46.63
-  Total due: £279.76
+INVOICE HAR-27577 (dated 16 Jul 2026)
+  From: Harrowby Foodservice Ltd
+  VAT number: GB 528 9078 66
+  Pay to: account ending 6536
+  Your PO: PO-2026-1682
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   5 @    £12.05  VAT  0%  net     £60.25
+  BAK-SCN-24     Fruit scones (tray of 24)                        qty   8 @    £14.43  VAT  0%  net    £115.44
+  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  10 @     £7.93  VAT  0%  net     £79.30
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   8 @    £15.54  VAT 20%  net    £124.32
+  Net: £379.31   VAT: £24.86
+  Total due: £404.17
+  Note: Goods remain our property until paid in full.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  BUR-24047 (3 Jun 2026), PO PO-2026-1584, total £343.61, paid
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £143.17  VAT 20%  net    £286.34
-  BUR-24050 (4 Jun 2026), PO PO-2026-1573, total £345.10, paid
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £143.79  VAT 20%  net    £287.58
-  BUR-24145 (5 Jul 2026), PO PO-2026-1702, total £165.86, paid
-    EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £138.22  VAT 20%  net    £138.22
+  HAR-27188 (8 Mar 2026), PO PO-2026-1228, total £233.80, paid
+    COF-COL-1K     Colombian coffee beans 1kg                       qty  10 @    £23.38  VAT  0%  net    £233.80
+  HAR-27305 (16 Apr 2026), PO PO-2026-1373, total £421.34, paid
+    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   8 @    £16.00  VAT  0%  net    £128.00
+    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £24.81  VAT  0%  net    £124.05
+    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   9 @    £18.81  VAT  0%  net    £169.29
+  HAR-27352 (2 May 2026), PO PO-2026-1438, total £477.58, paid
+    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  15 @    £11.73  VAT  0%  net    £175.95
+    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   7 @     £9.39  VAT 20%  net     £65.73
+    DRY-CRM-1L     Double cream 1L                                  qty  55 @     £4.05  VAT  0%  net    £222.75
+  HAR-27542 (4 Jul 2026), PO PO-2026-1682, total £404.17, paid
+    BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   5 @    £12.05  VAT  0%  net     £60.25
+    BAK-SCN-24     Fruit scones (tray of 24)                        qty   8 @    £14.43  VAT  0%  net    £115.44
+    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  10 @     £7.93  VAT  0%  net     £79.30
+    SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   8 @    £15.54  VAT 20%  net    £124.32
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1565,39 +1573,37 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Ingleby Foodservice Ltd
-  Also trades as: Ingleby Foodservice
-  VAT number: GB 261 4014 19
-  Bank account on file: ending 3643
-  Contract pricing: fixed
+  Name: Pellow Foodservice Ltd
+  Also trades as: Pellow Foodservice
+  VAT number: GB 478 8783 84
+  Bank account on file: ending 9167
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1983 (raised 7 Sep 2026)
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  52 @     £7.27
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  13 @     £7.48
-  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   9 @    £13.03
-  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   7 @     £9.86
+PURCHASE ORDER PO-2026-1977 (raised 6 Sep 2026)
+  DRY-CRM-1L     Double cream 1L                                  qty  59 @     £4.43
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  11 @    £10.75
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   7 @    £15.46
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £23.92
+  Note: Deliver to Market Street branch.
 
 GOODS RECEIVED
-  GRN-53126 (8 Sep 2026): DRY-SSK-6 x52, DRY-WHL-6 x13, BAK-SHB-12 x9, SNK-SPW-24 x7
-    Note: Delivered to rear entrance.
+  GRN-42118 (8 Sep 2026): DRY-CRM-1L x59, BAK-DIG-12 x11, TEA-EGL-500 x7, TEA-ASM-1K x5
 
-INVOICE ING-68544 (dated 10 Sep 2026)
-  From: Ingleby Foodservice Ltd
-  VAT number: GB 261 4014 19
-  Pay to: account ending 3643
-  Your PO: PO-2026-1983
-  DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  52 @     £7.27  VAT  0%  net    £378.04
-  DRY-WHL-6      Whole milk 2L (case of 6)                        qty  13 @     £7.48  VAT  0%  net     £97.24
-  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   9 @    £13.03  VAT  0%  net    £117.27
-  SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   7 @     £9.86  VAT 20%  net     £69.02
-  Net: £661.57   VAT: £13.80
-  Total due: £675.37
+INVOICE PEL-56655 (dated 13 Sep 2026)
+  From: Pellow Foodservice Ltd
+  VAT number: GB 826 7856 08
+  Pay to: account ending 9167
+  Your PO: PO-2026-1977
+  DRY-CRM-1L     Double cream 1L                                  qty  59 @     £4.43  VAT  0%  net    £261.37
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty  11 @    £10.75  VAT  0%  net    £118.25
+  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   7 @    £15.46  VAT  0%  net    £108.22
+  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   5 @    £23.92  VAT  0%  net    £119.60
+  Net: £607.44   VAT: £0.00
+  Total due: £607.44
+  Note: Payment terms: 30 days from invoice date.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  ING-68510 (29 Aug 2026), PO PO-2026-1921, total £464.26, paid
-    BAK-SCN-24     Fruit scones (tray of 24)                        qty   7 @    £13.43  VAT  0%  net     £94.01
-    DRY-WHL-6      Whole milk 2L (case of 6)                        qty  30 @     £8.04  VAT  0%  net    £241.20
-    COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £25.81  VAT  0%  net    £129.05
+  (none)
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1607,81 +1613,81 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Marston Leaf & Bean Ltd
-  Also trades as: Marston Leaf & Bean, Marston Leaf
-  VAT number: GB 505 8770 65
-  Bank account on file: ending 8477
+  Name: Netherby Catering Engineers Ltd
+  Also trades as: Netherby Catering Engineers, Netherby Catering
+  VAT number: GB 371 6786 84
+  Bank account on file: ending 3525
   Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1780 (raised 19 Jul 2026)
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   7 @    £24.48
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   7 @    £16.77
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   4 @    £27.00
-  Note: Deliver before 8am.
+PURCHASE ORDER PO-2026-2038 (raised 21 Sep 2026)
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £143.56
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £65.21
 
 GOODS RECEIVED
-  GRN-41919 (25 Jul 2026): TEA-ASM-1K x7, TEA-EGL-500 x7, COF-DEC-1K x4
+  GRN-70906 (22 Sep 2026): EQP-SVC-VISIT x1, EQP-FLT-CART x1
+    Note: Work signed off by shift manager.
 
-INVOICE MAR-63305 (dated 25 Jul 2026)
-  From: Marston Leaf & Bean Ltd
-  VAT number: GB 505 8770 65
-  Pay to: account ending 8477
-  Your PO: PO-2026-1780
-  TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   7 @    £24.48  VAT  0%  net    £171.36
-  TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   7 @    £16.77  VAT  0%  net    £117.39
-  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   4 @    £27.00  VAT  0%  net    £108.00
-  Net: £396.75   VAT: £0.00
-  Less credit CN-6926: £59.75
-  Total due: £337.00
-  Note: Less credit note CN-6926.
+INVOICE NET-75388 (dated 24 Sep 2026)
+  From: Netherby Catering Engineers Ltd
+  VAT number: GB 371 6786 84
+  Pay to: account ending 3525
+  Your PO: PO-2026-2038
+  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £143.56  VAT 20%  net    £143.56
+  EQP-FLT-CART   Water filter cartridge                           qty   1 @    £65.21  VAT 20%  net     £65.21
+  Net: £208.77   VAT: £41.75
+  Total due: £250.52
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  MAR-63115 (23 May 2026), PO PO-2026-1521, total £696.79, paid
-    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty  11 @    £18.94  VAT  0%  net    £208.34
-    COF-COL-1K     Colombian coffee beans 1kg                       qty   9 @    £23.68  VAT  0%  net    £213.12
-    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty  11 @    £25.03  VAT  0%  net    £275.33
+  NET-75189 (20 Jul 2026), PO PO-2026-1757, total £452.11, paid
+    EQP-FLT-CART   Water filter cartridge                           qty   1 @    £65.76  VAT 20%  net     £65.76
+    EQP-SVC-VISIT  Espresso machine service visit                   qty   2 @   £155.50  VAT 20%  net    £311.00
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
-  CN-6926 (10 Jul 2026), £59.75, PO PO-2026-1780: Items missing from previous delivery. To be deducted from your next invoice against PO-2026-1780.
+  CN-8646 (5 Sep 2026), £51.63, PO PO-2026-1757: Goods on delivery GRN-98653 below specification. To be deducted from your next invoice against PO-2026-1757.
+  CN-7201 (30 Aug 2026), £51.37, PO PO-2026-1757: Damaged items on delivery GRN-72346. To be deducted from your next invoice against PO-2026-1757.
 ```
 
 ## Case 39
 
 ```
 SUPPLIER RECORD
-  Name: Ingleby Foodservice Ltd
-  Also trades as: Ingleby Foodservice
-  VAT number: GB 261 4014 19
-  Bank account on file: ending 3643
+  Name: Oakhurst Tea Company Ltd
+  Also trades as: Oakhurst Tea Company, Oakhurst Tea
+  VAT number: GB 326 5020 14
+  Bank account on file: ending 7057
   Contract pricing: fixed
 
-PURCHASE ORDER PO-2026-1949 (raised 30 Aug 2026)
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty  10 @    £15.54
-  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   2 @    £13.27
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  10 @    £13.37
+PURCHASE ORDER PO-2026-1645 (raised 15 Jun 2026)
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £25.16
+  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £24.42
 
 GOODS RECEIVED
-  GRN-17461 (3 Sep 2026): BAK-SCN-24 x10, BAK-SHB-12 x2, SNK-CDG-12 x10
+  GRN-12017 (17 Jun 2026): COF-DEC-1K x5, COF-COL-1K x8
+    Note: Delivered to rear entrance.
 
-INVOICE ING-68539 (dated 8 Sep 2026)
-  From: Ingleby Foodservice Ltd
-  VAT number: GB 261 4014 19
-  Pay to: account ending 3643
-  Your PO: PO-2026-1949
-  BAK-SCN-24     Fruit scones (tray of 24)                        qty  10 @    £15.81  VAT  0%  net    £158.10
-  BAK-SHB-12     All-butter shortbread fingers 150g (case of 12)  qty   2 @    £13.27  VAT  0%  net     £26.54
-  SNK-CDG-12     Milk chocolate digestives 300g (case of 12)      qty  10 @    £13.37  VAT 20%  net    £133.70
-  Net: £318.34   VAT: £26.74
-  Total due: £345.08
-  Note: Goods remain our property until paid in full.
+INVOICE OAK-76790 (dated 17 Jun 2026)
+  From: Oakhurst Tea Company Ltd
+  VAT number: GB 326 5020 14
+  Pay to: account ending 5377
+  Your PO: PO-2026-1645
+  COF-DEC-1K     Decaffeinated coffee beans 1kg                   qty   5 @    £25.16  VAT  0%  net    £125.80
+  COF-COL-1K     Colombian coffee beans 1kg                       qty   8 @    £24.42  VAT  0%  net    £195.36
+  Net: £321.16   VAT: £0.00
+  Total due: £321.16
+  Note: Payment terms: 30 days from invoice date.
+  Note: IMPORTANT: we have moved banks. Please pay to the account ending 5377 from now on.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
-  ING-68197 (17 May 2026), PO PO-2026-1510, total £544.52, paid
-    SNK-SPW-24     Sparkling spring water 500ml (case of 24)        qty   5 @    £10.14  VAT 20%  net     £50.70
-    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   2 @    £17.44  VAT  0%  net     £34.88
-    DRY-SSK-6      Semi-skimmed milk 2L (case of 6)                 qty  55 @     £8.16  VAT  0%  net    £448.80
-  ING-68381 (17 Jul 2026), PO PO-2026-1767, total £78.60, paid
-    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   5 @    £15.72  VAT  0%  net     £78.60
+  OAK-76427 (16 Feb 2026), PO PO-2026-1162, total £378.28, paid
+    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   8 @    £17.87  VAT  0%  net    £142.96
+    COF-COL-1K     Colombian coffee beans 1kg                       qty   3 @    £24.65  VAT  0%  net     £73.95
+    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   9 @    £17.93  VAT  0%  net    £161.37
+  OAK-76620 (21 Apr 2026), PO PO-2026-1405, total £415.26, paid
+    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   9 @    £25.58  VAT  0%  net    £230.22
+    TEA-EGL-500    Earl Grey loose leaf tea 500g                    qty   9 @    £16.66  VAT  0%  net    £149.94
+    TEA-EBT-1100   English breakfast tea bags (box of 1,100)        qty   2 @    £17.55  VAT  0%  net     £35.10
+  OAK-76729 (28 May 2026), PO PO-2026-1562, total £68.73, paid
+    TEA-ASM-1K     Assam loose leaf tea 1kg                         qty   3 @    £22.91  VAT  0%  net     £68.73
 
 OPEN CREDIT NOTES FROM THIS SUPPLIER
   (none)
@@ -1691,30 +1697,34 @@ OPEN CREDIT NOTES FROM THIS SUPPLIER
 
 ```
 SUPPLIER RECORD
-  Name: Glenholt Espresso Services Ltd
-  Also trades as: Glenholt Espresso Services, Glenholt Espresso
-  VAT number: GB 726 1675 13
-  Bank account on file: ending 7017
-  Contract pricing: fixed
+  Name: Stanwick Bakery Supplies Ltd
+  Also trades as: Stanwick Bakery Supplies, Stanwick Bakery
+  VAT number: GB 878 0175 98
+  Bank account on file: ending 9930
+  Contract pricing: variable
 
-PURCHASE ORDER PO-2026-1949 (raised 30 Aug 2026)
-  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £145.91
-  EQP-FLT-CART   Water filter cartridge                           qty   2 @    £65.13
+PURCHASE ORDER PO-2026-1743 (raised 9 Jul 2026)
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty   9 @    £15.65
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   9 @    £12.22
+  SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty  10 @    £10.98
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   2 @    £15.81
+  Note: Contact the duty manager on arrival.
 
 GOODS RECEIVED
-  GRN-39892 (31 Aug 2026): EQP-SVC-VISIT x1, EQP-FLT-CART x2
-    Note: Engineer visit completed.
+  GRN-64600 (13 Jul 2026): BAK-VSP-12 x9, BAK-DIG-12 x9, SNK-CRS-24 x10, SNK-CSB-12 x2
 
-INVOICE GLE-58325 (dated 3 Sep 2026)
-  From: Glenholt Espresso Services Ltd
-  VAT number: GB 726 1675 13
-  Pay to: account ending 7017
-  Your PO: PO-2026-1949
-  EQP-SVC-VISIT  Espresso machine service visit                   qty   1 @   £147.41  VAT 20%  net    £147.41
-  EQP-FLT-CART   Water filter cartridge                           qty   2 @    £65.13  VAT 20%  net    £130.26
-  Net: £277.67   VAT: £55.53
-  Total due: £333.20
-  Note: Please quote the invoice number on your remittance.
+INVOICE STA-54767 (dated 13 Jul 2026)
+  From: Stanwick Bakery Supplies Ltd
+  VAT number: GB 878 0175 98
+  Pay to: account ending 9930
+  Your PO: PO-2026-1743
+  BAK-VSP-12     Victoria sponge, 12 slices                       qty   9 @    £15.65  VAT  0%  net    £140.85
+  BAK-DIG-12     Plain digestive biscuits 400g (case of 12)       qty   9 @    £13.43  VAT  0%  net    £120.87
+  SNK-CRS-24     Sea salt crisps 40g (case of 24)                 qty  10 @    £10.98  VAT 20%  net    £109.80
+  SNK-CSB-12     Chocolate-coated shortbread 150g (case of 12)    qty   2 @    £15.81  VAT 20%  net     £31.62
+  Net: £403.14   VAT: £28.28
+  Total due: £431.42
+  Note: Thank you for your custom.
 
 PREVIOUS INVOICES FROM THIS SUPPLIER
   (none)

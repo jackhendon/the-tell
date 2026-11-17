@@ -18,6 +18,9 @@ defend.
 
 - **Decision:** wrong means the label differs from the true one. Costs are asymmetric:
   approving a bad invoice loses the money at risk; holding a good one costs £5 of review time.
+- **Scored twice:** on the exact label, and on approve versus hold. Every label disagreement
+  found in review was between two reasons for holding, so the second level shows whether
+  any remaining ambiguity is driving the result.
 - **Why:** the experiment needs a clean right/wrong; the business case needs money.
 - **Would change my mind:** evidence that wrong-reason holds are costly in practice.
 

@@ -109,3 +109,16 @@ def test_agreed_price_changes_postdate_the_po(cases):
     for c in cases:
         for a in c.purchase_order.price_agreements:
             assert a.effective > c.purchase_order.date, (c.case_id, c.scenario)
+
+
+def test_documents_on_this_po_postdate_the_po(cases):
+    """Found by the blind Codex review: credits and earlier invoices on this PO were
+    sometimes dated before the PO existed, or before anything was delivered."""
+    for c in cases:
+        po, first_delivery = c.purchase_order, min(d.date for d in c.deliveries)
+        for cn in c.open_credit_notes:
+            if cn.po_number == po.po_number:
+                assert first_delivery <= cn.date <= c.invoice.date, (c.case_id, c.scenario)
+        for p in c.prior_invoices:
+            if p.po_number == po.po_number:
+                assert first_delivery <= p.date < c.invoice.date, (c.case_id, c.scenario)

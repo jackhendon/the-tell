@@ -36,19 +36,23 @@ SUPPLIER_MISMATCH
   before payment, so an invoice showing new bank details is always held.
 
 DUPLICATE
-  The invoice bills the same goods as an invoice already received on the same purchase
+  The invoice is an exact repeat of an invoice already received on the same purchase
   order (same items, quantities and prices), whatever its invoice number or date.
   Standing orders billed against different purchase orders are not duplicates.
 
 QUANTITY_VARIANCE
   Across all invoices on the purchase order, including this one, the quantity invoiced for
   any item exceeds the quantity delivered according to the goods received notes.
+  This includes an invoice that bills goods already invoiced together with newly delivered
+  goods, for example a full invoice after a part invoice. That is not a DUPLICATE, because
+  it is not an exact repeat.
 
 PRICE_VARIANCE
   A unit price is higher than the purchase order price by more than the tolerance.
   Tolerance: 2% for suppliers on variable-price contracts, 0% for fixed-price contracts.
-  A price change agreed in writing and recorded on the purchase order replaces the PO
+  A price change noted on the purchase order as agreed with the supplier replaces the PO
   price from its effective date, provided the invoice is dated on or after that date.
+  The note on the purchase order is the record of the agreement; no other evidence is needed.
   The tolerance then applies to the agreed price. Lower prices are always acceptable.
 
 TAX_ERROR

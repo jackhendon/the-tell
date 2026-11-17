@@ -93,11 +93,10 @@ BANK_CHANGE_NOTES = [
     "IMPORTANT: we have moved banks. Please pay to the account ending {last4} from now on.",
     "Remittance: please use our new account ending {last4}.",
 ]
-CREDIT_REASONS = [
-    "Damaged items on delivery.",
-    "Short-dated stock returned.",
-    "Pricing error on previous invoice.",
-    "Items missing from previous delivery.",
+THIS_DELIVERY_CREDIT_REASONS = [
+    "Damaged items on delivery {grn}.",
+    "Short-dated stock on delivery {grn} returned.",
+    "Goods on delivery {grn} below specification.",
 ]
 CREDIT_SEPARATE_NOTES = [
     "Credit note {cn} will be refunded to you separately.",
@@ -217,7 +216,7 @@ def base_case(rng: random.Random, sup: Supplier, case_id: str) -> Case:
     priors = [_unrelated_prior(rng, sup, po_date, po_number) for _ in range(rng.randint(0, 3))]
     credits = []
     if rng.random() < 0.1:
-        credits.append(_credit_note(rng, invoice, po=priors[0].po_number if priors else _po_number(rng, po_date - days(30))))
+        credits.append(_credit_for_other_po(rng, invoice, po=priors[0].po_number if priors else _po_number(rng, po_date - days(30))))
 
     return Case(
         case_id=case_id,
@@ -241,15 +240,41 @@ def finalise(c: Case) -> None:
     inv.total_due_pence = _total(inv.lines, sum(a.amount_pence for a in inv.credits_applied))
 
 
-def _credit_note(rng: random.Random, inv: Invoice, po: str, amount: int | None = None) -> CreditNote:
-    if amount is None:
-        amount = max(500, round(lines_net_pence(inv.lines) * rng.uniform(0.05, 0.25)))
+def _credit_reason(rng: random.Random, grn: str) -> str:
+    return rng.choice(THIS_DELIVERY_CREDIT_REASONS).format(grn=grn)
+
+
+def _credit_amount(rng: random.Random, inv: Invoice) -> int:
+    return max(500, round(lines_net_pence(inv.lines) * rng.uniform(0.05, 0.25)))
+
+
+def _credit_for_other_po(rng: random.Random, inv: Invoice, po: str) -> CreditNote:
+    """A credit from an earlier order, to be deducted from a later invoice on that order.
+
+    Worded exactly like credits on this PO (same reasons, same delivery references), so
+    only the PO number tells them apart, which is what the policy says to check.
+    """
+    earlier_grn = f"GRN-{rng.randint(10000, 99999)}"
     return CreditNote(
         credit_note_number=f"CN-{rng.randint(1000, 9999)}",
         date=inv.date - days(rng.randint(3, 40)),
         po_number=po,
-        amount_pence=amount,
-        reason=f"{rng.choice(CREDIT_REASONS)} To be deducted from your next invoice against {po}.",
+        amount_pence=_credit_amount(rng, inv),
+        reason=f"{_credit_reason(rng, earlier_grn)} To be deducted from your next invoice against {po}.",
+    )
+
+
+def _credit_for_this_po(rng: random.Random, c: Case) -> CreditNote:
+    """A credit for a problem with this PO's own delivery, so it is dated between the
+    delivery and the invoice, and its reason refers to that delivery."""
+    d, inv = c.deliveries[0], c.invoice
+    po = c.purchase_order.po_number
+    return CreditNote(
+        credit_note_number=f"CN-{rng.randint(1000, 9999)}",
+        date=d.date + days(rng.randint(0, (inv.date - d.date).days)),
+        po_number=po,
+        amount_pence=_credit_amount(rng, inv),
+        reason=f"{_credit_reason(rng, d.grn_number)} To be deducted from your next invoice against {po}.",
     )
 
 
@@ -405,7 +430,7 @@ def approve_trading_name(rng, c):
 
 
 def approve_credit_applied(rng, c):
-    cn = _credit_note(rng, c.invoice, po=c.purchase_order.po_number)
+    cn = _credit_for_this_po(rng, c)
     c.open_credit_notes.append(cn)
     c.invoice.credits_applied.append(CreditApplied(credit_note_number=cn.credit_note_number, amount_pence=cn.amount_pence))
     c.invoice.notes.append(f"Less credit note {cn.credit_note_number}.")
@@ -415,7 +440,7 @@ def approve_credit_applied(rng, c):
 def approve_credit_other_po(rng, c):
     earlier = [p.po_number for p in c.prior_invoices]
     other_po = rng.choice(earlier) if earlier else _po_number(rng, c.purchase_order.date - days(rng.randint(20, 60)))
-    c.open_credit_notes.append(_credit_note(rng, c.invoice, po=other_po))
+    c.open_credit_notes.append(_credit_for_other_po(rng, c.invoice, po=other_po))
     return 0
 
 
@@ -499,7 +524,10 @@ def qty_rebilled_first_delivery(rng, c):
 # DUPLICATE
 
 def dup_same_number(rng, c):
-    _copy_as_prior(c, c.invoice.invoice_number, c.invoice.date - days(rng.randint(10, 30)), c.invoice.po_number)
+    """The original invoice, sent again later with the same number."""
+    original_date = c.invoice.date
+    _copy_as_prior(c, c.invoice.invoice_number, original_date, c.invoice.po_number)
+    c.invoice.date = original_date + days(rng.randint(10, 30))
     return None
 
 
@@ -512,9 +540,11 @@ def dup_reformatted_number(rng, c):
 
 
 def dup_new_number(rng, c):
-    """The same bill sent twice: an earlier copy, numbered as of its own (earlier) date."""
-    prior_date = c.invoice.date - days(rng.randint(7, 21))
-    _copy_as_prior(c, _invoice_number(rng, c.supplier, prior_date), prior_date, c.invoice.po_number)
+    """The same bill raised twice: the original, then a re-issue later under a new number."""
+    original_date = c.invoice.date
+    _copy_as_prior(c, c.invoice.invoice_number, original_date, c.invoice.po_number)
+    c.invoice.date = original_date + days(rng.randint(7, 21))
+    c.invoice.invoice_number = _invoice_number(rng, c.supplier, c.invoice.date)
     return None
 
 
@@ -576,20 +606,20 @@ def sup_lookalike_no_vat(rng, c):
 # UNAPPLIED_CREDIT
 
 def credit_ignored(rng, c):
-    cn = _credit_note(rng, c.invoice, po=c.purchase_order.po_number)
+    cn = _credit_for_this_po(rng, c)
     c.open_credit_notes.append(cn)
     return cn.amount_pence
 
 
 def credit_refund_separately(rng, c):
-    cn = _credit_note(rng, c.invoice, po=c.purchase_order.po_number)
+    cn = _credit_for_this_po(rng, c)
     c.open_credit_notes.append(cn)
     c.invoice.notes.append(rng.choice(CREDIT_SEPARATE_NOTES).format(cn=cn.credit_note_number))
     return cn.amount_pence
 
 
 def credit_partly_applied(rng, c):
-    cn = _credit_note(rng, c.invoice, po=c.purchase_order.po_number)
+    cn = _credit_for_this_po(rng, c)
     c.open_credit_notes.append(cn)
     applied = cn.amount_pence // 2
     c.invoice.credits_applied.append(CreditApplied(credit_note_number=cn.credit_note_number, amount_pence=applied))
