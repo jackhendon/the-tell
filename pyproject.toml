@@ -3,7 +3,12 @@ name = "the-tell"
 version = "0.1.0"
 description = "Can you tell from inside a language model that it is about to get it wrong?"
 requires-python = ">=3.12,<3.13"
-dependencies = ["pydantic>=2.9"]
+dependencies = [
+    "numpy>=2.5.5",
+    "pydantic>=2.9",
+    "torch>=2.15.0",
+    "transformers>=5.23.0",
+]
 
 [dependency-groups]
 dev = ["pytest>=8"]
