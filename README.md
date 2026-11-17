@@ -19,7 +19,7 @@ each one, and why.
 | 1 | Synthetic invoice generator with labels known by construction | Done |
 | 2 | Deterministic pre-checks and the prompt | Done |
 | 3 | Open-model run: answers, samples and internal activations | Running |
-| 4 | Probes vs baselines, risk-coverage chart | |
+| 4 | Probes vs baselines, risk-coverage chart | Built, waiting for step 3 |
 | 5 | Same test on Claude (output-based signals only) | |
 | 6 | Write-ups: one for engineers, one for a finance director | |
 
@@ -27,7 +27,7 @@ each one, and why.
 
 ```bash
 uv sync
-uv run pytest                                   # 22 tests
+uv run pytest                                   # 28 tests
 uv run python -m the_tell.generate --n 2000     # writes data/generated/cases.jsonl
 uv run python -m the_tell.review_sample         # writes data/review_sample.md
 uv run python -m the_tell.prompt                # writes data/prompt_examples.md
@@ -35,6 +35,10 @@ uv run python -m the_tell.prompt                # writes data/prompt_examples.md
 # Step 3: run the local model (downloads ~8 GB once; about 4 s per invoice on an M4 Pro)
 uv run python -m the_tell.run_local --run qwen3-4b-full
 uv run python -m the_tell.viewer --run qwen3-4b-full   # watch it live at http://127.0.0.1:8765
+
+# Step 4: which signal predicts the mistakes? (tables, then charts in results/)
+uv run python -m the_tell.analysis --run qwen3-4b-full
+uv run python -m the_tell.charts --run qwen3-4b-full
 ```
 
 ## How the data works
