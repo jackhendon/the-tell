@@ -1,7 +1,15 @@
 """Step 4: which signal best predicts the model's mistakes?
 
 Every signal is turned into a "doubt score" per invoice: higher means "more likely wrong".
-Each is judged on invoices from suppliers it never saw during training.
+
+How it is tested (rotation): suppliers are split into five groups. Five times over, one
+group is the test group, one picks the probe's settings (validation), and the other three
+train it. Every invoice is scored exactly once, by a model that never saw its supplier,
+so every invoice counts towards the result.
+
+Error bars: the whole measurement is repeated on 1,000 resamples of the suppliers (drawn
+with replacement), and the middle 95% of the results is reported. Suppliers rather than
+invoices are resampled, because invoices from one supplier are not independent.
 
 Signals, from the model's outputs:
   stated       100 minus the confidence the model wrote
@@ -64,14 +72,14 @@ def is_wrong(results: list[dict], level: str) -> np.ndarray:
     return np.array(out)
 
 
-def supplier_split(results: list[dict], seed: int = 0) -> np.ndarray:
-    """60% of suppliers for training, 20% for choosing settings, 20% for the final test.
-    Splitting by supplier stops a probe scoring well by recognising a supplier it has seen."""
+def supplier_folds(results: list[dict], k: int = 5, seed: int = 0) -> np.ndarray:
+    """Assign every supplier to one of k groups, so all of a supplier's invoices are always
+    on the same side of the train/test line. Otherwise a probe could score well by
+    recognising a supplier it had already seen."""
     suppliers = sorted({r["supplier_id"] for r in results})
     random.Random(seed).shuffle(suppliers)
-    n = len(suppliers)
-    part = {s: "train" if i < 0.6 * n else "val" if i < 0.8 * n else "test" for i, s in enumerate(suppliers)}
-    return np.array([part[r["supplier_id"]] for r in results])
+    fold = {s: i % k for i, s in enumerate(suppliers)}
+    return np.array([fold[r["supplier_id"]] for r in results])
 
 
 # --- Signals that need no training ---
@@ -170,58 +178,155 @@ def evaluate(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray) -> 
     }
 
 
+def within_type_auroc(score: np.ndarray, y: np.ndarray, mask: np.ndarray, scenarios: np.ndarray, min_each: int = 3) -> dict:
+    """Can the signal tell right from wrong among invoices of the same kind?
+
+    If the model's mistakes are systematic (it gets one kind of invoice wrong most of the
+    time), a signal can look good just by recognising the kind of invoice. That is a fact
+    about the input, not about the model's doubt. Measuring separately inside each scenario
+    removes that advantage: "knowing the hard case types" scores exactly 0.5 here.
+    Only scenarios with at least min_each right and min_each wrong answers are used.
+    """
+    per, weights = [], []
+    for sc in np.unique(scenarios[mask]):
+        m = mask & (scenarios == sc)
+        wrong = int(y[m].sum())
+        if wrong >= min_each and m.sum() - wrong >= min_each:
+            per.append(_auroc(y[m], score[m]))
+            weights.append(m.sum())
+    if not per:
+        return {"auroc": float("nan"), "scenarios_used": 0, "invoices_used": 0}
+    return {"auroc": float(np.average(per, weights=weights)), "scenarios_used": len(per), "invoices_used": int(sum(weights))}
+
+
+# --- Error bars ---
+
+BOOTSTRAP_REPS = 1000
+
+
+def bootstrap(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, seed: int = 0) -> dict:
+    """95% ranges for each signal's metrics, and for the probe's AUROC advantage over each
+    other signal (paired: both measured on the same resample, which is much less noisy than
+    comparing two separate ranges)."""
+    rng = np.random.default_rng(seed)
+    by_group = {g: np.nonzero(mask & (groups == g))[0] for g in np.unique(groups[mask])}
+    keys = list(by_group)
+    draws: dict[str, list] = {f"{n}.{m}": [] for n in scores for m in ["auroc", "cov2", "cov5"]}
+    draws.update({f"probe_minus.{n}": [] for n in scores if n != "probe"})
+    for _ in range(BOOTSTRAP_REPS):
+        idx = np.concatenate([by_group[keys[i]] for i in rng.integers(0, len(keys), len(keys))])
+        yb = y[idx]
+        if not 0 < yb.sum() < len(yb):
+            continue
+        aurocs = {}
+        for n, s in scores.items():
+            aurocs[n] = _auroc(yb, s[idx])
+            draws[f"{n}.auroc"].append(aurocs[n])
+            draws[f"{n}.cov2"].append(coverage_at_risk(s[idx], yb, 0.02))
+            draws[f"{n}.cov5"].append(coverage_at_risk(s[idx], yb, 0.05))
+        for n in scores:
+            if n != "probe":
+                draws[f"probe_minus.{n}"].append(aurocs["probe"] - aurocs[n])
+    return {k: [float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))] for k, v in draws.items() if v}
+
+
+def summarise(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, scenarios: np.ndarray) -> dict:
+    point = evaluate(scores, y, mask)
+    ci = bootstrap(scores, y, mask, groups)
+    out = {"signals": {}, "probe_advantage_auroc": {}}
+    for n, m in point.items():
+        out["signals"][n] = {
+            "auroc": m["auroc"], "auroc_95": ci.get(f"{n}.auroc"),
+            "coverage_at_2pct_error": m["coverage_at_2pct_error"], "coverage_at_2pct_error_95": ci.get(f"{n}.cov2"),
+            "coverage_at_5pct_error": m["coverage_at_5pct_error"], "coverage_at_5pct_error_95": ci.get(f"{n}.cov5"),
+            "within_type": within_type_auroc(scores[n], y, mask, scenarios),
+        }
+        if n != "probe":
+            out["probe_advantage_auroc"][n] = {"diff": point["probe"]["auroc"] - m["auroc"], "diff_95": ci.get(f"probe_minus.{n}")}
+    return out
+
+
 # --- The whole analysis ---
 
 
-def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str, held_out: str | None) -> dict:
+def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str, held_out: str | None, k: int = 5):
     y = is_wrong(results, level)
-    split = supplier_split(results)
+    folds = supplier_folds(results, k)
+    suppliers = np.array([r["supplier_id"] for r in results])
     labels = np.array([r["label"] for r in results])
+    scenarios = np.array([r["scenario"] for r in results])
     excluded = labels == held_out if held_out else np.zeros(len(results), bool)  # never trained on
-    train, val, test = (split == "train") & ~excluded, (split == "val") & ~excluded, (split == "test") & ~excluded
-
-    sweep = probe_layer_sweep(acts, y, train, val)
-    best = max(sweep, key=lambda d: d["val_auroc"])
-    fit_mask = train | val  # refit on train + validation once settings are chosen
 
     scores = output_signals(results)
-    scores["probe"] = probe_scores(acts, y, fit_mask, best["layer"], best["C"])
-    scores["input_only"] = input_only_scores(texts, y, fit_mask, val)
-    scores["case_type"] = case_type_scores(results, y, fit_mask)
+    for name in ["probe", "input_only", "case_type"]:
+        scores[name] = np.zeros(len(results))
+    sweeps, chosen = [], []
+    for f in range(k):
+        test = folds == f
+        val = (folds == (f + 1) % k) & ~excluded
+        train = ~test & ~val & ~excluded
+        sweep = probe_layer_sweep(acts, y, train, val)
+        best = max(sweep, key=lambda d: d["val_auroc"])
+        fit = train | val  # refit on train + validation once settings are chosen
+        scores["probe"][test] = probe_scores(acts, y, fit, best["layer"], best["C"])[test]
+        scores["input_only"][test] = input_only_scores(texts, y, fit, val)[test]
+        scores["case_type"][test] = case_type_scores(results, y, fit)[test]
+        sweeps.append([d["val_auroc"] for d in sweep])
+        chosen.append({"fold": f, "layer": best["layer"], "C": best["C"]})
+        print(f"  fold {f + 1}/{k}: probe layer {best['layer']}, C={best['C']}", flush=True)
 
+    sweeps = np.array(sweeps)  # (folds, layers)
     report = {
         "level": level,
-        "counts": {
-            "invoices": len(results),
-            "wrong": int(y.sum()),
-            "train": int(train.sum()), "val": int(val.sum()), "test": int(test.sum()),
-            "test_wrong": int(y[test].sum()),
+        "counts": {"invoices": len(results), "wrong": int(y.sum()), "folds": k, "suppliers": len(set(suppliers))},
+        "probe_per_fold": chosen,
+        "layer_sweep": {
+            "mean": sweeps.mean(0).tolist(), "min": sweeps.min(0).tolist(), "max": sweeps.max(0).tolist(),
         },
-        "probe_layer": best["layer"],
-        "probe_C": best["C"],
-        "layer_sweep": sweep,
-        "test": evaluate(scores, y, test),
+        "in_distribution": summarise(scores, y, ~excluded, suppliers, scenarios),
     }
     if held_out:
         report["held_out_label"] = held_out
         report["held_out_counts"] = {"invoices": int(excluded.sum()), "wrong": int(y[excluded].sum())}
-        report["held_out"] = evaluate(scores, y, excluded)
-    return report, scores, y, test
+        report["held_out"] = summarise(scores, y, excluded, suppliers, scenarios)
+    return report, scores, y, ~excluded
+
+
+def _range(r) -> str:
+    return f"({r[0]:.2f} to {r[1]:.2f})" if r else ""
+
+
+def _pct_range(r) -> str:
+    return f"({r[0]:.0%} to {r[1]:.0%})" if r else ""
 
 
 def print_report(rep: dict) -> None:
     c = rep["counts"]
     print(f"\n=== Errors at the {rep['level']!r} level: {c['wrong']} of {c['invoices']} invoices wrong ===")
-    print(f"Split by supplier: train {c['train']}, validation {c['val']}, test {c['test']} ({c['test_wrong']} wrong in test)")
-    print(f"Probe: best layer {rep['probe_layer']} of {len(rep['layer_sweep']) - 1}, regularisation C={rep['probe_C']}")
-    for section in ["test", "held_out"]:
+    print(f"Rotation: {c['folds']} groups of suppliers ({c['suppliers']} suppliers); every invoice scored once by a model that never saw its supplier")
+    print("Probe layer chosen in each rotation:", ", ".join(str(d["layer"]) for d in rep["probe_per_fold"]))
+    for section in ["in_distribution", "held_out"]:
         if section not in rep:
             continue
-        title = "Test suppliers" if section == "test" else f"Held-out problem type {rep['held_out_label']} (never trained on)"
-        print(f"\n{title}")
-        print(f"  {'signal':<12} {'AUROC':>6}  {'automatable at 2% error':>24}  {'at 5% error':>12}")
-        for name, m in rep[section].items():
-            print(f"  {name:<12} {m['auroc']:>6.3f}  {m['coverage_at_2pct_error']:>23.0%}  {m['coverage_at_5pct_error']:>12.0%}")
+        title = "All invoices" if section == "in_distribution" else f"Held-out problem type {rep['held_out_label']} (never trained on)"
+        if section == "in_distribution" and "held_out_label" in rep:
+            title = f"All invoices except {rep['held_out_label']}"
+        print(f"\n{title}   [95% ranges in brackets]")
+        print(f"  {'signal':<12} {'AUROC':<22} {'within type':<13} {'automatable at 2% error':<26} {'at 5% error'}")
+        for name, m in rep[section]["signals"].items():
+            w = m["within_type"]
+            print(
+                f"  {name:<12} {m['auroc']:.2f} {_range(m['auroc_95']):<17} "
+                f"{w['auroc']:.2f} ({w['scenarios_used']:>2})    "
+                f"{m['coverage_at_2pct_error']:>4.0%} {_pct_range(m['coverage_at_2pct_error_95']):<21} "
+                f"{m['coverage_at_5pct_error']:>4.0%} {_pct_range(m['coverage_at_5pct_error_95'])}"
+            )
+        print("  (within type: AUROC inside each kind of invoice, averaged; number of kinds used in brackets)")
+        print("  Probe AUROC advantage over:")
+        for name, d in rep[section]["probe_advantage_auroc"].items():
+            r = d["diff_95"]
+            verdict = "" if not r else ("  clearly better" if r[0] > 0 else "  clearly worse" if r[1] < 0 else "  not distinguishable")
+            print(f"    {name:<12} {d['diff']:+.2f} {_range(r)}{verdict}")
 
 
 def main() -> None:
@@ -238,6 +343,7 @@ def main() -> None:
 
     args.out.mkdir(exist_ok=True)
     for level in ["label", "hold"]:
+        print(f"\nRotating over suppliers ({level!r} level)...", flush=True)
         rep, _, _, _ = analyse(results, acts, texts, level, args.held_out)
         print_report(rep)
         (args.out / f"{args.run}_{level}.json").write_text(json.dumps(rep, indent=2))

@@ -75,19 +75,22 @@ def risk_coverage_chart(scores: dict, y: np.ndarray, mask: np.ndarray, title: st
 
 def layer_chart(report: dict, path: Path) -> None:
     sweep = report["layer_sweep"]
-    layers = [d["layer"] for d in sweep]
-    auroc = [d["val_auroc"] for d in sweep]
+    mean, lo, hi = (np.array(sweep[k]) for k in ["mean", "min", "max"])
+    layers = np.arange(len(mean))
     fig, ax = plt.subplots(figsize=(7.5, 3.8), dpi=200, facecolor=SURFACE)
     _style(ax)
-    ax.plot(layers, auroc, color=SERIES["probe"][1], linewidth=2, marker="o", markersize=4)
+    colour = SERIES["probe"][1]
+    ax.fill_between(layers, lo, hi, color=colour, alpha=0.15, linewidth=0, label="range across the 5 rotations")
+    ax.plot(layers, mean, color=colour, linewidth=2, marker="o", markersize=3.5, label="average")
     ax.axhline(0.5, color=INK_2, linewidth=1, linestyle=":")
-    ax.text(layers[-1], 0.51, "chance", color=INK_2, fontsize=8, ha="right")
-    best = report["probe_layer"]
-    ax.annotate(f"best: layer {best}", (best, auroc[layers.index(best)]), textcoords="offset points", xytext=(0, 8), ha="center", fontsize=8.5, color=INK)
+    ax.text(layers[-1], 0.5 + 0.01, "chance", color=INK_2, fontsize=8, ha="right", va="bottom")
+    best = int(mean.argmax())
+    ax.annotate(f"best on average: layer {best}", (best, mean[best]), textcoords="offset points", xytext=(0, 9), ha="center", fontsize=8.5, color=INK)
     ax.set_xlabel("Layer (0 = word embeddings, before any processing)", color=INK, fontsize=10)
     ax.set_ylabel("AUROC on validation suppliers", color=INK, fontsize=10)
     ax.set_title("How well a probe at each layer predicts the model's mistakes", color=INK, fontsize=11, loc="left")
-    ax.set_ylim(min(0.4, min(auroc) - 0.05), 1.0)
+    ax.set_ylim(min(0.4, float(lo.min()) - 0.05), 1.0)
+    ax.legend(frameon=False, fontsize=8.5, labelcolor=INK, loc="upper left")
     fig.tight_layout()
     fig.savefig(path, facecolor=SURFACE)
     plt.close(fig)
@@ -107,9 +110,9 @@ def main() -> None:
     args.out.mkdir(exist_ok=True)
 
     for level, title in [("label", "Predicting a wrong outcome"), ("hold", "Predicting a wrong approve-or-hold decision")]:
-        report, scores, y, test = analyse(results, acts, texts, level, args.held_out)
+        report, scores, y, scored = analyse(results, acts, texts, level, args.held_out)
         (args.out / f"{args.run}_{level}.json").write_text(json.dumps(report, indent=2))
-        risk_coverage_chart(scores, y, test, f"{title}: test suppliers", args.out / f"{args.run}_risk_coverage_{level}.png")
+        risk_coverage_chart(scores, y, scored, f"{title} (each invoice scored by a model that never saw its supplier)", args.out / f"{args.run}_risk_coverage_{level}.png")
         if level == "label":
             layer_chart(report, args.out / f"{args.run}_layers.png")
         print(f"{level}: charts written to {args.out}/")

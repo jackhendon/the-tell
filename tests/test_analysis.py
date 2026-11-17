@@ -1,6 +1,6 @@
 import numpy as np
 
-from the_tell.analysis import coverage_at_risk, is_wrong, output_signals, risk_coverage, supplier_split
+from the_tell.analysis import bootstrap, coverage_at_risk, within_type_auroc, is_wrong, output_signals, risk_coverage, supplier_folds
 
 
 def _result(label, predicted, supplier="SUP-001", confidence=100, top_logprob=-1e-6):
@@ -43,15 +43,35 @@ def test_two_levels_of_wrong():
     assert list(is_wrong(rs, "hold")) == [False, True, False, True]
 
 
-def test_supplier_split_keeps_each_supplier_in_one_group():
+def test_each_supplier_sits_in_exactly_one_fold():
     rs = [_result("APPROVE", "APPROVE", supplier=f"SUP-{i % 40:03d}") for i in range(400)]
-    split = supplier_split(rs)
+    folds = supplier_folds(rs, k=5)
     for s in {r["supplier_id"] for r in rs}:
-        assert len({g for r, g in zip(rs, split) if r["supplier_id"] == s}) == 1
-    assert set(split) == {"train", "val", "test"}
+        assert len({f for r, f in zip(rs, folds) if r["supplier_id"] == s}) == 1
+    assert sorted(set(folds)) == [0, 1, 2, 3, 4]
+
+
+def test_bootstrap_ranges_bracket_a_perfect_and_a_useless_signal():
+    rng = np.random.default_rng(1)
+    y = rng.random(800) < 0.2
+    groups = np.array([f"S{i % 40}" for i in range(800)])
+    scores = {"probe": y + rng.random(800) * 0.1, "noise": rng.random(800)}
+    ci = bootstrap(scores, y, np.ones(800, bool), groups)
+    assert ci["probe.auroc"][0] > 0.99
+    assert ci["noise.auroc"][0] < 0.5 < ci["noise.auroc"][1]
+    assert ci["probe_minus.noise"][0] > 0.3
 
 
 def test_more_certain_answers_get_lower_doubt():
     sure, unsure = _result("APPROVE", "APPROVE", top_logprob=-1e-7), _result("APPROVE", "APPROVE", top_logprob=-0.3)
     doubt = output_signals([sure, unsure])["answer_prob"]
     assert doubt[0] < doubt[1]
+
+
+def test_knowing_the_case_type_scores_chance_within_type():
+    """A score that only knows each invoice's type cannot separate right from wrong inside a type."""
+    scenarios = np.array(["a"] * 10 + ["b"] * 10)
+    y = np.array([True] * 4 + [False] * 6 + [True] * 3 + [False] * 7)
+    type_rate = np.where(scenarios == "a", 0.4, 0.3)
+    assert within_type_auroc(type_rate, y, np.ones(20, bool), scenarios)["auroc"] == 0.5
+    assert within_type_auroc(y.astype(float), y, np.ones(20, bool), scenarios)["auroc"] == 1.0
