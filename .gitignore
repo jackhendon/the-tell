@@ -1,0 +1,22 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# generated data (reproducible from a seed, so not committed)
+data/generated/
+
+# model runs and activations (large)
+runs/
+
+# personal Claude Code settings
+.claude/settings.local.json
+
+# OS
+.DS_Store
