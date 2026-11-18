@@ -25,11 +25,13 @@ For a non-technical version of the results, see [REPORT.md](REPORT.md).
 
 ## The short version
 
-> A model can't tell you when it's wrong, and a checker trained on its past mistakes only
-> catches the kinds of mistake it has already seen.
+> Whether a model's confidence means anything depends on the model, so measure it before
+> you rely on it.
 
-I ran a small open model (Qwen3-4B-Instruct) over 2,000 synthetic invoices on my laptop,
-and saved its internal state just before it gave each answer.
+I ran the same 2,000 synthetic invoices through two models: a small open model on my
+laptop, and Claude Haiku 5.5 through the API.
+
+**Qwen3-4B, on my laptop.** I saved its internal state just before it gave each answer.
 
 - It got 388 wrong (19%).
 - On 378 of those it said it was 100% confident.
@@ -53,9 +55,18 @@ So there is a tell. It's mostly the model's own decision showing through, plus t
 pattern of mistakes the probe has already seen. A new kind of mistake gets straight past
 it.
 
+**Claude Haiku 5.5, through the API.** There's no internal state to read, so I asked about
+each invoice five times and tested what's left: its stated confidence, how often its
+answers disagree, and the same text-and-answer checker.
+
+- With thinking switched off, it got 96 wrong (5%).
+- Its stated confidence was a useful warning sign. With the cut-off set in advance, it
+  would hand over 80% of invoices with 1.2% of those wrong, and one bad invoice paid.
+- With thinking switched on, it got all 2,000 right.
+
 ![Risk-coverage chart](results/qwen3-4b-full_risk_coverage_label.png)
 
-## Results
+## Results: Qwen3-4B on my laptop
 
 How to read the table:
 
@@ -103,11 +114,22 @@ Two things stand out:
 
 - Both trained checkers overshoot the 2% target. A cut-off picked on one group of
   suppliers doesn't carry over exactly to another.
-- The probe automates the most invoices, but lets through the most bad ones. Its extra
-  mistakes are mostly the model approving invoices it should have held.
+- They hand over different numbers of invoices, so their counts of bad invoices can't be
+  compared as they stand. Hand over fewer invoices and fewer bad ones get through.
 
-If the cost you care about is paying bad invoices, the simpler text-and-answer checker
-comes out ahead here. Aiming for 5% gives the same pattern (in `results/report.txt`).
+To compare them fairly, I had each checker hand over the same share of invoices: the ones
+it was least worried about, within each group of unseen suppliers.
+
+| Share handed over | Mistakes: probe | Mistakes: text + answer | Bad paid: probe | Bad paid: text + answer |
+|---|---|---|---|---|
+| 55% | 8 | 20 | 3 | 5 |
+| 66% | 38 | 62 | 26 | 21 |
+| 75% | 90 | 119 | 65 | 56 |
+
+- At the same volume, the probe makes fewer mistakes overall. At 66% that's 24 fewer, with
+  a range of 8 to 41 fewer.
+- On bad invoices paid, the two are level. The differences go both ways, and every range
+  crosses zero.
 
 ### The model's mistakes are few and repetitive
 
@@ -171,8 +193,8 @@ separate that from anything deeper.
 - The probability it gave its chosen answer was above 99.9% on 93% of invoices. On
   average it was slightly higher for wrong answers than right ones.
 - I also worked out how often it would disagree with itself if sampled at temperature
-  0.7. That comes straight from the same probabilities, so it adds nothing here. It
-  matters later for Claude, which doesn't expose probabilities.
+  0.7. That comes straight from the same probabilities, so it adds nothing here. Claude
+  doesn't expose probabilities, so for Claude I asked five times and counted.
 
 ### The probe mostly reads the answer it's about to give
 
@@ -249,6 +271,83 @@ Within one problem type, being right or wrong depends entirely on which answer t
 gives. So this test mostly asks whether the probe learned the right lesson about which
 answers are risky. That depends on which mistakes it was shown.
 
+## Results: Claude Haiku 5.5
+
+The set-up:
+
+- The same 2,000 invoices, system prompt and policy as the Qwen run.
+- Five answers per invoice. Haiku 5.5 doesn't let you set the temperature, so every
+  answer is a sample at its default setting. The first answer counts as Claude's answer,
+  and the other four show how much it varies.
+- Two runs: thinking off, to match Qwen, and thinking on at low effort, which is how
+  you'd normally use it.
+- Both ran as batches at half price. Together they cost $2.88.
+
+One thing broke in the pilot. Qwen had "OUTCOME:" written for it and only had to fill in
+the rest. The Claude API doesn't allow that, and with thinking off Claude often wrote its
+reasoning out first and ran out of room. Giving it room fixed it, and every one of the
+20,000 answers could be read.
+
+### With thinking on, it got everything right
+
+All 2,000 invoices, right on the first answer. Its five answers differed on just one
+invoice, an agreed price rise it held once out of five.
+
+With no mistakes, there's nothing to test a warning sign on. So everything below is the
+thinking-off run.
+
+### With thinking off, its confidence is a useful warning sign
+
+It got 96 wrong (5%). Aiming for 2% wrong, with the cut-off set in advance:
+
+| Signal | AUROC | Invoices automated | Wrong among those | Bad invoices paid |
+|---|---|---|---|---|
+| **Claude's stated confidence** | **0.88 (0.85 to 0.90)** | **1,597 (80%)** | **19 (1.2%)** | **1** |
+| Invoice text + Claude's answer | 0.84 (0.80 to 0.87) | 1,472 (74%) | 29 (2.0%) | 8 |
+| Which answer Claude gave | 0.67 (0.61 to 0.72) | 744 (37%) | 17 (2.3%) | 0 |
+| How often its five answers disagree | 0.70 (0.65 to 0.74) | 0 | - | - |
+
+Claude's confidence hands over more invoices than the text-and-answer checker and lets
+fewer bad ones through. So the volume problem from the Qwen comparison doesn't apply here:
+it's ahead on both counts.
+
+It works because Claude's confidence actually moves:
+
+| Claude said | Right | Wrong |
+|---|---|---|
+| 95 to 97 | 1,213 | 7 |
+| 92 to 93 | 365 | 12 |
+| 90 | 261 | 47 |
+| Below 90 | 65 | 30 |
+
+Asking again helps less. On 55 of the 96 mistakes, Claude gave the same wrong answer all
+five times.
+
+Grouped by the answer it gave, its confidence beats text plus answer on price holds: 0.76
+against 0.54. That's the same place the probe beat the baseline on Qwen.
+
+### Its mistakes look like Qwen's, only fewer
+
+- 22 price rises inside the 2% tolerance, held for price
+- 37 agreed price rises applied wrongly, either before their start date or above the
+  agreed amount
+- 13 standing orders called duplicates
+
+It got the VAT rates right, which is where most of Qwen's mistakes were.
+
+### Reasoning is what fixes it
+
+With thinking off, Claude still chose to write out its reasoning on 45% of replies:
+
+- When it wrote its reasoning out, it was wrong 0.3% of the time.
+- When it answered straight away, it was wrong 8.4% of the time.
+
+It picks when to reason, so on its own that could just mean it reasons on the easy ones.
+But with thinking on, it reasoned every time and made no mistakes at all. Thinking on cost
+$1.63 for the run, against $1.24 with it off.
+
+Full tables are in [results/report_haiku-full-off.txt](results/report_haiku-full-off.txt).
+
 ## How it was tested
 
 ### Labels
@@ -276,7 +375,7 @@ is still the model's to make.
 - Each group is scored by a probe trained on the other four: three to train, and one to
   pick the layer and how strongly to regularise.
 - So every invoice is scored once, by a probe that never saw its supplier.
-- Every trained baseline uses the same rotation.
+- Every trained baseline uses the same rotation, and so does the Claude analysis.
 
 ### Error bars
 
@@ -300,8 +399,10 @@ at 99.9999% plain probabilities all round to the same number.
 
 - The data is synthetic, and so is the policy. Real invoices are messier, and real
   mistakes may not cluster this tightly.
-- One small model, one prompt, greedy decoding. A bigger model would make fewer mistakes,
-  and different ones.
+- Two models and one prompt. Qwen answered greedily. Claude was sampled at its default
+  setting, which can't be changed on Haiku 5.5.
+- With thinking on, Claude made no mistakes, so the warning signs could only be tested
+  with thinking off.
 - Only 7 kinds of invoice had enough right and wrong answers to measure within a kind,
   and only two of those had plenty of both. The within-type numbers have wide ranges.
 - The text baselines can't read numbers well. A baseline built on the pre-check numbers
@@ -312,9 +413,8 @@ at 99.9999% plain probabilities all round to the same number.
 
 ## What I'd do next
 
-1. Run the same comparison on Claude. There's no internal state to read there, so it
-   comes down to stated confidence, agreement across samples and the text baselines.
-   It's a paid API run, so I'll cost it with a 20-invoice pilot first.
+1. Make harder invoices, to find where Claude with thinking on does go wrong, then test
+   the warning signs there.
 2. Read the internal state before the answer forms, for example at the end of the
    invoice documents. If the probe still works there, it's seeing more than the answer.
 3. Test the price lead directly. Train a probe to read the size of the price change from
@@ -329,14 +429,14 @@ at 99.9999% plain probabilities all round to the same number.
 | 2 | Pre-checks and the prompt | Done |
 | 3 | Local model run: answers and internal state, 2,000 invoices | Done |
 | 4 | Probes against baselines, charts | Done |
-| 5 | Same test on Claude (output signals only) | Next |
-| 6 | Write-ups | Done for the local model |
+| 5 | Same test on Claude Haiku 5.5 (output signals only) | Done |
+| 6 | Write-ups | Done |
 
 ## Run it
 
 ```bash
 uv sync
-uv run pytest                                   # 31 tests
+uv run pytest                                   # 40 tests
 uv run python -m the_tell.generate --n 2000     # writes data/generated/cases.jsonl
 uv run python -m the_tell.review_sample         # writes data/review_sample.md
 uv run python -m the_tell.prompt                # writes data/prompt_examples.md
@@ -349,9 +449,15 @@ uv run python -m the_tell.viewer --run qwen3-4b-full   # watch it at http://127.
 uv run python -m the_tell.analysis --run qwen3-4b-full
 uv run python -m the_tell.analysis --run qwen3-4b-full --held-out TAX_ERROR
 uv run python -m the_tell.charts --run qwen3-4b-full
+
+# Claude Haiku 5.5 (needs ANTHROPIC_API_KEY in .env; about $1.25 to $1.65 per run)
+uv run python -m the_tell.run_claude pilot --run haiku-pilot --thinking off
+uv run python -m the_tell.run_claude submit --run haiku-full-off --thinking off
+uv run python -m the_tell.run_claude collect --run haiku-full-off
+uv run python -m the_tell.compare_claude --run haiku-full-off
 ```
 
-The model runs entirely on the laptop:
+The local model runs entirely on the laptop:
 
 - Weights load as safetensors only, with `trust_remote_code=False` and a pinned
   revision, so no code from the model download is ever run.
@@ -372,6 +478,8 @@ The model runs entirely on the laptop:
 | `src/the_tell/viewer.py` | Local page to watch a run |
 | `src/the_tell/analysis.py` | The probe, the baselines and the error bars |
 | `src/the_tell/charts.py` | The two charts |
+| `src/the_tell/run_claude.py` | Runs Claude Haiku 5.5: a quick pilot, then batches |
+| `src/the_tell/compare_claude.py` | Claude's warning signs, tested the same way |
 | `DECISIONS.md` | Why things are built the way they are |
 
 All data is synthetic. No real invoices, suppliers or people.

@@ -978,6 +978,118 @@
       }
     }
   },
+  "matched_share": [
+    {
+      "share": 0.5,
+      "handed_over": 1000,
+      "wrong": {
+        "probe": 4,
+        "text_and_answer": 8,
+        "diff": -4,
+        "diff_95": [
+          -9.0,
+          0.0
+        ]
+      },
+      "bad_paid": {
+        "probe": 1,
+        "text_and_answer": 1,
+        "diff": 0,
+        "diff_95": [
+          -3.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "share": 0.55,
+      "handed_over": 1100,
+      "wrong": {
+        "probe": 8,
+        "text_and_answer": 20,
+        "diff": -12,
+        "diff_95": [
+          -23.0,
+          -2.0
+        ]
+      },
+      "bad_paid": {
+        "probe": 3,
+        "text_and_answer": 5,
+        "diff": -2,
+        "diff_95": [
+          -7.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "share": 0.6,
+      "handed_over": 1200,
+      "wrong": {
+        "probe": 24,
+        "text_and_answer": 36,
+        "diff": -12,
+        "diff_95": [
+          -26.0,
+          1.0249999999999773
+        ]
+      },
+      "bad_paid": {
+        "probe": 15,
+        "text_and_answer": 9,
+        "diff": 6,
+        "diff_95": [
+          -2.0,
+          15.0
+        ]
+      }
+    },
+    {
+      "share": 0.66,
+      "handed_over": 1319,
+      "wrong": {
+        "probe": 38,
+        "text_and_answer": 62,
+        "diff": -24,
+        "diff_95": [
+          -41.0,
+          -8.0
+        ]
+      },
+      "bad_paid": {
+        "probe": 26,
+        "text_and_answer": 21,
+        "diff": 5,
+        "diff_95": [
+          -4.0,
+          14.0
+        ]
+      }
+    },
+    {
+      "share": 0.75,
+      "handed_over": 1501,
+      "wrong": {
+        "probe": 90,
+        "text_and_answer": 119,
+        "diff": -29,
+        "diff_95": [
+          -57.025,
+          -2.0
+        ]
+      },
+      "bad_paid": {
+        "probe": 65,
+        "text_and_answer": 56,
+        "diff": 9,
+        "diff_95": [
+          -10.0,
+          28.0
+        ]
+      }
+    }
+  ],
   "cutoff_set_in_advance": {
     "in_distribution": {
       "probe": {

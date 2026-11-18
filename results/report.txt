@@ -31,6 +31,12 @@ All invoices   [95% ranges in brackets]
     text_and_answer -0.08 (-0.28 to 0.10)  not distinguishable
     answer_given    +0.16 (-0.24 to 0.35)  not distinguishable
     case_type       +0.41 (0.30 to 0.63)  clearly better
+  Probe against text_and_answer, both handing over the same share of invoices:
+    50% (1000): wrong 4 vs 8 (diff -4, -9 to +0); bad invoices paid 1 vs 1 (diff +0, -3 to +3)
+    55% (1100): wrong 8 vs 20 (diff -12, -23 to -2); bad invoices paid 3 vs 5 (diff -2, -7 to +3)
+    60% (1200): wrong 24 vs 36 (diff -12, -26 to +1); bad invoices paid 15 vs 9 (diff +6, -2 to +15)
+    66% (1319): wrong 38 vs 62 (diff -24, -41 to -8); bad invoices paid 26 vs 21 (diff +5, -4 to +14)
+    75% (1501): wrong 90 vs 119 (diff -29, -57 to -2); bad invoices paid 65 vs 56 (diff +9, -10 to +28)
   Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):
     probe           aiming for  2% error: automated 1316 of 2000 (66%), 41 wrong (3.1%), 30 bad invoices approved
     probe           aiming for  5% error: automated 1483 of 2000 (74%), 94 wrong (6.3%), 62 bad invoices approved
@@ -86,6 +92,12 @@ All invoices   [95% ranges in brackets]
     text_and_answer -0.02 (-0.19 to 0.07)  not distinguishable
     answer_given    +0.12 (-0.21 to 0.23)  not distinguishable
     case_type       +0.41 (0.30 to 0.53)  clearly better
+  Probe against text_and_answer, both handing over the same share of invoices:
+    50% (1000): wrong 3 vs 10 (diff -7, -12 to -2); bad invoices paid 1 vs 2 (diff -1, -5 to +2)
+    55% (1100): wrong 9 vs 20 (diff -11, -19 to -3); bad invoices paid 6 vs 4 (diff +2, -4 to +9)
+    60% (1200): wrong 22 vs 33 (diff -11, -23 to +1); bad invoices paid 15 vs 8 (diff +7, -1 to +16)
+    66% (1319): wrong 35 vs 54 (diff -19, -36 to -2); bad invoices paid 25 vs 18 (diff +7, -2 to +17)
+    75% (1501): wrong 88 vs 111 (diff -23, -51 to +4); bad invoices paid 66 vs 47 (diff +19, +2 to +36)
   Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):
     probe           aiming for  2% error: automated 1312 of 2000 (66%), 38 wrong (2.9%), 27 bad invoices approved
     probe           aiming for  5% error: automated 1500 of 2000 (75%), 93 wrong (6.2%), 64 bad invoices approved

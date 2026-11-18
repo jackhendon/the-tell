@@ -1,6 +1,6 @@
 import numpy as np
 
-from the_tell.analysis import answer_given_scores, bootstrap, cutoff_at_risk, coverage_at_risk, within_type_auroc, is_wrong, output_signals, risk_coverage, supplier_folds
+from the_tell.analysis import answer_given_scores, bootstrap, cutoff_at_risk, matched_share, coverage_at_risk, within_type_auroc, is_wrong, output_signals, risk_coverage, supplier_folds
 
 
 def _result(label, predicted, supplier="SUP-001", confidence=100, top_logprob=-1e-6):
@@ -91,3 +91,14 @@ def test_cutoff_is_the_highest_score_that_keeps_errors_in_bounds():
     assert cutoff_at_risk(score, wrong, 0.0) == 7.0
     assert cutoff_at_risk(score, wrong, 0.2) == 9.0
     assert cutoff_at_risk(score, np.ones(10, bool), 0.02) == -np.inf  # nothing can be automated
+
+
+def test_matched_share_hands_over_the_same_number_with_each_checker():
+    rng = np.random.default_rng(0)
+    y = rng.random(400) < 0.2
+    scores = {"good": y + rng.random(400) * 0.5, "noise": rng.random(400)}
+    folds = np.arange(400) % 5
+    groups = np.array([f"S{i % 40}" for i in range(400)])
+    rows = matched_share(scores, "good", "noise", y, y, folds, groups)
+    assert all(r["handed_over"] == round(r["share"] * 80) * 5 for r in rows)
+    assert rows[0]["wrong"]["good"] < rows[0]["wrong"]["noise"]

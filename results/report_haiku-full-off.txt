@@ -1,0 +1,58 @@
+
+=== Errors at the 'label' level: 96 of 2000 invoices wrong ===
+  signal           AUROC                  within type              automatable at 2% (best case)
+  stated           0.88 (0.85 to 0.90)    0.77 (0.64 to 0.87) [8]   80%
+  disagreement     0.70 (0.65 to 0.74)    0.78 (0.62 to 0.83) [8]   0%
+  input_only       0.80 (0.76 to 0.84)    0.60 (0.51 to 0.72) [8]   82%
+  text_and_answer  0.84 (0.80 to 0.87)    0.65 (0.51 to 0.79) [8]   85%
+  answer_given     0.67 (0.61 to 0.72)    0.28 (0.12 to 0.49) [8]   40%
+  case_type        0.90 (0.86 to 0.93)    0.31 (0.24 to 0.39) [8]   92%
+  text_and_answer AUROC advantage over:
+    stated           -0.04 (-0.09 to 0.00)  not distinguishable
+    disagreement     +0.14 (0.08 to 0.20)  clearly better
+    input_only       +0.03 (-0.01 to 0.07)  not distinguishable
+    answer_given     +0.17 (0.12 to 0.22)  clearly better
+    case_type        -0.06 (-0.10 to -0.02)  clearly worse
+  Automation with the cut-off set in advance:
+    stated           aiming for  2%: automated 1597 of 2000, 19 wrong (1.2%), 1 bad invoices approved
+    stated           aiming for  5%: automated 1923 of 2000, 78 wrong (4.1%), 29 bad invoices approved
+    disagreement     aiming for  2%: automated    0 of 2000, 0 wrong (0.0%), 0 bad invoices approved
+    disagreement     aiming for  5%: automated 1976 of 2000, 89 wrong (4.5%), 36 bad invoices approved
+    text_and_answer  aiming for  2%: automated 1472 of 2000, 29 wrong (2.0%), 8 bad invoices approved
+    text_and_answer  aiming for  5%: automated 1989 of 2000, 90 wrong (4.5%), 34 bad invoices approved
+    answer_given     aiming for  2%: automated  744 of 2000, 17 wrong (2.3%), 0 bad invoices approved
+    answer_given     aiming for  5%: automated 1725 of 2000, 80 wrong (4.6%), 30 bad invoices approved
+  Grouped by the answer Claude gave (AUROC):
+    APPROVE              right  549 wrong  39   text_and_answer 0.91  stated 0.82  disagreement 0.63
+    DUPLICATE            right  230 wrong  13   text_and_answer 0.98  stated 0.97  disagreement 0.49
+    PRICE_VARIANCE       right  196 wrong  25   text_and_answer 0.54  stated 0.76  disagreement 0.69
+    TAX_ERROR            right  232 wrong  15   text_and_answer 0.56  stated 0.98  disagreement 1.00
+
+=== Errors at the 'hold' level: 92 of 2000 invoices wrong ===
+  signal           AUROC                  within type              automatable at 2% (best case)
+  stated           0.87 (0.85 to 0.90)    0.77 (0.61 to 0.86) [8]   80%
+  disagreement     0.70 (0.65 to 0.74)    0.78 (0.64 to 0.83) [8]   0%
+  input_only       0.83 (0.79 to 0.86)    0.60 (0.52 to 0.74) [8]   86%
+  text_and_answer  0.85 (0.82 to 0.89)    0.62 (0.53 to 0.79) [8]   86%
+  answer_given     0.69 (0.64 to 0.75)    0.18 (0.08 to 0.37) [8]   42%
+  case_type        0.93 (0.91 to 0.95)    0.31 (0.25 to 0.40) [8]   93%
+  text_and_answer AUROC advantage over:
+    stated           -0.02 (-0.06 to 0.03)  not distinguishable
+    disagreement     +0.16 (0.10 to 0.22)  clearly better
+    input_only       +0.03 (-0.01 to 0.06)  not distinguishable
+    answer_given     +0.16 (0.11 to 0.21)  clearly better
+    case_type        -0.07 (-0.11 to -0.04)  clearly worse
+  Automation with the cut-off set in advance:
+    stated           aiming for  2%: automated 1597 of 2000, 19 wrong (1.2%), 1 bad invoices approved
+    stated           aiming for  5%: automated 1977 of 2000, 82 wrong (4.1%), 36 bad invoices approved
+    disagreement     aiming for  2%: automated    0 of 2000, 0 wrong (0.0%), 0 bad invoices approved
+    disagreement     aiming for  5%: automated 1976 of 2000, 85 wrong (4.3%), 36 bad invoices approved
+    text_and_answer  aiming for  2%: automated 1767 of 2000, 35 wrong (2.0%), 11 bad invoices approved
+    text_and_answer  aiming for  5%: automated 1991 of 2000, 88 wrong (4.4%), 36 bad invoices approved
+    answer_given     aiming for  2%: automated  933 of 2000, 17 wrong (1.8%), 0 bad invoices approved
+    answer_given     aiming for  5%: automated 1843 of 2000, 81 wrong (4.4%), 30 bad invoices approved
+  Grouped by the answer Claude gave (AUROC):
+    APPROVE              right  549 wrong  39   text_and_answer 0.91  stated 0.82  disagreement 0.63
+    DUPLICATE            right  230 wrong  13   text_and_answer 0.99  stated 0.97  disagreement 0.49
+    PRICE_VARIANCE       right  196 wrong  25   text_and_answer 0.54  stated 0.76  disagreement 0.69
+    TAX_ERROR            right  234 wrong  13   text_and_answer 0.56  stated 0.97  disagreement 1.00

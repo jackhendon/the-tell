@@ -203,6 +203,42 @@ def cutoff_at_risk(score: np.ndarray, y: np.ndarray, max_risk: float) -> float:
     return float(sorted_score[ends[ok.max()]]) if len(ok) else -np.inf
 
 
+MATCHED_SHARES = [0.5, 0.55, 0.6, 0.66, 0.75]
+
+
+def matched_share(scores: dict[str, np.ndarray], a: str, b: str, y: np.ndarray, bad: np.ndarray, folds: np.ndarray, groups: np.ndarray, seed: int = 0) -> list[dict]:
+    """Compares two checkers handing over the same number of invoices.
+
+    A checker that hands over fewer invoices will let fewer bad ones through, so counts
+    only compare fairly at the same volume. In each group of test suppliers, each checker
+    hands over the same share: the invoices it is least worried about. The cut-off is a
+    count, so it never looks at which answers were wrong. Ranges come from resampling
+    suppliers.
+    """
+    def pick(score, share):
+        auto = np.zeros(len(score), bool)
+        for f in np.unique(folds):
+            idx = np.nonzero(folds == f)[0]
+            auto[idx[np.argsort(score[idx], kind="stable")[: int(round(share * len(idx)))]]] = True
+        return auto
+
+    rng = np.random.default_rng(seed)
+    by_group = [np.nonzero(groups == g)[0] for g in np.unique(groups)]
+    out = []
+    for share in MATCHED_SHARES:
+        auto = {n: pick(scores[n], share) for n in (a, b)}
+        row = {"share": share, "handed_over": int(auto[a].sum())}
+        for what, bad_mask in [("wrong", y), ("bad_paid", bad)]:
+            ca, cb = int((auto[a] & bad_mask).sum()), int((auto[b] & bad_mask).sum())
+            diffs = []
+            for _ in range(BOOTSTRAP_REPS):
+                idx = np.concatenate([by_group[i] for i in rng.integers(0, len(by_group), len(by_group))])
+                diffs.append(int((auto[a][idx] & bad_mask[idx]).sum()) - int((auto[b][idx] & bad_mask[idx]).sum()))
+            row[what] = {a: ca, b: cb, "diff": ca - cb, "diff_95": [float(np.percentile(diffs, 2.5)), float(np.percentile(diffs, 97.5))]}
+        out.append(row)
+    return out
+
+
 def evaluate(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray) -> dict[str, dict]:
     return {
         name: {
@@ -363,8 +399,8 @@ def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str,
         },
         "in_distribution": summarise(scores, y, ~excluded, suppliers, scenarios, answers),
     }
+    report["matched_share"] = matched_share(scores, "probe", "text_and_answer", y, bad_approval, folds, suppliers)
     for sec in sections:
-        target = report if sec == "in_distribution" else None
         block = {}
         for n in ADVANCE_SIGNALS:
             for r in ADVANCE_RISKS:
@@ -417,6 +453,13 @@ def print_report(rep: dict) -> None:
                 r = d["diff_95"]
                 verdict = "" if not r else ("  clearly better" if r[0] > 0 else "  clearly worse" if r[1] < 0 else "  not distinguishable")
                 print(f"    {name:<15} {d['diff']:+.2f} {_range(r)}{verdict}")
+        if section == "in_distribution" and "matched_share" in rep:
+            print("  Probe against text_and_answer, both handing over the same share of invoices:")
+            for row in rep["matched_share"]:
+                w, b = row["wrong"], row["bad_paid"]
+                print(f"    {row['share']:.0%} ({row['handed_over']}): wrong {w['probe']} vs {w['text_and_answer']} "
+                      f"(diff {w['diff']:+d}, {w['diff_95'][0]:+.0f} to {w['diff_95'][1]:+.0f}); "
+                      f"bad invoices paid {b['probe']} vs {b['text_and_answer']} (diff {b['diff']:+d}, {b['diff_95'][0]:+.0f} to {b['diff_95'][1]:+.0f})")
         adv = rep.get("cutoff_set_in_advance", {}).get(section, {})
         if adv:
             print("  Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):")
