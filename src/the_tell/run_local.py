@@ -93,6 +93,7 @@ def run_case(c: Case, tok, model, first_tokens: dict[Label, int], stops: set[int
         past = out.past_key_values
         next_id = out.logits[0, -1].argmax()
 
+    del out, past  # free the cached prompt before the next case
     raw = ANSWER_PREFIX + tok.decode(generated)
     answer = parse_answer(raw)
     record = {
@@ -111,6 +112,12 @@ def run_case(c: Case, tok, model, first_tokens: dict[Label, int], stops: set[int
         "seconds": round(time.time() - started, 2),
     }
     return record, activations
+
+
+def free_gpu_memory(device: str) -> None:
+    """Hand cached GPU memory back to the system, so the run does not slowly crowd out other apps."""
+    if device == "mps":
+        torch.mps.empty_cache()
 
 
 def write_metadata(run_dir: Path, device: str, model, total_cases: int) -> None:
@@ -155,7 +162,15 @@ def main() -> None:
 
     correct = 0
     for i, c in enumerate(todo, 1):
-        record, acts = run_case(c, tok, model, first_tokens, stops)
+        try:
+            record, acts = run_case(c, tok, model, first_tokens, stops)
+        except torch.OutOfMemoryError:
+            # Usually other apps squeezing memory. Release what we hold, wait, try once more.
+            print(f"{c.case_id}: out of GPU memory, clearing and retrying in 60s", flush=True)
+            free_gpu_memory(device)
+            time.sleep(60)
+            record, acts = run_case(c, tok, model, first_tokens, stops)
+        free_gpu_memory(device)
         np.save(run_dir / "acts" / f"{c.case_id}.npy", acts)
         with results_path.open("a") as f:
             f.write(json.dumps(record) + "\n")
