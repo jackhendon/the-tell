@@ -1,0 +1,1404 @@
+{
+  "level": "hold",
+  "counts": {
+    "invoices": 2000,
+    "wrong": 375,
+    "folds": 5,
+    "suppliers": 40
+  },
+  "probe_per_fold": [
+    {
+      "fold": 0,
+      "layer": 25,
+      "C": 0.01
+    },
+    {
+      "fold": 1,
+      "layer": 29,
+      "C": 0.01
+    },
+    {
+      "fold": 2,
+      "layer": 32,
+      "C": 0.01
+    },
+    {
+      "fold": 3,
+      "layer": 22,
+      "C": 0.01
+    },
+    {
+      "fold": 4,
+      "layer": 29,
+      "C": 0.01
+    }
+  ],
+  "layer_sweep": {
+    "mean": [
+      0.5,
+      0.784667680518442,
+      0.7774886121788103,
+      0.7883687589152106,
+      0.7896437935249594,
+      0.8070533907882622,
+      0.8119669640759524,
+      0.8089067852892364,
+      0.7918377530770491,
+      0.794281326223276,
+      0.7977680035361268,
+      0.8033581097312273,
+      0.8150859608891852,
+      0.8169350479515589,
+      0.8094385606432872,
+      0.808989497280755,
+      0.8234086408906919,
+      0.8337675934756303,
+      0.8805912224785732,
+      0.9145217134949364,
+      0.9185870073491793,
+      0.9406140652407154,
+      0.9641668120302869,
+      0.9733030173435772,
+      0.9784374331056964,
+      0.9783999375683499,
+      0.9787491422754666,
+      0.9793542202766963,
+      0.9797698409666173,
+      0.9808413071130729,
+      0.9803529662318475,
+      0.9793500194583661,
+      0.9791864264802193,
+      0.9774579809807683,
+      0.9757562050565223,
+      0.9751493633152247,
+      0.9733649141660266
+    ],
+    "min": [
+      0.5,
+      0.734075907590759,
+      0.7114285714285714,
+      0.743015873015873,
+      0.7438095238095238,
+      0.7657142857142857,
+      0.7592857142857143,
+      0.7746825396825396,
+      0.7287953795379538,
+      0.7446369636963696,
+      0.7561881188118812,
+      0.7749999999999999,
+      0.787046204620462,
+      0.793069306930693,
+      0.788410242731395,
+      0.7801413710322753,
+      0.7910447761194029,
+      0.8017057569296375,
+      0.8543611629767939,
+      0.8943894389438943,
+      0.897029702970297,
+      0.9271452145214522,
+      0.9455445544554455,
+      0.9532178217821782,
+      0.9606435643564356,
+      0.9601485148514852,
+      0.9611386138613861,
+      0.9617161716171616,
+      0.961138613861386,
+      0.9635313531353135,
+      0.9656765676567657,
+      0.9651815181518154,
+      0.9660891089108911,
+      0.9617986798679867,
+      0.9573432343234323,
+      0.958168316831683,
+      0.9562706270627063
+    ],
+    "max": [
+      0.5,
+      0.8523906888958792,
+      0.850188738597043,
+      0.8527838943063857,
+      0.8408304498269897,
+      0.903114186851211,
+      0.9045297263290343,
+      0.879993708713432,
+      0.8850267379679144,
+      0.8641868512110726,
+      0.8624567474048443,
+      0.8555363321799309,
+      0.8699276502044668,
+      0.8792859389745203,
+      0.8713431896822901,
+      0.8571877949040578,
+      0.8806228373702423,
+      0.8937558980811576,
+      0.9387385970430953,
+      0.9559609940232777,
+      0.9529726329034287,
+      0.9642183076439131,
+      0.9890688895879207,
+      0.987496067945895,
+      0.9874174268637937,
+      0.9869936034115139,
+      0.9862378106322742,
+      0.9875747090279963,
+      0.9882824787669078,
+      0.9887543252595155,
+      0.9882038376848066,
+      0.9870242214532872,
+      0.9866310160427807,
+      0.9858446052217678,
+      0.9848222711544511,
+      0.985058194400755,
+      0.983406731676628
+    ]
+  },
+  "in_distribution": {
+    "signals": {
+      "stated": {
+        "auroc": 0.5023364485981309,
+        "auroc_95": [
+          0.5,
+          0.5073900770618934
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "coverage_at_5pct_error": 0.0,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "within_type": {
+          "auroc": 0.5,
+          "scenarios_used": 6,
+          "invoices_used": 392,
+          "per_group": {
+            "agreed_uplift": {
+              "right": 3,
+              "wrong": 42,
+              "auroc": 0.5
+            },
+            "billed_full_on_partial": {
+              "right": 31,
+              "wrong": 51,
+              "auroc": 0.5
+            },
+            "credit_other_po": {
+              "right": 75,
+              "wrong": 3,
+              "auroc": 0.5
+            },
+            "mixed_vat": {
+              "right": 46,
+              "wrong": 3,
+              "auroc": 0.5
+            },
+            "rebilled_first_delivery": {
+              "right": 73,
+              "wrong": 8,
+              "auroc": 0.5
+            },
+            "standing_order": {
+              "right": 3,
+              "wrong": 54,
+              "auroc": 0.5
+            }
+          },
+          "auroc_95": [
+            0.5,
+            0.6776411835920809
+          ]
+        },
+        "within_answer": {
+          "auroc": 0.5015462936530592,
+          "scenarios_used": 4,
+          "invoices_used": 1130,
+          "per_group": {
+            "APPROVE": {
+              "right": 448,
+              "wrong": 60,
+              "auroc": 0.5
+            },
+            "DUPLICATE": {
+              "right": 234,
+              "wrong": 54,
+              "auroc": 0.5
+            },
+            "PRICE_VARIANCE": {
+              "right": 232,
+              "wrong": 93,
+              "auroc": 0.5053763440860215
+            },
+            "TAX_ERROR": {
+              "right": 3,
+              "wrong": 6,
+              "auroc": 0.5
+            }
+          }
+        }
+      },
+      "answer_prob": {
+        "auroc": 0.6454119551546299,
+        "auroc_95": [
+          0.6088269141108887,
+          0.6796485373623172
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.18003538276980324
+        ],
+        "coverage_at_5pct_error": 0.38653084323712505,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.43971147135713223
+        ],
+        "within_type": {
+          "auroc": 0.5456971507391144,
+          "scenarios_used": 6,
+          "invoices_used": 392,
+          "per_group": {
+            "agreed_uplift": {
+              "right": 3,
+              "wrong": 42,
+              "auroc": 0.10317460317460317
+            },
+            "billed_full_on_partial": {
+              "right": 31,
+              "wrong": 51,
+              "auroc": 0.34471853257432006
+            },
+            "credit_other_po": {
+              "right": 75,
+              "wrong": 3,
+              "auroc": 0.9111111111111111
+            },
+            "mixed_vat": {
+              "right": 46,
+              "wrong": 3,
+              "auroc": 0.9637681159420289
+            },
+            "rebilled_first_delivery": {
+              "right": 73,
+              "wrong": 8,
+              "auroc": 0.7568493150684932
+            },
+            "standing_order": {
+              "right": 3,
+              "wrong": 54,
+              "auroc": 0.02469135802469136
+            }
+          },
+          "auroc_95": [
+            0.3259804959886223,
+            0.7725222716723077
+          ]
+        },
+        "within_answer": {
+          "auroc": 0.6686452888737091,
+          "scenarios_used": 4,
+          "invoices_used": 1130,
+          "per_group": {
+            "APPROVE": {
+              "right": 448,
+              "wrong": 60,
+              "auroc": 0.7543712797619048
+            },
+            "DUPLICATE": {
+              "right": 234,
+              "wrong": 54,
+              "auroc": 0.5401234567901234
+            },
+            "PRICE_VARIANCE": {
+              "right": 232,
+              "wrong": 93,
+              "auroc": 0.663978494623656
+            },
+            "TAX_ERROR": {
+              "right": 3,
+              "wrong": 6,
+              "auroc": 0.11111111111111112
+            }
+          }
+        }
+      },
+      "agreement": {
+        "auroc": 0.6433117090226333,
+        "auroc_95": [
+          0.6085668657374521,
+          0.678260182414066
+        ],
+        "coverage_at_2pct_error": 0.20430107526881722,
+        "coverage_at_2pct_error_95": [
+          0.17693962418379627,
+          0.2407808706311361
+        ],
+        "coverage_at_5pct_error": 0.2614601018675722,
+        "coverage_at_5pct_error_95": [
+          0.2112967077921474,
+          0.3617763800683928
+        ],
+        "within_type": {
+          "auroc": 0.561131853011539,
+          "scenarios_used": 6,
+          "invoices_used": 392,
+          "per_group": {
+            "agreed_uplift": {
+              "right": 3,
+              "wrong": 42,
+              "auroc": 0.10317460317460317
+            },
+            "billed_full_on_partial": {
+              "right": 31,
+              "wrong": 51,
+              "auroc": 0.42188488298545224
+            },
+            "credit_other_po": {
+              "right": 75,
+              "wrong": 3,
+              "auroc": 0.9022222222222221
+            },
+            "mixed_vat": {
+              "right": 46,
+              "wrong": 3,
+              "auroc": 0.963768115942029
+            },
+            "rebilled_first_delivery": {
+              "right": 73,
+              "wrong": 8,
+              "auroc": 0.7619863013698631
+            },
+            "standing_order": {
+              "right": 3,
+              "wrong": 54,
+              "auroc": 0.02469135802469136
+            }
+          },
+          "auroc_95": [
+            0.35451839523937667,
+            0.7871054816360628
+          ]
+        },
+        "within_answer": {
+          "auroc": 0.6291664456855669,
+          "scenarios_used": 4,
+          "invoices_used": 1130,
+          "per_group": {
+            "APPROVE": {
+              "right": 448,
+              "wrong": 60,
+              "auroc": 0.772265625
+            },
+            "DUPLICATE": {
+              "right": 234,
+              "wrong": 54,
+              "auroc": 0.34777619499841717
+            },
+            "PRICE_VARIANCE": {
+              "right": 232,
+              "wrong": 93,
+              "auroc": 0.6691926214312199
+            },
+            "TAX_ERROR": {
+              "right": 3,
+              "wrong": 6,
+              "auroc": 0.11111111111111112
+            }
+          }
+        }
+      },
+      "probe": {
+        "auroc": 0.9782182209892222,
+        "auroc_95": [
+          0.9675133822253928,
+          0.9867361688789061
+        ],
+        "coverage_at_2pct_error": 0.8602150537634409,
+        "coverage_at_2pct_error_95": [
+          0.8342206961264335,
+          0.8877226631393298
+        ],
+        "coverage_at_5pct_error": 0.9179400113186191,
+        "coverage_at_5pct_error_95": [
+          0.8932191256626596,
+          0.9404942808721156
+        ],
+        "within_type": {
+          "auroc": 0.8167289766410378,
+          "scenarios_used": 6,
+          "invoices_used": 392,
+          "per_group": {
+            "agreed_uplift": {
+              "right": 3,
+              "wrong": 42,
+              "auroc": 0.380952380952381
+            },
+            "billed_full_on_partial": {
+              "right": 31,
+              "wrong": 51,
+              "auroc": 0.9101834282099937
+            },
+            "credit_other_po": {
+              "right": 75,
+              "wrong": 3,
+              "auroc": 0.9466666666666667
+            },
+            "mixed_vat": {
+              "right": 46,
+              "wrong": 3,
+              "auroc": 0.9492753623188406
+            },
+            "rebilled_first_delivery": {
+              "right": 73,
+              "wrong": 8,
+              "auroc": 0.9383561643835616
+            },
+            "standing_order": {
+              "right": 3,
+              "wrong": 54,
+              "auroc": 0.5617283950617284
+            }
+          },
+          "auroc_95": [
+            0.6577549060041882,
+            0.9628717235554335
+          ]
+        },
+        "within_answer": {
+          "auroc": 0.9648700064500192,
+          "scenarios_used": 4,
+          "invoices_used": 1130,
+          "per_group": {
+            "APPROVE": {
+              "right": 448,
+              "wrong": 60,
+              "auroc": 0.9855654761904762
+            },
+            "DUPLICATE": {
+              "right": 234,
+              "wrong": 54,
+              "auroc": 1.0
+            },
+            "PRICE_VARIANCE": {
+              "right": 232,
+              "wrong": 93,
+              "auroc": 0.9050333704115684
+            },
+            "TAX_ERROR": {
+              "right": 3,
+              "wrong": 6,
+              "auroc": 0.8333333333333334
+            }
+          }
+        }
+      },
+      "input_only": {
+        "auroc": 0.7992399395803118,
+        "auroc_95": [
+          0.7577113526570048,
+          0.8457603998627174
+        ],
+        "coverage_at_2pct_error": 0.2144878324844369,
+        "coverage_at_2pct_error_95": [
+          0.12756136811877244,
+          0.33138351065195887
+        ],
+        "coverage_at_5pct_error": 0.7289190718732315,
+        "coverage_at_5pct_error_95": [
+          0.28444831378299124,
+          0.8560319506436823
+        ],
+        "within_type": {
+          "auroc": 0.5323391766363562,
+          "scenarios_used": 6,
+          "invoices_used": 392,
+          "per_group": {
+            "agreed_uplift": {
+              "right": 3,
+              "wrong": 42,
+              "auroc": 0.6190476190476191
+            },
+            "billed_full_on_partial": {
+              "right": 31,
+              "wrong": 51,
+              "auroc": 0.6451612903225806
+            },
+            "credit_other_po": {
+              "right": 75,
+              "wrong": 3,
+              "auroc": 0.7066666666666667
+            },
+            "mixed_vat": {
+              "right": 46,
+              "wrong": 3,
+              "auroc": 0.5797101449275363
+            },
+            "rebilled_first_delivery": {
+              "right": 73,
+              "wrong": 8,
+              "auroc": 0.48287671232876717
+            },
+            "standing_order": {
+              "right": 3,
+              "wrong": 54,
+              "auroc": 0.0925925925925926
+            }
+          },
+          "auroc_95": [
+            0.37940555901959644,
+            0.672801388508858
+          ]
+        },
+        "within_answer": {
+          "auroc": 0.782557447608949,
+          "scenarios_used": 4,
+          "invoices_used": 1130,
+          "per_group": {
+            "APPROVE": {
+              "right": 448,
+              "wrong": 60,
+              "auroc": 0.8554315476190475
+            },
+            "DUPLICATE": {
+              "right": 234,
+              "wrong": 54,
+              "auroc": 0.9952516619183286
+            },
+            "PRICE_VARIANCE": {
+              "right": 232,
+              "wrong": 93,
+              "auroc": 0.4803021876158695
+            },
+            "TAX_ERROR": {
+              "right": 3,
+              "wrong": 6,
+              "auroc": 0.7777777777777778
+            }
+          }
+        }
+      },
+      "text_and_answer": {
+        "auroc": 0.9287842042233603,
+        "auroc_95": [
+          0.9154657215499733,
+          0.943200310728908
+        ],
+        "coverage_at_2pct_error": 0.756649688737974,
+        "coverage_at_2pct_error_95": [
+          0.7199530520093029,
+          0.8008076015313397
+        ],
+        "coverage_at_5pct_error": 0.853423882286361,
+        "coverage_at_5pct_error_95": [
+          0.8076900584795322,
+          0.9063939411380991
+        ],
+        "within_type": {
+          "auroc": 0.9972667638483965,
+          "scenarios_used": 6,
+          "invoices_used": 392,
+          "per_group": {
+            "agreed_uplift": {
+              "right": 3,
+              "wrong": 42,
+              "auroc": 0.9761904761904762
+            },
+            "billed_full_on_partial": {
+              "right": 31,
+              "wrong": 51,
+              "auroc": 1.0
+            },
+            "credit_other_po": {
+              "right": 75,
+              "wrong": 3,
+              "auroc": 1.0
+            },
+            "mixed_vat": {
+              "right": 46,
+              "wrong": 3,
+              "auroc": 1.0
+            },
+            "rebilled_first_delivery": {
+              "right": 73,
+              "wrong": 8,
+              "auroc": 1.0
+            },
+            "standing_order": {
+              "right": 3,
+              "wrong": 54,
+              "auroc": 1.0
+            }
+          },
+          "auroc_95": [
+            0.8106411946680029,
+            1.0
+          ]
+        },
+        "within_answer": {
+          "auroc": 0.8420198447659453,
+          "scenarios_used": 4,
+          "invoices_used": 1130,
+          "per_group": {
+            "APPROVE": {
+              "right": 448,
+              "wrong": 60,
+              "auroc": 0.9558779761904761
+            },
+            "DUPLICATE": {
+              "right": 234,
+              "wrong": 54,
+              "auroc": 1.0
+            },
+            "PRICE_VARIANCE": {
+              "right": 232,
+              "wrong": 93,
+              "auroc": 0.5304505005561736
+            },
+            "TAX_ERROR": {
+              "right": 3,
+              "wrong": 6,
+              "auroc": 0.6111111111111112
+            }
+          }
+        }
+      },
+      "answer_given": {
+        "auroc": 0.7683410462716118,
+        "auroc_95": [
+          0.7424196541366241,
+          0.7916976723298286
+        ],
+        "coverage_at_2pct_error": 0.36049801924165253,
+        "coverage_at_2pct_error_95": [
+          0.3429817102025364,
+          0.4301579376497504
+        ],
+        "coverage_at_5pct_error": 0.5897000565930957,
+        "coverage_at_5pct_error_95": [
+          0.44350197212971404,
+          0.6871390534763369
+        ],
+        "within_type": {
+          "auroc": 1.0,
+          "scenarios_used": 6,
+          "invoices_used": 392,
+          "per_group": {
+            "agreed_uplift": {
+              "right": 3,
+              "wrong": 42,
+              "auroc": 1.0
+            },
+            "billed_full_on_partial": {
+              "right": 31,
+              "wrong": 51,
+              "auroc": 1.0
+            },
+            "credit_other_po": {
+              "right": 75,
+              "wrong": 3,
+              "auroc": 1.0
+            },
+            "mixed_vat": {
+              "right": 46,
+              "wrong": 3,
+              "auroc": 1.0
+            },
+            "rebilled_first_delivery": {
+              "right": 73,
+              "wrong": 8,
+              "auroc": 1.0
+            },
+            "standing_order": {
+              "right": 3,
+              "wrong": 54,
+              "auroc": 1.0
+            }
+          },
+          "auroc_95": [
+            0.7966050948949558,
+            1.0
+          ]
+        },
+        "within_answer": {
+          "auroc": 0.4344033997124667,
+          "scenarios_used": 4,
+          "invoices_used": 1130,
+          "per_group": {
+            "APPROVE": {
+              "right": 448,
+              "wrong": 60,
+              "auroc": 0.45018601190476193
+            },
+            "DUPLICATE": {
+              "right": 234,
+              "wrong": 54,
+              "auroc": 0.4231956315289649
+            },
+            "PRICE_VARIANCE": {
+              "right": 232,
+              "wrong": 93,
+              "auroc": 0.4216954022988505
+            },
+            "TAX_ERROR": {
+              "right": 3,
+              "wrong": 6,
+              "auroc": 0.3611111111111111
+            }
+          }
+        }
+      },
+      "case_type": {
+        "auroc": 0.9791103742530285,
+        "auroc_95": [
+          0.9674113546154899,
+          0.9892198032778231
+        ],
+        "coverage_at_2pct_error": 0.8771929824561403,
+        "coverage_at_2pct_error_95": [
+          0.8492355893921848,
+          0.8953477686174938
+        ],
+        "coverage_at_5pct_error": 0.9190718732314658,
+        "coverage_at_5pct_error_95": [
+          0.8958798150266971,
+          0.9388247512654914
+        ],
+        "within_type": {
+          "auroc": 0.2598336811322817,
+          "scenarios_used": 6,
+          "invoices_used": 392,
+          "per_group": {
+            "agreed_uplift": {
+              "right": 3,
+              "wrong": 42,
+              "auroc": 0.24603174603174605
+            },
+            "billed_full_on_partial": {
+              "right": 31,
+              "wrong": 51,
+              "auroc": 0.3602150537634409
+            },
+            "credit_other_po": {
+              "right": 75,
+              "wrong": 3,
+              "auroc": 0.18
+            },
+            "mixed_vat": {
+              "right": 46,
+              "wrong": 3,
+              "auroc": 0.16304347826086954
+            },
+            "rebilled_first_delivery": {
+              "right": 73,
+              "wrong": 8,
+              "auroc": 0.425513698630137
+            },
+            "standing_order": {
+              "right": 3,
+              "wrong": 54,
+              "auroc": 0.08333333333333333
+            }
+          },
+          "auroc_95": [
+            0.19624551031184587,
+            0.4295452709673682
+          ]
+        },
+        "within_answer": {
+          "auroc": 0.9846199267036886,
+          "scenarios_used": 4,
+          "invoices_used": 1130,
+          "per_group": {
+            "APPROVE": {
+              "right": 448,
+              "wrong": 60,
+              "auroc": 0.9697172619047618
+            },
+            "DUPLICATE": {
+              "right": 234,
+              "wrong": 54,
+              "auroc": 1.0
+            },
+            "PRICE_VARIANCE": {
+              "right": 232,
+              "wrong": 93,
+              "auroc": 0.9938589173155358
+            },
+            "TAX_ERROR": {
+              "right": 3,
+              "wrong": 6,
+              "auroc": 1.0
+            }
+          }
+        }
+      }
+    },
+    "probe_advantage_auroc": {
+      "stated": {
+        "diff": 0.4758817723910913,
+        "diff_95": [
+          0.464674596185713,
+          0.485047211282877
+        ]
+      },
+      "answer_prob": {
+        "diff": 0.3328062658345923,
+        "diff_95": [
+          0.300214703442916,
+          0.3694210429146645
+        ]
+      },
+      "agreement": {
+        "diff": 0.3349065119665888,
+        "diff_95": [
+          0.298253941272599,
+          0.37086081511934277
+        ]
+      },
+      "input_only": {
+        "diff": 0.17897828140891037,
+        "diff_95": [
+          0.1322726441824331,
+          0.2224416261108896
+        ]
+      },
+      "text_and_answer": {
+        "diff": 0.0494340167658619,
+        "diff_95": [
+          0.035477262957825544,
+          0.06195011732457271
+        ]
+      },
+      "answer_given": {
+        "diff": 0.20987717471761036,
+        "diff_95": [
+          0.1844302569681944,
+          0.23560878486797449
+        ]
+      },
+      "case_type": {
+        "diff": -0.0008921532638063168,
+        "diff_95": [
+          -0.012036937853548826,
+          0.010935602410836675
+        ]
+      }
+    },
+    "probe_advantage_within_type": {
+      "stated": {
+        "diff": 0.31672897664103783,
+        "diff_95": [
+          0.14630961955324387,
+          0.45351495733784986
+        ]
+      },
+      "answer_prob": {
+        "diff": 0.27103182590192343,
+        "diff_95": [
+          0.0362692748901541,
+          0.4688580842554472
+        ]
+      },
+      "agreement": {
+        "diff": 0.2555971236294988,
+        "diff_95": [
+          0.016241658519342565,
+          0.432434486891281
+        ]
+      },
+      "input_only": {
+        "diff": 0.2843898000046816,
+        "diff_95": [
+          0.07257984841629203,
+          0.5181895331901117
+        ]
+      },
+      "text_and_answer": {
+        "diff": -0.1805377872073587,
+        "diff_95": [
+          -0.27506591375689216,
+          -0.0176826583537627
+        ]
+      },
+      "answer_given": {
+        "diff": -0.18327102335896217,
+        "diff_95": [
+          -0.2785353379528121,
+          -0.009218258218404838
+        ]
+      },
+      "case_type": {
+        "diff": 0.556895295508756,
+        "diff_95": [
+          0.3661156179433928,
+          0.7091968092797014
+        ]
+      }
+    }
+  },
+  "held_out_label": "TAX_ERROR",
+  "held_out_counts": {
+    "invoices": 233,
+    "wrong": 161
+  },
+  "held_out": {
+    "signals": {
+      "stated": {
+        "auroc": 0.4375,
+        "auroc_95": [
+          0.39230113636363634,
+          0.47794916879795396
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "coverage_at_5pct_error": 0.0,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "within_type": {
+          "auroc": 0.18173701298701297,
+          "scenarios_used": 2,
+          "invoices_used": 112,
+          "per_group": {
+            "plain_biscuit_at_standard": {
+              "right": 5,
+              "wrong": 54,
+              "auroc": 0.09999999999999998
+            },
+            "standard_on_zero_rated": {
+              "right": 11,
+              "wrong": 42,
+              "auroc": 0.2727272727272727
+            }
+          },
+          "auroc_95": [
+            0.0689082697605425,
+            0.375
+          ]
+        },
+        "within_answer": {
+          "auroc": NaN,
+          "scenarios_used": 0,
+          "invoices_used": 0,
+          "per_group": {}
+        }
+      },
+      "answer_prob": {
+        "auroc": 0.18055555555555558,
+        "auroc_95": [
+          0.12184106634263386,
+          0.23417102459263275
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "coverage_at_5pct_error": 0.0,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "within_type": {
+          "auroc": 0.032386793101078816,
+          "scenarios_used": 2,
+          "invoices_used": 112,
+          "per_group": {
+            "plain_biscuit_at_standard": {
+              "right": 5,
+              "wrong": 54,
+              "auroc": 0.014814814814814812
+            },
+            "standard_on_zero_rated": {
+              "right": 11,
+              "wrong": 42,
+              "auroc": 0.051948051948051945
+            }
+          },
+          "auroc_95": [
+            0.0038553061672260513,
+            0.09841372912801476
+          ]
+        },
+        "within_answer": {
+          "auroc": NaN,
+          "scenarios_used": 0,
+          "invoices_used": 0,
+          "per_group": {}
+        }
+      },
+      "agreement": {
+        "auroc": 0.24396135265700483,
+        "auroc_95": [
+          0.17130897634235415,
+          0.31093402715147506
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "coverage_at_5pct_error": 0.0,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "within_type": {
+          "auroc": 0.03341106644678073,
+          "scenarios_used": 2,
+          "invoices_used": 112,
+          "per_group": {
+            "plain_biscuit_at_standard": {
+              "right": 5,
+              "wrong": 54,
+              "auroc": 0.014814814814814812
+            },
+            "standard_on_zero_rated": {
+              "right": 11,
+              "wrong": 42,
+              "auroc": 0.05411255411255411
+            }
+          },
+          "auroc_95": [
+            0.004020348099295468,
+            0.10010204081632644
+          ]
+        },
+        "within_answer": {
+          "auroc": NaN,
+          "scenarios_used": 0,
+          "invoices_used": 0,
+          "per_group": {}
+        }
+      },
+      "probe": {
+        "auroc": 0.20997239475500343,
+        "auroc_95": [
+          0.11688231470516237,
+          0.31728100291927974
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.011676598547749622
+        ],
+        "coverage_at_5pct_error": 0.0,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.011676598547749622
+        ],
+        "within_type": {
+          "auroc": 0.09038170823885107,
+          "scenarios_used": 2,
+          "invoices_used": 112,
+          "per_group": {
+            "plain_biscuit_at_standard": {
+              "right": 5,
+              "wrong": 54,
+              "auroc": 0.10740740740740738
+            },
+            "standard_on_zero_rated": {
+              "right": 11,
+              "wrong": 42,
+              "auroc": 0.07142857142857142
+            }
+          },
+          "auroc_95": [
+            0.0028023008183171274,
+            0.21468610386426368
+          ]
+        },
+        "within_answer": {
+          "auroc": NaN,
+          "scenarios_used": 0,
+          "invoices_used": 0,
+          "per_group": {}
+        }
+      },
+      "input_only": {
+        "auroc": 0.5022429261559695,
+        "auroc_95": [
+          0.43015793630500265,
+          0.5738761685814985
+        ],
+        "coverage_at_2pct_error": 0.004291845493562232,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.016328203412512544
+        ],
+        "coverage_at_5pct_error": 0.004291845493562232,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.016328203412512544
+        ],
+        "within_type": {
+          "auroc": 0.45409881124166845,
+          "scenarios_used": 2,
+          "invoices_used": 112,
+          "per_group": {
+            "plain_biscuit_at_standard": {
+              "right": 5,
+              "wrong": 54,
+              "auroc": 0.25925925925925924
+            },
+            "standard_on_zero_rated": {
+              "right": 11,
+              "wrong": 42,
+              "auroc": 0.670995670995671
+            }
+          },
+          "auroc_95": [
+            0.2941682087444735,
+            0.7771515502752826
+          ]
+        },
+        "within_answer": {
+          "auroc": NaN,
+          "scenarios_used": 0,
+          "invoices_used": 0,
+          "per_group": {}
+        }
+      },
+      "text_and_answer": {
+        "auroc": 0.007763975155279499,
+        "auroc_95": [
+          0.0011073597811217498,
+          0.017943171681128866
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "coverage_at_5pct_error": 0.0,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "within_type": {
+          "auroc": 0.02253401360544217,
+          "scenarios_used": 2,
+          "invoices_used": 112,
+          "per_group": {
+            "plain_biscuit_at_standard": {
+              "right": 5,
+              "wrong": 54,
+              "auroc": 0.0
+            },
+            "standard_on_zero_rated": {
+              "right": 11,
+              "wrong": 42,
+              "auroc": 0.04761904761904761
+            }
+          },
+          "auroc_95": [
+            0.0,
+            0.09277585159938098
+          ]
+        },
+        "within_answer": {
+          "auroc": NaN,
+          "scenarios_used": 0,
+          "invoices_used": 0,
+          "per_group": {}
+        }
+      },
+      "answer_given": {
+        "auroc": 0.0,
+        "auroc_95": [
+          0.0,
+          0.0
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "coverage_at_5pct_error": 0.0,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "within_type": {
+          "auroc": 0.0,
+          "scenarios_used": 2,
+          "invoices_used": 112,
+          "per_group": {
+            "plain_biscuit_at_standard": {
+              "right": 5,
+              "wrong": 54,
+              "auroc": 0.0
+            },
+            "standard_on_zero_rated": {
+              "right": 11,
+              "wrong": 42,
+              "auroc": 0.0
+            }
+          },
+          "auroc_95": [
+            0.0,
+            0.0
+          ]
+        },
+        "within_answer": {
+          "auroc": NaN,
+          "scenarios_used": 0,
+          "invoices_used": 0,
+          "per_group": {}
+        }
+      },
+      "case_type": {
+        "auroc": 0.42231711525189786,
+        "auroc_95": [
+          0.35262745101436993,
+          0.5023683519629422
+        ],
+        "coverage_at_2pct_error": 0.0,
+        "coverage_at_2pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "coverage_at_5pct_error": 0.0,
+        "coverage_at_5pct_error_95": [
+          0.0,
+          0.0
+        ],
+        "within_type": {
+          "auroc": 0.32516126400054973,
+          "scenarios_used": 2,
+          "invoices_used": 112,
+          "per_group": {
+            "plain_biscuit_at_standard": {
+              "right": 5,
+              "wrong": 54,
+              "auroc": 0.1962962962962963
+            },
+            "standard_on_zero_rated": {
+              "right": 11,
+              "wrong": 42,
+              "auroc": 0.4686147186147186
+            }
+          },
+          "auroc_95": [
+            0.2026121350839448,
+            0.591208106884058
+          ]
+        },
+        "within_answer": {
+          "auroc": NaN,
+          "scenarios_used": 0,
+          "invoices_used": 0,
+          "per_group": {}
+        }
+      }
+    },
+    "probe_advantage_auroc": {
+      "stated": {
+        "diff": -0.22752760524499657,
+        "diff_95": [
+          -0.32738552834190415,
+          -0.11177126047178129
+        ]
+      },
+      "answer_prob": {
+        "diff": 0.029416839199447847,
+        "diff_95": [
+          -0.05826589870024305,
+          0.1364203895246479
+        ]
+      },
+      "agreement": {
+        "diff": -0.033988957902001404,
+        "diff_95": [
+          -0.12603634898379826,
+          0.06767021920936156
+        ]
+      },
+      "input_only": {
+        "diff": -0.29227053140096615,
+        "diff_95": [
+          -0.40653779665695244,
+          -0.17443727710924603
+        ]
+      },
+      "text_and_answer": {
+        "diff": 0.20220841959972394,
+        "diff_95": [
+          0.10941731754614772,
+          0.30428456221198147
+        ]
+      },
+      "answer_given": {
+        "diff": 0.20997239475500343,
+        "diff_95": [
+          0.11688231470516237,
+          0.31728100291927974
+        ]
+      },
+      "case_type": {
+        "diff": -0.21234472049689443,
+        "diff_95": [
+          -0.3350688491962883,
+          -0.08808621393576492
+        ]
+      }
+    },
+    "probe_advantage_within_type": {
+      "stated": {
+        "diff": -0.0913553047481619,
+        "diff_95": [
+          -0.3323152711375056,
+          0.09425390631833203
+        ]
+      },
+      "answer_prob": {
+        "diff": 0.05799491513777225,
+        "diff_95": [
+          -0.02676017207024958,
+          0.1871669653255712
+        ]
+      },
+      "agreement": {
+        "diff": 0.05697064179207034,
+        "diff_95": [
+          -0.032568821530703285,
+          0.1856285130166089
+        ]
+      },
+      "input_only": {
+        "diff": -0.3637171030028174,
+        "diff_95": [
+          -0.7022022720708577,
+          -0.14284334023464465
+        ]
+      },
+      "text_and_answer": {
+        "diff": 0.0678476946334089,
+        "diff_95": [
+          -0.035467892222120365,
+          0.19661259283391147
+        ]
+      },
+      "answer_given": {
+        "diff": 0.09038170823885107,
+        "diff_95": [
+          0.0028023008183171274,
+          0.21468610386426368
+        ]
+      },
+      "case_type": {
+        "diff": -0.23477955576169868,
+        "diff_95": [
+          -0.5272221437982307,
+          -0.064988344988345
+        ]
+      }
+    }
+  }
+}

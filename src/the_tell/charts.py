@@ -28,9 +28,11 @@ from the_tell.prompt import user_message
 SURFACE, INK, INK_2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e6e5e1"
 
 # signal -> (legend name, colour, dash). Fixed order, so a colour always means the same signal.
+# The text-only baseline is left off the chart: the text-and-answer baseline beats it
+# everywhere, and the strongest cheap baseline is the fair one to draw. Both are in the tables.
 SERIES = {
     "probe": ("Probe on internal state", "#2a78d6", "-"),
-    "input_only": ("Input-only baseline", "#eb6834", (0, (6, 3))),
+    "text_and_answer": ("Invoice text + the model's answer", "#eb6834", (0, (6, 3))),
     "answer_prob": ("Answer probability", "#1baf7a", (0, (2, 2))),
     "stated": ("Stated confidence", "#eda100", (0, (6, 2, 2, 2))),
     "case_type": ("Known hard case types (reference)", "#8a8984", (0, (1, 3))),
@@ -66,7 +68,8 @@ def risk_coverage_chart(scores: dict, y: np.ndarray, mask: np.ndarray, title: st
     ax.set_ylim(0, top * 1.08)
     ax.set_xlabel("Share of invoices automated, least doubtful first (%)", color=INK, fontsize=10)
     ax.set_ylabel("Error rate among automated invoices (%)", color=INK, fontsize=10)
-    ax.set_title(title, color=INK, fontsize=11, loc="left")
+    ax.set_title(title, color=INK, fontsize=11, loc="left", pad=22)
+    ax.text(0, 1.02, "Each invoice scored by a model trained only on other suppliers", transform=ax.transAxes, color=INK_2, fontsize=8.5)
     ax.legend(frameon=False, fontsize=8.5, labelcolor=INK, loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=2)
     fig.tight_layout()
     fig.savefig(path, facecolor=SURFACE)
@@ -112,7 +115,7 @@ def main() -> None:
     for level, title in [("label", "Predicting a wrong outcome"), ("hold", "Predicting a wrong approve-or-hold decision")]:
         report, scores, y, scored = analyse(results, acts, texts, level, args.held_out)
         (args.out / f"{args.run}_{level}.json").write_text(json.dumps(report, indent=2))
-        risk_coverage_chart(scores, y, scored, f"{title} (each invoice scored by a model that never saw its supplier)", args.out / f"{args.run}_risk_coverage_{level}.png")
+        risk_coverage_chart(scores, y, scored, title, args.out / f"{args.run}_risk_coverage_{level}.png")
         if level == "label":
             layer_chart(report, args.out / f"{args.run}_layers.png")
         print(f"{level}: charts written to {args.out}/")

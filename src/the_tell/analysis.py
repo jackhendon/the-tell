@@ -21,6 +21,14 @@ Signals that are trained (on train-supplier invoices only):
   probe        logistic regression on the model's internal state at one layer
   input_only   the same kind of model, reading only the invoice text. If the probe cannot
                beat this, it has learned which invoices are hard, not what the model knows.
+  text_and_answer  the input-only model, also told the answer the model gave. Every word is
+               paired with the answer ("APPROVE_credit"), so it can learn which answers
+               are wrong for which kinds of invoice. The internal state at the moment we
+               read it already holds the coming answer, so this is the fairest cheap
+               comparison: does the probe know more than "this text, and that answer"?
+  answer_given the error rate, on train-supplier invoices, of the answer the model gave
+               (how often "PRICE_VARIANCE" turned out wrong, and so on). Usable in a real
+               system. If the probe cannot beat this, it is only reading the model's answer.
 Reference only, not a usable signal:
   case_type    the error rate of each generator scenario. Uses information no real system
                has; it shows how far "knowing the hard case types" alone gets you.
@@ -127,21 +135,35 @@ def probe_scores(acts: np.ndarray, y: np.ndarray, fit_mask: np.ndarray, layer: i
     return _fit(X[fit_mask], y[fit_mask], C).decision_function(X)
 
 
+def with_answer(texts: list[str], results: list[dict]) -> list[str]:
+    """Each invoice text with every word also paired with the model's answer."""
+    return [t + " " + " ".join(f"{r['predicted']}_{w}" for w in t.split()) for t, r in zip(texts, results)]
+
+
 def input_only_scores(texts: list[str], y: np.ndarray, fit_mask: np.ndarray, val: np.ndarray) -> np.ndarray:
     """Predicts the model's errors from the invoice text alone, never looking inside the model."""
     vec = TfidfVectorizer(ngram_range=(1, 2), min_df=2, sublinear_tf=True)
     X = vec.fit_transform(texts)
-    best_C = max(PROBE_C + [0.1, 1.0], key=lambda C: _auroc(y[val], LogisticRegression(C=C, class_weight="balanced", max_iter=3000).fit(X[fit_mask & ~val], y[fit_mask & ~val]).decision_function(X[val])))
+    best_C = max(PROBE_C + [0.1, 1.0, 10.0], key=lambda C: _auroc(y[val], LogisticRegression(C=C, class_weight="balanced", max_iter=3000).fit(X[fit_mask & ~val], y[fit_mask & ~val]).decision_function(X[val])))
     return LogisticRegression(C=best_C, class_weight="balanced", max_iter=3000).fit(X[fit_mask], y[fit_mask]).decision_function(X)
 
 
+def answer_given_scores(results: list[dict], y: np.ndarray, fit_mask: np.ndarray) -> np.ndarray:
+    """How often each answer the model gives turns out to be wrong, learned on the fit invoices."""
+    return _rate_by(results, "predicted", y, fit_mask)
+
+
 def case_type_scores(results: list[dict], y: np.ndarray, fit_mask: np.ndarray) -> np.ndarray:
+    return _rate_by(results, "scenario", y, fit_mask)
+
+
+def _rate_by(results: list[dict], key: str, y: np.ndarray, fit_mask: np.ndarray) -> np.ndarray:
     rates: dict[str, list[bool]] = {}
     for r, wrong, use in zip(results, y, fit_mask):
         if use:
-            rates.setdefault(r["scenario"], []).append(bool(wrong))
+            rates.setdefault(str(r[key]), []).append(bool(wrong))
     overall = float(y[fit_mask].mean())
-    return np.array([np.mean(rates[r["scenario"]]) if r["scenario"] in rates else overall for r in results])
+    return np.array([np.mean(rates[str(r[key])]) if str(r[key]) in rates else overall for r in results])
 
 
 # --- Measuring how useful a signal is ---
@@ -187,16 +209,17 @@ def within_type_auroc(score: np.ndarray, y: np.ndarray, mask: np.ndarray, scenar
     removes that advantage: "knowing the hard case types" scores exactly 0.5 here.
     Only scenarios with at least min_each right and min_each wrong answers are used.
     """
-    per, weights = [], []
+    per, weights, detail = [], [], {}
     for sc in np.unique(scenarios[mask]):
         m = mask & (scenarios == sc)
         wrong = int(y[m].sum())
         if wrong >= min_each and m.sum() - wrong >= min_each:
             per.append(_auroc(y[m], score[m]))
             weights.append(m.sum())
+            detail[str(sc)] = {"right": int(m.sum()) - wrong, "wrong": wrong, "auroc": per[-1]}
     if not per:
-        return {"auroc": float("nan"), "scenarios_used": 0, "invoices_used": 0}
-    return {"auroc": float(np.average(per, weights=weights)), "scenarios_used": len(per), "invoices_used": int(sum(weights))}
+        return {"auroc": float("nan"), "scenarios_used": 0, "invoices_used": 0, "per_group": {}}
+    return {"auroc": float(np.average(per, weights=weights)), "scenarios_used": len(per), "invoices_used": int(sum(weights)), "per_group": detail}
 
 
 # --- Error bars ---
@@ -204,7 +227,7 @@ def within_type_auroc(score: np.ndarray, y: np.ndarray, mask: np.ndarray, scenar
 BOOTSTRAP_REPS = 1000
 
 
-def bootstrap(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, seed: int = 0) -> dict:
+def bootstrap(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, scenarios: np.ndarray | None = None, seed: int = 0) -> dict:
     """95% ranges for each signal's metrics, and for the probe's AUROC advantage over each
     other signal (paired: both measured on the same resample, which is much less noisy than
     comparing two separate ranges)."""
@@ -213,6 +236,9 @@ def bootstrap(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, gr
     keys = list(by_group)
     draws: dict[str, list] = {f"{n}.{m}": [] for n in scores for m in ["auroc", "cov2", "cov5"]}
     draws.update({f"probe_minus.{n}": [] for n in scores if n != "probe"})
+    if scenarios is not None:
+        draws.update({f"{n}.within": [] for n in scores})
+        draws.update({f"probe_minus_within.{n}": [] for n in scores if n != "probe"})
     for _ in range(BOOTSTRAP_REPS):
         idx = np.concatenate([by_group[keys[i]] for i in rng.integers(0, len(keys), len(keys))])
         yb = y[idx]
@@ -227,22 +253,35 @@ def bootstrap(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, gr
         for n in scores:
             if n != "probe":
                 draws[f"probe_minus.{n}"].append(aurocs["probe"] - aurocs[n])
+        if scenarios is not None:
+            within = {n: within_type_auroc(s[idx], yb, np.ones(len(idx), bool), scenarios[idx])["auroc"] for n, s in scores.items()}
+            if not np.isnan(within["probe"]):
+                for n in scores:
+                    draws[f"{n}.within"].append(within[n])
+                    if n != "probe":
+                        draws[f"probe_minus_within.{n}"].append(within["probe"] - within[n])
     return {k: [float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))] for k, v in draws.items() if v}
 
 
-def summarise(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, scenarios: np.ndarray) -> dict:
+def summarise(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, scenarios: np.ndarray, answers: np.ndarray) -> dict:
     point = evaluate(scores, y, mask)
-    ci = bootstrap(scores, y, mask, groups)
-    out = {"signals": {}, "probe_advantage_auroc": {}}
+    ci = bootstrap(scores, y, mask, groups, scenarios)
+    out = {"signals": {}, "probe_advantage_auroc": {}, "probe_advantage_within_type": {}}
     for n, m in point.items():
         out["signals"][n] = {
             "auroc": m["auroc"], "auroc_95": ci.get(f"{n}.auroc"),
             "coverage_at_2pct_error": m["coverage_at_2pct_error"], "coverage_at_2pct_error_95": ci.get(f"{n}.cov2"),
             "coverage_at_5pct_error": m["coverage_at_5pct_error"], "coverage_at_5pct_error_95": ci.get(f"{n}.cov5"),
-            "within_type": within_type_auroc(scores[n], y, mask, scenarios),
+            "within_type": within_type_auroc(scores[n], y, mask, scenarios) | {"auroc_95": ci.get(f"{n}.within")},
+            # Same idea, grouped by the answer the model gave: among invoices it approved, can
+            # the signal find the ones it should have held?
+            "within_answer": within_type_auroc(scores[n], y, mask, answers),
         }
+    for n in point:
         if n != "probe":
-            out["probe_advantage_auroc"][n] = {"diff": point["probe"]["auroc"] - m["auroc"], "diff_95": ci.get(f"probe_minus.{n}")}
+            out["probe_advantage_auroc"][n] = {"diff": point["probe"]["auroc"] - point[n]["auroc"], "diff_95": ci.get(f"probe_minus.{n}")}
+            w = out["signals"]
+            out["probe_advantage_within_type"][n] = {"diff": w["probe"]["within_type"]["auroc"] - w[n]["within_type"]["auroc"], "diff_95": ci.get(f"probe_minus_within.{n}")}
     return out
 
 
@@ -255,10 +294,12 @@ def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str,
     suppliers = np.array([r["supplier_id"] for r in results])
     labels = np.array([r["label"] for r in results])
     scenarios = np.array([r["scenario"] for r in results])
+    answers = np.array([str(r["predicted"]) for r in results])
     excluded = labels == held_out if held_out else np.zeros(len(results), bool)  # never trained on
 
     scores = output_signals(results)
-    for name in ["probe", "input_only", "case_type"]:
+    texts_with_answer = with_answer(texts, results)
+    for name in ["probe", "input_only", "text_and_answer", "answer_given", "case_type"]:
         scores[name] = np.zeros(len(results))
     sweeps, chosen = [], []
     for f in range(k):
@@ -270,6 +311,8 @@ def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str,
         fit = train | val  # refit on train + validation once settings are chosen
         scores["probe"][test] = probe_scores(acts, y, fit, best["layer"], best["C"])[test]
         scores["input_only"][test] = input_only_scores(texts, y, fit, val)[test]
+        scores["text_and_answer"][test] = input_only_scores(texts_with_answer, y, fit, val)[test]
+        scores["answer_given"][test] = answer_given_scores(results, y, fit)[test]
         scores["case_type"][test] = case_type_scores(results, y, fit)[test]
         sweeps.append([d["val_auroc"] for d in sweep])
         chosen.append({"fold": f, "layer": best["layer"], "C": best["C"]})
@@ -283,12 +326,12 @@ def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str,
         "layer_sweep": {
             "mean": sweeps.mean(0).tolist(), "min": sweeps.min(0).tolist(), "max": sweeps.max(0).tolist(),
         },
-        "in_distribution": summarise(scores, y, ~excluded, suppliers, scenarios),
+        "in_distribution": summarise(scores, y, ~excluded, suppliers, scenarios, answers),
     }
     if held_out:
         report["held_out_label"] = held_out
         report["held_out_counts"] = {"invoices": int(excluded.sum()), "wrong": int(y[excluded].sum())}
-        report["held_out"] = summarise(scores, y, excluded, suppliers, scenarios)
+        report["held_out"] = summarise(scores, y, excluded, suppliers, scenarios, answers)
     return report, scores, y, ~excluded
 
 
@@ -312,21 +355,29 @@ def print_report(rep: dict) -> None:
         if section == "in_distribution" and "held_out_label" in rep:
             title = f"All invoices except {rep['held_out_label']}"
         print(f"\n{title}   [95% ranges in brackets]")
-        print(f"  {'signal':<12} {'AUROC':<22} {'within type':<13} {'automatable at 2% error':<26} {'at 5% error'}")
+        print(f"  {'signal':<15} {'AUROC':<22} {'within type':<24} {'automatable at 2% error':<26} {'at 5% error'}")
         for name, m in rep[section]["signals"].items():
             w = m["within_type"]
             print(
-                f"  {name:<12} {m['auroc']:.2f} {_range(m['auroc_95']):<17} "
-                f"{w['auroc']:.2f} ({w['scenarios_used']:>2})    "
+                f"  {name:<15} {m['auroc']:.2f} {_range(m['auroc_95']):<17} "
+                f"{w['auroc']:.2f} {_range(w.get('auroc_95')):<14} [{w['scenarios_used']}]  "
                 f"{m['coverage_at_2pct_error']:>4.0%} {_pct_range(m['coverage_at_2pct_error_95']):<21} "
                 f"{m['coverage_at_5pct_error']:>4.0%} {_pct_range(m['coverage_at_5pct_error_95'])}"
             )
-        print("  (within type: AUROC inside each kind of invoice, averaged; number of kinds used in brackets)")
-        print("  Probe AUROC advantage over:")
-        for name, d in rep[section]["probe_advantage_auroc"].items():
-            r = d["diff_95"]
-            verdict = "" if not r else ("  clearly better" if r[0] > 0 else "  clearly worse" if r[1] < 0 else "  not distinguishable")
-            print(f"    {name:<12} {d['diff']:+.2f} {_range(r)}{verdict}")
+        print("  (within type: AUROC inside each kind of invoice, averaged; number of kinds used in square brackets)")
+        for key, what in [("probe_advantage_auroc", "AUROC"), ("probe_advantage_within_type", "within-type AUROC")]:
+            print(f"  Probe {what} advantage over:")
+            for name, d in rep[section][key].items():
+                r = d["diff_95"]
+                verdict = "" if not r else ("  clearly better" if r[0] > 0 else "  clearly worse" if r[1] < 0 else "  not distinguishable")
+                print(f"    {name:<15} {d['diff']:+.2f} {_range(r)}{verdict}")
+        sig = rep[section]["signals"]
+        for key, what in [("within_type", "Inside each kind of invoice"), ("within_answer", "Grouped by the answer the model gave")]:
+            print(f"  {what} (AUROC; groups with at least 3 right and 3 wrong):")
+            shown = ["probe", "text_and_answer", "input_only", "answer_given", "answer_prob"]
+            print(f"    {'group':<28} {'right':>5} {'wrong':>5}   " + "  ".join(f"{n:>15}" for n in shown))
+            for g, d in sig["probe"][key]["per_group"].items():
+                print(f"    {g:<28} {d['right']:>5} {d['wrong']:>5}   " + "  ".join(f"{sig[n][key]['per_group'][g]['auroc']:>15.2f}" for n in shown))
 
 
 def main() -> None:
@@ -346,7 +397,8 @@ def main() -> None:
         print(f"\nRotating over suppliers ({level!r} level)...", flush=True)
         rep, _, _, _ = analyse(results, acts, texts, level, args.held_out)
         print_report(rep)
-        (args.out / f"{args.run}_{level}.json").write_text(json.dumps(rep, indent=2))
+        suffix = f"_heldout_{args.held_out}" if args.held_out else ""
+        (args.out / f"{args.run}_{level}{suffix}.json").write_text(json.dumps(rep, indent=2))
 
 
 if __name__ == "__main__":

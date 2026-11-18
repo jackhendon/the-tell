@@ -1,0 +1,160 @@
+
+
+=== Errors at the 'label' level: 388 of 2000 invoices wrong ===
+Rotation: 5 groups of suppliers (40 suppliers); every invoice scored once by a model that never saw its supplier
+Probe layer chosen in each rotation: 25, 29, 31, 30, 31
+
+All invoices except TAX_ERROR   [95% ranges in brackets]
+  signal          AUROC                  within type              automatable at 2% error    at 5% error
+  stated          0.50 (0.50 to 0.51)    0.50 (0.50 to 0.67) [6]    0% (0% to 0%)              0% (0% to 0%)
+  answer_prob     0.65 (0.62 to 0.69)    0.55 (0.35 to 0.80) [6]    0% (0% to 18%)            39% (0% to 44%)
+  agreement       0.65 (0.62 to 0.69)    0.56 (0.37 to 0.82) [6]   20% (18% to 24%)           26% (21% to 36%)
+  probe           0.98 (0.97 to 0.99)    0.84 (0.69 to 0.99) [6]   86% (84% to 89%)           91% (89% to 94%)
+  input_only      0.81 (0.77 to 0.85)    0.52 (0.42 to 0.70) [6]   29% (15% to 41%)           58% (39% to 86%)
+  text_and_answer 0.93 (0.92 to 0.95)    1.00 (0.82 to 1.00) [6]   75% (72% to 80%)           85% (80% to 90%)
+  answer_given    0.77 (0.75 to 0.80)    1.00 (0.82 to 1.00) [6]   36% (34% to 43%)           59% (44% to 68%)
+  case_type       0.97 (0.95 to 0.98)    0.26 (0.19 to 0.39) [6]   87% (85% to 89%)           92% (89% to 94%)
+  (within type: AUROC inside each kind of invoice, averaged; number of kinds used in square brackets)
+  Probe AUROC advantage over:
+    stated          +0.48 (0.47 to 0.49)  clearly better
+    answer_prob     +0.33 (0.30 to 0.36)  clearly better
+    agreement       +0.33 (0.29 to 0.36)  clearly better
+    input_only      +0.17 (0.14 to 0.21)  clearly better
+    text_and_answer +0.05 (0.04 to 0.06)  clearly better
+    answer_given    +0.21 (0.19 to 0.23)  clearly better
+    case_type       +0.01 (-0.00 to 0.03)  not distinguishable
+  Probe within-type AUROC advantage over:
+    stated          +0.34 (0.18 to 0.49)  clearly better
+    answer_prob     +0.29 (0.06 to 0.45)  clearly better
+    agreement       +0.27 (0.04 to 0.42)  clearly better
+    input_only      +0.32 (0.15 to 0.49)  clearly better
+    text_and_answer -0.16 (-0.26 to -0.00)  clearly worse
+    answer_given    -0.16 (-0.27 to 0.01)  not distinguishable
+    case_type       +0.58 (0.40 to 0.75)  clearly better
+  Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
+    group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
+    agreed_uplift                    3    42              0.35             0.98             0.61             1.00             0.10
+    billed_full_on_partial          31    51              0.95             1.00             0.67             1.00             0.34
+    credit_other_po                 75     3              1.00             1.00             0.60             1.00             0.91
+    mixed_vat                       46     3              0.98             1.00             0.64             1.00             0.96
+    rebilled_first_delivery         73     8              0.97             1.00             0.46             1.00             0.76
+    standing_order                   3    54              0.52             1.00             0.09             1.00             0.02
+  Grouped by the answer the model gave (AUROC; groups with at least 3 right and 3 wrong):
+    group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
+    APPROVE                        448    60              0.99             0.96             0.87             0.45             0.75
+    DUPLICATE                      233    55              1.00             1.00             1.00             0.42             0.55
+    PRICE_VARIANCE                 232    93              0.90             0.53             0.50             0.42             0.66
+
+Held-out problem type TAX_ERROR (never trained on)   [95% ranges in brackets]
+  signal          AUROC                  within type              automatable at 2% error    at 5% error
+  stated          0.53 (0.51 to 0.55)    0.55 (0.51 to 0.60) [1]    0% (0% to 0%)              0% (0% to 0%)
+  answer_prob     0.24 (0.18 to 0.30)    0.07 (0.00 to 0.17) [1]    0% (0% to 0%)              0% (0% to 0%)
+  agreement       0.31 (0.23 to 0.38)    0.07 (0.00 to 0.17) [1]    0% (0% to 0%)              0% (0% to 0%)
+  probe           0.02 (0.01 to 0.03)    0.04 (0.00 to 0.09) [1]    0% (0% to 0%)              0% (0% to 0%)
+  input_only      0.50 (0.42 to 0.58)    0.51 (0.25 to 0.89) [1]    1% (0% to 3%)              1% (0% to 3%)
+  text_and_answer 0.00 (0.00 to 0.00)    0.00 (0.00 to 0.00) [1]    0% (0% to 0%)              0% (0% to 0%)
+  answer_given    0.00 (0.00 to 0.00)    0.00 (0.00 to 0.00) [1]    0% (0% to 0%)              0% (0% to 0%)
+  case_type       0.44 (0.35 to 0.54)    0.45 (0.15 to 0.83) [1]    0% (0% to 0%)              0% (0% to 0%)
+  (within type: AUROC inside each kind of invoice, averaged; number of kinds used in square brackets)
+  Probe AUROC advantage over:
+    stated          -0.51 (-0.53 to -0.49)  clearly worse
+    answer_prob     -0.22 (-0.28 to -0.17)  clearly worse
+    agreement       -0.29 (-0.36 to -0.22)  clearly worse
+    input_only      -0.48 (-0.56 to -0.41)  clearly worse
+    text_and_answer +0.02 (0.01 to 0.03)  clearly better
+    answer_given    +0.02 (0.01 to 0.03)  clearly better
+    case_type       -0.42 (-0.52 to -0.34)  clearly worse
+  Probe within-type AUROC advantage over:
+    stated          -0.51 (-0.57 to -0.45)  clearly worse
+    answer_prob     -0.03 (-0.14 to 0.05)  not distinguishable
+    agreement       -0.03 (-0.14 to 0.05)  not distinguishable
+    input_only      -0.48 (-0.86 to -0.18)  clearly worse
+    text_and_answer +0.04 (0.00 to 0.09)  not distinguishable
+    answer_given    +0.04 (0.00 to 0.09)  not distinguishable
+    case_type       -0.41 (-0.82 to -0.11)  clearly worse
+  Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
+    group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
+    standard_on_zero_rated           6    47              0.04             0.00             0.51             0.00             0.07
+  Grouped by the answer the model gave (AUROC; groups with at least 3 right and 3 wrong):
+    group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
+
+
+=== Errors at the 'hold' level: 375 of 2000 invoices wrong ===
+Rotation: 5 groups of suppliers (40 suppliers); every invoice scored once by a model that never saw its supplier
+Probe layer chosen in each rotation: 25, 29, 32, 22, 29
+
+All invoices except TAX_ERROR   [95% ranges in brackets]
+  signal          AUROC                  within type              automatable at 2% error    at 5% error
+  stated          0.50 (0.50 to 0.51)    0.50 (0.50 to 0.68) [6]    0% (0% to 0%)              0% (0% to 0%)
+  answer_prob     0.65 (0.61 to 0.68)    0.55 (0.33 to 0.77) [6]    0% (0% to 18%)            39% (0% to 44%)
+  agreement       0.64 (0.61 to 0.68)    0.56 (0.35 to 0.79) [6]   20% (18% to 24%)           26% (21% to 36%)
+  probe           0.98 (0.97 to 0.99)    0.82 (0.66 to 0.96) [6]   86% (83% to 89%)           92% (89% to 94%)
+  input_only      0.80 (0.76 to 0.85)    0.53 (0.38 to 0.67) [6]   21% (13% to 33%)           73% (28% to 86%)
+  text_and_answer 0.93 (0.92 to 0.94)    1.00 (0.81 to 1.00) [6]   76% (72% to 80%)           85% (81% to 91%)
+  answer_given    0.77 (0.74 to 0.79)    1.00 (0.80 to 1.00) [6]   36% (34% to 43%)           59% (44% to 69%)
+  case_type       0.98 (0.97 to 0.99)    0.26 (0.20 to 0.43) [6]   88% (85% to 90%)           92% (90% to 94%)
+  (within type: AUROC inside each kind of invoice, averaged; number of kinds used in square brackets)
+  Probe AUROC advantage over:
+    stated          +0.48 (0.46 to 0.49)  clearly better
+    answer_prob     +0.33 (0.30 to 0.37)  clearly better
+    agreement       +0.33 (0.30 to 0.37)  clearly better
+    input_only      +0.18 (0.13 to 0.22)  clearly better
+    text_and_answer +0.05 (0.04 to 0.06)  clearly better
+    answer_given    +0.21 (0.18 to 0.24)  clearly better
+    case_type       -0.00 (-0.01 to 0.01)  not distinguishable
+  Probe within-type AUROC advantage over:
+    stated          +0.32 (0.15 to 0.45)  clearly better
+    answer_prob     +0.27 (0.04 to 0.47)  clearly better
+    agreement       +0.26 (0.02 to 0.43)  clearly better
+    input_only      +0.28 (0.07 to 0.52)  clearly better
+    text_and_answer -0.18 (-0.28 to -0.02)  clearly worse
+    answer_given    -0.18 (-0.28 to -0.01)  clearly worse
+    case_type       +0.56 (0.37 to 0.71)  clearly better
+  Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
+    group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
+    agreed_uplift                    3    42              0.38             0.98             0.62             1.00             0.10
+    billed_full_on_partial          31    51              0.91             1.00             0.65             1.00             0.34
+    credit_other_po                 75     3              0.95             1.00             0.71             1.00             0.91
+    mixed_vat                       46     3              0.95             1.00             0.58             1.00             0.96
+    rebilled_first_delivery         73     8              0.94             1.00             0.48             1.00             0.76
+    standing_order                   3    54              0.56             1.00             0.09             1.00             0.02
+  Grouped by the answer the model gave (AUROC; groups with at least 3 right and 3 wrong):
+    group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
+    APPROVE                        448    60              0.99             0.96             0.86             0.45             0.75
+    DUPLICATE                      234    54              1.00             1.00             1.00             0.42             0.54
+    PRICE_VARIANCE                 232    93              0.91             0.53             0.48             0.42             0.66
+    TAX_ERROR                        3     6              0.83             0.61             0.78             0.36             0.11
+
+Held-out problem type TAX_ERROR (never trained on)   [95% ranges in brackets]
+  signal          AUROC                  within type              automatable at 2% error    at 5% error
+  stated          0.44 (0.39 to 0.48)    0.18 (0.07 to 0.38) [2]    0% (0% to 0%)              0% (0% to 0%)
+  answer_prob     0.18 (0.12 to 0.23)    0.03 (0.00 to 0.10) [2]    0% (0% to 0%)              0% (0% to 0%)
+  agreement       0.24 (0.17 to 0.31)    0.03 (0.00 to 0.10) [2]    0% (0% to 0%)              0% (0% to 0%)
+  probe           0.21 (0.12 to 0.32)    0.09 (0.00 to 0.21) [2]    0% (0% to 1%)              0% (0% to 1%)
+  input_only      0.50 (0.43 to 0.57)    0.45 (0.29 to 0.78) [2]    0% (0% to 2%)              0% (0% to 2%)
+  text_and_answer 0.01 (0.00 to 0.02)    0.02 (0.00 to 0.09) [2]    0% (0% to 0%)              0% (0% to 0%)
+  answer_given    0.00 (0.00 to 0.00)    0.00 (0.00 to 0.00) [2]    0% (0% to 0%)              0% (0% to 0%)
+  case_type       0.42 (0.35 to 0.50)    0.33 (0.20 to 0.59) [2]    0% (0% to 0%)              0% (0% to 0%)
+  (within type: AUROC inside each kind of invoice, averaged; number of kinds used in square brackets)
+  Probe AUROC advantage over:
+    stated          -0.23 (-0.33 to -0.11)  clearly worse
+    answer_prob     +0.03 (-0.06 to 0.14)  not distinguishable
+    agreement       -0.03 (-0.13 to 0.07)  not distinguishable
+    input_only      -0.29 (-0.41 to -0.17)  clearly worse
+    text_and_answer +0.20 (0.11 to 0.30)  clearly better
+    answer_given    +0.21 (0.12 to 0.32)  clearly better
+    case_type       -0.21 (-0.34 to -0.09)  clearly worse
+  Probe within-type AUROC advantage over:
+    stated          -0.09 (-0.33 to 0.09)  not distinguishable
+    answer_prob     +0.06 (-0.03 to 0.19)  not distinguishable
+    agreement       +0.06 (-0.03 to 0.19)  not distinguishable
+    input_only      -0.36 (-0.70 to -0.14)  clearly worse
+    text_and_answer +0.07 (-0.04 to 0.20)  not distinguishable
+    answer_given    +0.09 (0.00 to 0.21)  clearly better
+    case_type       -0.23 (-0.53 to -0.06)  clearly worse
+  Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
+    group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
+    plain_biscuit_at_standard        5    54              0.11             0.00             0.26             0.00             0.01
+    standard_on_zero_rated          11    42              0.07             0.05             0.67             0.00             0.05
+  Grouped by the answer the model gave (AUROC; groups with at least 3 right and 3 wrong):
+    group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob

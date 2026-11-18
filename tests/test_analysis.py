@@ -1,6 +1,6 @@
 import numpy as np
 
-from the_tell.analysis import bootstrap, coverage_at_risk, within_type_auroc, is_wrong, output_signals, risk_coverage, supplier_folds
+from the_tell.analysis import answer_given_scores, bootstrap, coverage_at_risk, within_type_auroc, is_wrong, output_signals, risk_coverage, supplier_folds
 
 
 def _result(label, predicted, supplier="SUP-001", confidence=100, top_logprob=-1e-6):
@@ -75,3 +75,11 @@ def test_knowing_the_case_type_scores_chance_within_type():
     type_rate = np.where(scenarios == "a", 0.4, 0.3)
     assert within_type_auroc(type_rate, y, np.ones(20, bool), scenarios)["auroc"] == 0.5
     assert within_type_auroc(y.astype(float), y, np.ones(20, bool), scenarios)["auroc"] == 1.0
+
+
+def test_answer_given_learns_only_from_fit_invoices():
+    rs = [_result("APPROVE", "PRICE_VARIANCE"), _result("PRICE_VARIANCE", "PRICE_VARIANCE"), _result("APPROVE", "APPROVE"), _result("TAX_ERROR", "APPROVE")]
+    y = is_wrong(rs, "label")
+    fit = np.array([True, True, True, False])  # the last invoice is a test invoice
+    s = answer_given_scores(rs, y, fit)
+    assert list(s) == [0.5, 0.5, 0.0, 0.0]  # "APPROVE" was never wrong among the fit invoices
