@@ -52,6 +52,8 @@ from the_tell.domain import Label
 from the_tell.generate import read_jsonl
 from the_tell.prompt import user_message
 
+ADVANCE_SIGNALS = ["probe", "text_and_answer", "answer_given"]
+ADVANCE_RISKS = [0.02, 0.05]
 PROBE_C = [0.0003, 0.001, 0.003, 0.01]  # regularisation strengths tried; chosen on validation
 SAMPLE_TEMPERATURE = 0.7
 
@@ -189,6 +191,18 @@ def coverage_at_risk(score: np.ndarray, y: np.ndarray, max_risk: float) -> float
     return float(ok.max()) if len(ok) else 0.0
 
 
+def cutoff_at_risk(score: np.ndarray, y: np.ndarray, max_risk: float) -> float:
+    """The cut-off to use in advance: the highest doubt score at which, on these invoices,
+    errors among everything at or below it stay within max_risk. Minus infinity if no
+    cut-off manages it (then nothing is automated)."""
+    order = np.argsort(score, kind="stable")
+    sorted_score, wrong = score[order], y[order].astype(float)
+    n = np.arange(1, len(y) + 1)
+    ends = np.r_[np.nonzero(np.diff(sorted_score))[0], len(y) - 1]
+    ok = np.nonzero(np.cumsum(wrong)[ends] / n[ends] <= max_risk)[0]
+    return float(sorted_score[ends[ok.max()]]) if len(ok) else -np.inf
+
+
 def evaluate(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray) -> dict[str, dict]:
     return {
         name: {
@@ -302,6 +316,13 @@ def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str,
     for name in ["probe", "input_only", "text_and_answer", "answer_given", "case_type"]:
         scores[name] = np.zeros(len(results))
     sweeps, chosen = [], []
+    # Cut-offs set in advance. The coverage figures elsewhere pick the best cut-off after
+    # seeing which answers were wrong. Here, in each rotation, the signal is trained on
+    # three groups, the cut-off is picked on the fourth, and both are applied unchanged
+    # to the fifth. What happens there is what you'd see in real use.
+    bad_approval = (answers == "APPROVE") & (labels != "APPROVE")
+    sections = {"in_distribution": ~excluded, "held_out": excluded} if held_out else {"in_distribution": ~excluded}
+    tally = {(sec, n, r): np.zeros(4, int) for sec in sections for n in ADVANCE_SIGNALS for r in ADVANCE_RISKS}
     for f in range(k):
         test = folds == f
         val = (folds == (f + 1) % k) & ~excluded
@@ -314,6 +335,17 @@ def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str,
         scores["text_and_answer"][test] = input_only_scores(texts_with_answer, y, fit, val)[test]
         scores["answer_given"][test] = answer_given_scores(results, y, fit)[test]
         scores["case_type"][test] = case_type_scores(results, y, fit)[test]
+        train_only = {
+            "probe": probe_scores(acts, y, train, best["layer"], best["C"]),
+            "text_and_answer": input_only_scores(texts_with_answer, y, train, val),
+            "answer_given": answer_given_scores(results, y, train),
+        }
+        for n, sc in train_only.items():
+            for r in ADVANCE_RISKS:
+                cut = cutoff_at_risk(sc[val], y[val], r)
+                for sec, m in sections.items():
+                    auto = test & m & (sc <= cut)
+                    tally[(sec, n, r)] += [auto.sum(), (auto & y).sum(), (auto & bad_approval).sum(), (test & m).sum()]
         sweeps.append([d["val_auroc"] for d in sweep])
         chosen.append({"fold": f, "layer": best["layer"], "C": best["C"]})
         print(f"  fold {f + 1}/{k}: probe layer {best['layer']}, C={best['C']}", flush=True)
@@ -328,6 +360,17 @@ def analyse(results: list[dict], acts: np.ndarray, texts: list[str], level: str,
         },
         "in_distribution": summarise(scores, y, ~excluded, suppliers, scenarios, answers),
     }
+    for sec in sections:
+        target = report if sec == "in_distribution" else None
+        block = {}
+        for n in ADVANCE_SIGNALS:
+            for r in ADVANCE_RISKS:
+                auto, wrong, bad, total = (int(v) for v in tally[(sec, n, r)])
+                block.setdefault(n, {})[f"target_{r:.0%}"] = {
+                    "automated": auto, "of": total, "share_automated": auto / total if total else 0.0,
+                    "wrong": wrong, "error_rate": wrong / auto if auto else 0.0, "bad_invoices_approved": bad,
+                }
+        report.setdefault("cutoff_set_in_advance", {})[sec] = block
     if held_out:
         report["held_out_label"] = held_out
         report["held_out_counts"] = {"invoices": int(excluded.sum()), "wrong": int(y[excluded].sum())}
@@ -371,6 +414,13 @@ def print_report(rep: dict) -> None:
                 r = d["diff_95"]
                 verdict = "" if not r else ("  clearly better" if r[0] > 0 else "  clearly worse" if r[1] < 0 else "  not distinguishable")
                 print(f"    {name:<15} {d['diff']:+.2f} {_range(r)}{verdict}")
+        adv = rep.get("cutoff_set_in_advance", {}).get(section, {})
+        if adv:
+            print("  Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):")
+            for n, by_target in adv.items():
+                for t, d in by_target.items():
+                    print(f"    {n:<15} aiming for {t[7:]:>3} error: automated {d['automated']:>4} of {d['of']} ({d['share_automated']:.0%}), "
+                          f"{d['wrong']} wrong ({d['error_rate']:.1%}), {d['bad_invoices_approved']} bad invoices approved")
         sig = rep[section]["signals"]
         for key, what in [("within_type", "Inside each kind of invoice"), ("within_answer", "Grouped by the answer the model gave")]:
             print(f"  {what} (AUROC; groups with at least 3 right and 3 wrong):")

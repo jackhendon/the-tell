@@ -54,12 +54,13 @@ all of its mistakes.
 Yes, with a catch. I trained a separate checker that looks inside the model while it
 works, and learns from past examples what it looks like when it's about to be wrong.
 
-Used as a filter, the checker would have let the model handle 1,228 of the 2,000
-invoices (61%) on its own:
+I tested it the way you'd use it: set the checker up on one group of suppliers, then
+let it decide on invoices from suppliers it had never seen. Aiming for 2 in 100 wrong, it
+let the model handle 1,316 of the 2,000 invoices (66%) on its own:
 
-- 24 of those were wrong, about 2 in 100.
-- Only 14 were bad invoices that would have been paid.
-- The other 772 invoices would go to a person, and they include 207 of the 221 bad
+- 41 of those were wrong, about 3 in 100. A bit worse than the target.
+- 30 were bad invoices that would have been paid.
+- The other 684 invoices would go to a person, and they include 191 of the 221 bad
   invoices the model approved.
 
 The model's own confidence couldn't safely hand over a single invoice, so that's a big
@@ -75,9 +76,13 @@ invoices. It rated the model's VAT mistakes as the safest answers of all.
 So if the model starts making a new kind of mistake, say after a policy change or a new
 supplier, the checker won't flag it.
 
-I also found that a much simpler checker, one that just reads the invoice and the
-model's answer, does nearly as well. Looking inside the model gave a small extra
-improvement, mainly on invoices held over price rises that were actually fine.
+I also tried a much simpler checker, one that just reads the invoice and the model's
+answer. It handed over fewer invoices (1,095, or 55%), but only 9 of those were bad
+invoices that would have been paid, against 30 for the checker that looks inside the
+model.
+
+> If paying bad invoices is what worries you most, the simpler checker is the safer
+> choice here.
 
 ## What I'd recommend
 
@@ -87,10 +92,12 @@ improvement, mainly on invoices held over price rises that were actually fine.
    and the price tolerance are both simple lookups. The model got those wrong far more
    than anything else, and caught every problem the automated checks had already spelled
    out.
-3. If you use a checker to decide what goes straight through, always send a random
+3. Set the checker's threshold on one batch of invoices and test it on another before
+   trusting it. Here, aiming for 2% wrong gave about 3%.
+4. If you use a checker to decide what goes straight through, always send a random
    sample of the "safe" invoices to a person too. That's how you'd notice a new kind of
    mistake before it costs money.
-4. Start in shadow mode. Run the model alongside the current process, compare its
+5. Start in shadow mode. Run the model alongside the current process, compare its
    decisions with your team's for a few weeks, and only then let anything through
    unchecked.
 

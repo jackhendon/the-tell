@@ -31,6 +31,13 @@ All invoices except TAX_ERROR   [95% ranges in brackets]
     text_and_answer -0.16 (-0.26 to -0.00)  clearly worse
     answer_given    -0.16 (-0.27 to 0.01)  not distinguishable
     case_type       +0.58 (0.40 to 0.75)  clearly better
+  Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):
+    probe           aiming for  2% error: automated 1543 of 1767 (87%), 39 wrong (2.5%), 7 bad invoices approved
+    probe           aiming for  5% error: automated 1621 of 1767 (92%), 88 wrong (5.4%), 21 bad invoices approved
+    text_and_answer aiming for  2% error: automated 1352 of 1767 (77%), 40 wrong (3.0%), 14 bad invoices approved
+    text_and_answer aiming for  5% error: automated 1504 of 1767 (85%), 76 wrong (5.1%), 29 bad invoices approved
+    answer_given    aiming for  2% error: automated  637 of 1767 (36%), 1 wrong (0.2%), 0 bad invoices approved
+    answer_given    aiming for  5% error: automated  837 of 1767 (47%), 27 wrong (3.2%), 26 bad invoices approved
   Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
     group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
     agreed_uplift                    3    42              0.35             0.98             0.61             1.00             0.10
@@ -72,6 +79,13 @@ Held-out problem type TAX_ERROR (never trained on)   [95% ranges in brackets]
     text_and_answer +0.04 (0.00 to 0.09)  not distinguishable
     answer_given    +0.04 (0.00 to 0.09)  not distinguishable
     case_type       -0.41 (-0.82 to -0.11)  clearly worse
+  Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):
+    probe           aiming for  2% error: automated  186 of 233 (80%), 166 wrong (89.2%), 159 bad invoices approved
+    probe           aiming for  5% error: automated  210 of 233 (90%), 169 wrong (80.5%), 160 bad invoices approved
+    text_and_answer aiming for  2% error: automated  145 of 233 (62%), 145 wrong (100.0%), 144 bad invoices approved
+    text_and_answer aiming for  5% error: automated  165 of 233 (71%), 165 wrong (100.0%), 157 bad invoices approved
+    answer_given    aiming for  2% error: automated    0 of 233 (0%), 0 wrong (0.0%), 0 bad invoices approved
+    answer_given    aiming for  5% error: automated   69 of 233 (30%), 69 wrong (100.0%), 69 bad invoices approved
   Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
     group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
     standard_on_zero_rated           6    47              0.04             0.00             0.51             0.00             0.07
@@ -110,6 +124,13 @@ All invoices except TAX_ERROR   [95% ranges in brackets]
     text_and_answer -0.18 (-0.28 to -0.02)  clearly worse
     answer_given    -0.18 (-0.28 to -0.01)  clearly worse
     case_type       +0.56 (0.37 to 0.71)  clearly better
+  Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):
+    probe           aiming for  2% error: automated 1548 of 1767 (88%), 43 wrong (2.8%), 13 bad invoices approved
+    probe           aiming for  5% error: automated 1625 of 1767 (92%), 87 wrong (5.4%), 24 bad invoices approved
+    text_and_answer aiming for  2% error: automated 1359 of 1767 (77%), 40 wrong (2.9%), 13 bad invoices approved
+    text_and_answer aiming for  5% error: automated 1501 of 1767 (85%), 73 wrong (4.9%), 27 bad invoices approved
+    answer_given    aiming for  2% error: automated  637 of 1767 (36%), 1 wrong (0.2%), 0 bad invoices approved
+    answer_given    aiming for  5% error: automated  837 of 1767 (47%), 27 wrong (3.2%), 26 bad invoices approved
   Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
     group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
     agreed_uplift                    3    42              0.38             0.98             0.62             1.00             0.10
@@ -152,6 +173,13 @@ Held-out problem type TAX_ERROR (never trained on)   [95% ranges in brackets]
     text_and_answer +0.07 (-0.04 to 0.20)  not distinguishable
     answer_given    +0.09 (0.00 to 0.21)  clearly better
     case_type       -0.23 (-0.53 to -0.06)  clearly worse
+  Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):
+    probe           aiming for  2% error: automated  227 of 233 (97%), 160 wrong (70.5%), 160 bad invoices approved
+    probe           aiming for  5% error: automated  232 of 233 (100%), 160 wrong (69.0%), 160 bad invoices approved
+    text_and_answer aiming for  2% error: automated  149 of 233 (64%), 143 wrong (96.0%), 143 bad invoices approved
+    text_and_answer aiming for  5% error: automated  177 of 233 (76%), 156 wrong (88.1%), 156 bad invoices approved
+    answer_given    aiming for  2% error: automated    0 of 233 (0%), 0 wrong (0.0%), 0 bad invoices approved
+    answer_given    aiming for  5% error: automated   69 of 233 (30%), 69 wrong (100.0%), 69 bad invoices approved
   Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
     group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
     plain_biscuit_at_standard        5    54              0.11             0.00             0.26             0.00             0.01

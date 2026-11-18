@@ -62,3 +62,9 @@ def test_parse_answer(reply, label, confidence):
     a = parse_answer(reply)
     assert a.label == label
     assert a.confidence == confidence
+
+
+def test_reasoning_written_before_the_answer_is_skipped():
+    reply = "Checking each rule.\nPRICE: +1.6%, inside tolerance.\n\nOUTCOME: APPROVE\nCONFIDENCE: 90"
+    a = parse_answer(reply)
+    assert a.label.value == "APPROVE" and a.confidence == 90

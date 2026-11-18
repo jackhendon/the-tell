@@ -1017,5 +1017,63 @@
         ]
       }
     }
+  },
+  "cutoff_set_in_advance": {
+    "in_distribution": {
+      "probe": {
+        "target_2%": {
+          "automated": 1312,
+          "of": 2000,
+          "share_automated": 0.656,
+          "wrong": 38,
+          "error_rate": 0.028963414634146343,
+          "bad_invoices_approved": 27
+        },
+        "target_5%": {
+          "automated": 1500,
+          "of": 2000,
+          "share_automated": 0.75,
+          "wrong": 93,
+          "error_rate": 0.062,
+          "bad_invoices_approved": 64
+        }
+      },
+      "text_and_answer": {
+        "target_2%": {
+          "automated": 1042,
+          "of": 2000,
+          "share_automated": 0.521,
+          "wrong": 22,
+          "error_rate": 0.02111324376199616,
+          "bad_invoices_approved": 1
+        },
+        "target_5%": {
+          "automated": 1339,
+          "of": 2000,
+          "share_automated": 0.6695,
+          "wrong": 70,
+          "error_rate": 0.05227781926811053,
+          "bad_invoices_approved": 17
+        }
+      },
+      "answer_given": {
+        "target_2%": {
+          "automated": 699,
+          "of": 2000,
+          "share_automated": 0.3495,
+          "wrong": 6,
+          "error_rate": 0.008583690987124463,
+          "bad_invoices_approved": 0
+        },
+        "target_5%": {
+          "automated": 874,
+          "of": 2000,
+          "share_automated": 0.437,
+          "wrong": 42,
+          "error_rate": 0.04805491990846682,
+          "bad_invoices_approved": 0
+        }
+      }
+    }
   }
 }

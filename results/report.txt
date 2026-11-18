@@ -31,6 +31,13 @@ All invoices   [95% ranges in brackets]
     text_and_answer -0.08 (-0.28 to 0.10)  not distinguishable
     answer_given    +0.16 (-0.24 to 0.35)  not distinguishable
     case_type       +0.41 (0.30 to 0.63)  clearly better
+  Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):
+    probe           aiming for  2% error: automated 1316 of 2000 (66%), 41 wrong (3.1%), 30 bad invoices approved
+    probe           aiming for  5% error: automated 1483 of 2000 (74%), 94 wrong (6.3%), 62 bad invoices approved
+    text_and_answer aiming for  2% error: automated 1095 of 2000 (55%), 30 wrong (2.7%), 9 bad invoices approved
+    text_and_answer aiming for  5% error: automated 1318 of 2000 (66%), 71 wrong (5.4%), 20 bad invoices approved
+    answer_given    aiming for  2% error: automated  699 of 2000 (35%), 8 wrong (1.1%), 0 bad invoices approved
+    answer_given    aiming for  5% error: automated  778 of 2000 (39%), 29 wrong (3.7%), 0 bad invoices approved
   Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
     group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
     agreed_uplift                    3    42              0.41             0.83             0.73             0.21             0.10
@@ -79,6 +86,13 @@ All invoices   [95% ranges in brackets]
     text_and_answer -0.02 (-0.19 to 0.07)  not distinguishable
     answer_given    +0.12 (-0.21 to 0.23)  not distinguishable
     case_type       +0.41 (0.30 to 0.53)  clearly better
+  Automation with the cut-off set in advance (picked on other suppliers, then applied unchanged):
+    probe           aiming for  2% error: automated 1312 of 2000 (66%), 38 wrong (2.9%), 27 bad invoices approved
+    probe           aiming for  5% error: automated 1500 of 2000 (75%), 93 wrong (6.2%), 64 bad invoices approved
+    text_and_answer aiming for  2% error: automated 1042 of 2000 (52%), 22 wrong (2.1%), 1 bad invoices approved
+    text_and_answer aiming for  5% error: automated 1339 of 2000 (67%), 70 wrong (5.2%), 17 bad invoices approved
+    answer_given    aiming for  2% error: automated  699 of 2000 (35%), 6 wrong (0.9%), 0 bad invoices approved
+    answer_given    aiming for  5% error: automated  874 of 2000 (44%), 42 wrong (4.8%), 0 bad invoices approved
   Inside each kind of invoice (AUROC; groups with at least 3 right and 3 wrong):
     group                        right wrong             probe  text_and_answer       input_only     answer_given      answer_prob
     agreed_uplift                    3    42              0.40             0.75             0.71             0.00             0.10

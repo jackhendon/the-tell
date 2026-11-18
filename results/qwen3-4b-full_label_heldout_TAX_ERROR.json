@@ -898,6 +898,120 @@
       }
     }
   },
+  "cutoff_set_in_advance": {
+    "in_distribution": {
+      "probe": {
+        "target_2%": {
+          "automated": 1543,
+          "of": 1767,
+          "share_automated": 0.8732314657611772,
+          "wrong": 39,
+          "error_rate": 0.025275437459494492,
+          "bad_invoices_approved": 7
+        },
+        "target_5%": {
+          "automated": 1621,
+          "of": 1767,
+          "share_automated": 0.9173740803621958,
+          "wrong": 88,
+          "error_rate": 0.054287476866132015,
+          "bad_invoices_approved": 21
+        }
+      },
+      "text_and_answer": {
+        "target_2%": {
+          "automated": 1352,
+          "of": 1767,
+          "share_automated": 0.7651386530843237,
+          "wrong": 40,
+          "error_rate": 0.029585798816568046,
+          "bad_invoices_approved": 14
+        },
+        "target_5%": {
+          "automated": 1504,
+          "of": 1767,
+          "share_automated": 0.8511601584606678,
+          "wrong": 76,
+          "error_rate": 0.05053191489361702,
+          "bad_invoices_approved": 29
+        }
+      },
+      "answer_given": {
+        "target_2%": {
+          "automated": 637,
+          "of": 1767,
+          "share_automated": 0.36049801924165253,
+          "wrong": 1,
+          "error_rate": 0.0015698587127158557,
+          "bad_invoices_approved": 0
+        },
+        "target_5%": {
+          "automated": 837,
+          "of": 1767,
+          "share_automated": 0.47368421052631576,
+          "wrong": 27,
+          "error_rate": 0.03225806451612903,
+          "bad_invoices_approved": 26
+        }
+      }
+    },
+    "held_out": {
+      "probe": {
+        "target_2%": {
+          "automated": 186,
+          "of": 233,
+          "share_automated": 0.7982832618025751,
+          "wrong": 166,
+          "error_rate": 0.8924731182795699,
+          "bad_invoices_approved": 159
+        },
+        "target_5%": {
+          "automated": 210,
+          "of": 233,
+          "share_automated": 0.9012875536480687,
+          "wrong": 169,
+          "error_rate": 0.8047619047619048,
+          "bad_invoices_approved": 160
+        }
+      },
+      "text_and_answer": {
+        "target_2%": {
+          "automated": 145,
+          "of": 233,
+          "share_automated": 0.6223175965665236,
+          "wrong": 145,
+          "error_rate": 1.0,
+          "bad_invoices_approved": 144
+        },
+        "target_5%": {
+          "automated": 165,
+          "of": 233,
+          "share_automated": 0.7081545064377682,
+          "wrong": 165,
+          "error_rate": 1.0,
+          "bad_invoices_approved": 157
+        }
+      },
+      "answer_given": {
+        "target_2%": {
+          "automated": 0,
+          "of": 233,
+          "share_automated": 0.0,
+          "wrong": 0,
+          "error_rate": 0.0,
+          "bad_invoices_approved": 0
+        },
+        "target_5%": {
+          "automated": 69,
+          "of": 233,
+          "share_automated": 0.296137339055794,
+          "wrong": 69,
+          "error_rate": 1.0,
+          "bad_invoices_approved": 69
+        }
+      }
+    }
+  },
   "held_out_label": "TAX_ERROR",
   "held_out_counts": {
     "invoices": 233,

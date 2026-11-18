@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Can you tell from inside a language model that it is about to get it wrong?"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "anthropic>=2.10.0",
     "matplotlib>=3.11.2",
     "numpy>=2.5.5",
     "pydantic>=2.9",

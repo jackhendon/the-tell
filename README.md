@@ -35,8 +35,9 @@ and saved its internal state just before it gave each answer.
 - On 378 of those it said it was 100% confident.
 - A probe, which is a simple classifier trained on its internal state, predicts the
   mistakes far better than anything the model says about itself.
-- Used as a filter, the probe would let the model handle 61% of invoices with 2% of those
-  wrong. The model's own confidence can't safely hand over any.
+- Used as a filter, it would let the model handle about two thirds of invoices. Aiming for
+  2% of those wrong, it came out at 3.1% on suppliers it hadn't seen. The model's own
+  confidence can't safely hand over any.
 
 The probe is less clever than that sounds, though. Most of what it picks up is the
 answer the model is about to give.
@@ -62,10 +63,11 @@ How to read the table:
 - AUROC measures how well that score ranks wrong answers above right ones. 0.5 is a coin
   toss, 1.0 is perfect.
 - "Automatable" is the largest share of invoices you could leave to the model, least
-  doubtful first, with no more than 2% of them wrong.
+  doubtful first, with no more than 2% of them wrong. It picks the cut-off after seeing
+  which answers were wrong, so it's a best case. The next section sets it in advance.
 - Ranges in brackets are 95% ranges.
 
-| Signal | AUROC | Automatable at 2% error |
+| Signal | AUROC | Automatable at 2% error (best case) |
 |---|---|---|
 | Model's stated confidence | 0.51 (0.51 to 0.52) | 0% |
 | Model's probability for its answer | 0.47 (0.44 to 0.51) | 0% |
@@ -80,10 +82,32 @@ what kind of invoice each one is, which no real system would have. It's there to
 how much of the problem comes down to some kinds of invoice being hard.
 
 Scoring only the approve-or-hold decision gives almost the same numbers: probe 0.92, 62%
-automatable. That's the version where holding a bad invoice for the wrong reason counts
+automatable at best. That's the version where holding a bad invoice for the wrong reason counts
 as right.
 
 Full tables, including everything below, are in [results/report.txt](results/report.txt).
+
+### Setting the cut-off in advance
+
+In real use you'd have to choose the cut-off before seeing the answers. So in each of the
+five rotations, I trained each checker on three groups of suppliers, picked the cut-off on
+a fourth, and applied both unchanged to the fifth. Aiming for 2% wrong:
+
+| Checker | Invoices automated | Wrong among those | Bad invoices approved |
+|---|---|---|---|
+| Probe on internal state | 1,316 (66%) | 41 (3.1%) | 30 |
+| Invoice text + the model's answer | 1,095 (55%) | 30 (2.7%) | 9 |
+| Which answer the model gave | 699 (35%) | 8 (1.1%) | 0 |
+
+Two things stand out:
+
+- Both trained checkers overshoot the 2% target. A cut-off picked on one group of
+  suppliers doesn't carry over exactly to another.
+- The probe automates the most invoices, but lets through the most bad ones. Its extra
+  mistakes are mostly the model approving invoices it should have held.
+
+If the cost you care about is paying bad invoices, the simpler text-and-answer checker
+comes out ahead here. Aiming for 5% gives the same pattern (in `results/report.txt`).
 
 ### The model's mistakes are few and repetitive
 

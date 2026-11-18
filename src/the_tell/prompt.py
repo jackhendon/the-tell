@@ -60,12 +60,19 @@ _OUTCOME = re.compile(r"OUTCOME:\s*([A-Z_]+)")
 _CONFIDENCE = re.compile(r"CONFIDENCE:\s*(\d{1,3})")
 
 
+def _last(pattern: re.Pattern, text: str) -> re.Match | None:
+    matches = list(pattern.finditer(text))
+    return matches[-1] if matches else None
+
+
 def parse_answer(text: str) -> Answer:
     """Reads the reply. Anything unreadable becomes None and is counted as an error later,
     never silently guessed."""
-    m = _OUTCOME.search(text)
+    # The last match counts: a model that writes out its reasoning first may mention the
+    # format along the way, but its final lines are its answer.
+    m = _last(_OUTCOME, text)
     label = Label(m.group(1)) if m and m.group(1) in Label.__members__ else None
-    m = _CONFIDENCE.search(text)
+    m = _last(_CONFIDENCE, text)
     confidence = int(m.group(1)) if m and int(m.group(1)) <= 100 else None
     return Answer(label=label, confidence=confidence, raw=text)
 

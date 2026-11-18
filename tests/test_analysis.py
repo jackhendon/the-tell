@@ -1,6 +1,6 @@
 import numpy as np
 
-from the_tell.analysis import answer_given_scores, bootstrap, coverage_at_risk, within_type_auroc, is_wrong, output_signals, risk_coverage, supplier_folds
+from the_tell.analysis import answer_given_scores, bootstrap, cutoff_at_risk, coverage_at_risk, within_type_auroc, is_wrong, output_signals, risk_coverage, supplier_folds
 
 
 def _result(label, predicted, supplier="SUP-001", confidence=100, top_logprob=-1e-6):
@@ -83,3 +83,11 @@ def test_answer_given_learns_only_from_fit_invoices():
     fit = np.array([True, True, True, False])  # the last invoice is a test invoice
     s = answer_given_scores(rs, y, fit)
     assert list(s) == [0.5, 0.5, 0.0, 0.0]  # "APPROVE" was never wrong among the fit invoices
+
+
+def test_cutoff_is_the_highest_score_that_keeps_errors_in_bounds():
+    score = np.arange(10.0)
+    wrong = np.array([False] * 8 + [True, True])
+    assert cutoff_at_risk(score, wrong, 0.0) == 7.0
+    assert cutoff_at_risk(score, wrong, 0.2) == 9.0
+    assert cutoff_at_risk(score, np.ones(10, bool), 0.02) == -np.inf  # nothing can be automated
