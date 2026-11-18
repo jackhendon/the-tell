@@ -25,8 +25,8 @@ For a non-technical version of the results, see [REPORT.md](REPORT.md).
 
 ## The short version
 
-> Whether a model's confidence means anything depends on the model, so measure it before
-> you rely on it.
+> Claude Haiku 5.5's confidence was a useful warning sign of its mistakes, while Qwen3-4B's
+> told me nothing. Measure a model's confidence before you rely on it.
 
 I ran the same 2,000 synthetic invoices through two models: a small open model on my
 laptop, and Claude Haiku 5.5 through the API.
