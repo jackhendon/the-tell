@@ -192,27 +192,40 @@ def pilot(args, cases: list[Case], run_dir: Path) -> None:
     summarise(results, calls, batch=False, total_cases=len(cases))
 
 
+BATCH_SIZE = 2000  # requests per batch; one batch of all 10,000 was too big to upload reliably
+
+
 def submit(args, cases: list[Case], run_dir: Path) -> None:
+    """Sends the run as several batches. Each batch is recorded as soon as it's accepted,
+    so if an upload fails, running submit again sends only the batches still missing."""
     batch_file = run_dir / "batch.json"
-    if batch_file.exists():
-        raise SystemExit(f"A batch was already submitted for this run: {batch_file.read_text()}")
+    info = json.loads(batch_file.read_text()) if batch_file.exists() else {"thinking": args.thinking, "batches": []}
+    if info["thinking"] != args.thinking:
+        raise SystemExit(f"This run was started with thinking {info['thinking']}.")
     requests = [{"custom_id": custom_id(c.case_id, s), "params": request_params(c, args.thinking)} for c in cases for s in range(SAMPLES)]
-    batch = make_client().messages.batches.create(requests=requests)
-    batch_file.write_text(json.dumps({"id": batch.id, "requests": len(requests), "thinking": args.thinking, "submitted": time.strftime("%Y-%m-%d %H:%M:%S")}))
-    print(f"Submitted batch {batch.id} with {len(requests)} requests.")
+    chunks = [requests[i : i + BATCH_SIZE] for i in range(0, len(requests), BATCH_SIZE)]
+    client = make_client()
+    for n, chunk in enumerate(chunks):
+        if n < len(info["batches"]):
+            continue  # already submitted
+        batch = client.messages.batches.create(requests=chunk)
+        info["batches"].append({"id": batch.id, "requests": len(chunk), "submitted": time.strftime("%Y-%m-%d %H:%M:%S")})
+        batch_file.write_text(json.dumps(info, indent=2))
+        print(f"Submitted batch {n + 1}/{len(chunks)}: {batch.id} ({len(chunk)} requests)", flush=True)
 
 
 def collect(args, cases: list[Case], run_dir: Path) -> None:
     info = json.loads((run_dir / "batch.json").read_text())
     client = make_client()
-    batch = client.messages.batches.retrieve(info["id"])
-    print(f"Batch {batch.id}: {batch.processing_status}, counts {batch.request_counts}")
-    if batch.processing_status != "ended":
+    batches = [client.messages.batches.retrieve(b["id"]) for b in info["batches"]]
+    for b in batches:
+        print(f"Batch {b.id}: {b.processing_status}, counts {b.request_counts}")
+    if any(b.processing_status != "ended" for b in batches):
         return
     calls_path = run_dir / "calls.jsonl"
     done = read_calls(calls_path)
     failed = 0
-    for result in client.messages.batches.results(batch.id):
+    for result in (r for b in batches for r in client.messages.batches.results(b.id)):
         if result.custom_id in done:
             continue
         if result.result.type == "succeeded":

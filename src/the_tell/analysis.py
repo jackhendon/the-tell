@@ -241,18 +241,18 @@ def within_type_auroc(score: np.ndarray, y: np.ndarray, mask: np.ndarray, scenar
 BOOTSTRAP_REPS = 1000
 
 
-def bootstrap(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, scenarios: np.ndarray | None = None, seed: int = 0) -> dict:
-    """95% ranges for each signal's metrics, and for the probe's AUROC advantage over each
+def bootstrap(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, scenarios: np.ndarray | None = None, seed: int = 0, lead: str = "probe") -> dict:
+    """95% ranges for each signal's metrics, and for the lead signal's AUROC advantage over each
     other signal (paired: both measured on the same resample, which is much less noisy than
     comparing two separate ranges)."""
     rng = np.random.default_rng(seed)
     by_group = {g: np.nonzero(mask & (groups == g))[0] for g in np.unique(groups[mask])}
     keys = list(by_group)
     draws: dict[str, list] = {f"{n}.{m}": [] for n in scores for m in ["auroc", "cov2", "cov5"]}
-    draws.update({f"probe_minus.{n}": [] for n in scores if n != "probe"})
+    draws.update({f"lead_minus.{n}": [] for n in scores if n != lead})
     if scenarios is not None:
         draws.update({f"{n}.within": [] for n in scores})
-        draws.update({f"probe_minus_within.{n}": [] for n in scores if n != "probe"})
+        draws.update({f"lead_minus_within.{n}": [] for n in scores if n != lead})
     for _ in range(BOOTSTRAP_REPS):
         idx = np.concatenate([by_group[keys[i]] for i in rng.integers(0, len(keys), len(keys))])
         yb = y[idx]
@@ -265,22 +265,25 @@ def bootstrap(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, gr
             draws[f"{n}.cov2"].append(coverage_at_risk(s[idx], yb, 0.02))
             draws[f"{n}.cov5"].append(coverage_at_risk(s[idx], yb, 0.05))
         for n in scores:
-            if n != "probe":
-                draws[f"probe_minus.{n}"].append(aurocs["probe"] - aurocs[n])
+            if n != lead:
+                draws[f"lead_minus.{n}"].append(aurocs[lead] - aurocs[n])
         if scenarios is not None:
             within = {n: within_type_auroc(s[idx], yb, np.ones(len(idx), bool), scenarios[idx])["auroc"] for n, s in scores.items()}
-            if not np.isnan(within["probe"]):
+            if not np.isnan(within[lead]):
                 for n in scores:
                     draws[f"{n}.within"].append(within[n])
-                    if n != "probe":
-                        draws[f"probe_minus_within.{n}"].append(within["probe"] - within[n])
+                    if n != lead:
+                        draws[f"lead_minus_within.{n}"].append(within[lead] - within[n])
     return {k: [float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))] for k, v in draws.items() if v}
 
 
-def summarise(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, scenarios: np.ndarray, answers: np.ndarray) -> dict:
+def summarise(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, groups: np.ndarray, scenarios: np.ndarray, answers: np.ndarray, lead: str = "probe") -> dict:
+    """lead is the signal every other one is compared against: the probe for the local
+    model, and the best output-only signal for a model with no internals to read."""
     point = evaluate(scores, y, mask)
-    ci = bootstrap(scores, y, mask, groups, scenarios)
-    out = {"signals": {}, "probe_advantage_auroc": {}, "probe_advantage_within_type": {}}
+    ci = bootstrap(scores, y, mask, groups, scenarios, lead=lead)
+    adv, adv_w = f"{lead}_advantage_auroc", f"{lead}_advantage_within_type"
+    out = {"signals": {}, adv: {}, adv_w: {}}
     for n, m in point.items():
         out["signals"][n] = {
             "auroc": m["auroc"], "auroc_95": ci.get(f"{n}.auroc"),
@@ -292,10 +295,10 @@ def summarise(scores: dict[str, np.ndarray], y: np.ndarray, mask: np.ndarray, gr
             "within_answer": within_type_auroc(scores[n], y, mask, answers),
         }
     for n in point:
-        if n != "probe":
-            out["probe_advantage_auroc"][n] = {"diff": point["probe"]["auroc"] - point[n]["auroc"], "diff_95": ci.get(f"probe_minus.{n}")}
+        if n != lead:
+            out[adv][n] = {"diff": point[lead]["auroc"] - point[n]["auroc"], "diff_95": ci.get(f"lead_minus.{n}")}
             w = out["signals"]
-            out["probe_advantage_within_type"][n] = {"diff": w["probe"]["within_type"]["auroc"] - w[n]["within_type"]["auroc"], "diff_95": ci.get(f"probe_minus_within.{n}")}
+            out[adv_w][n] = {"diff": w[lead]["within_type"]["auroc"] - w[n]["within_type"]["auroc"], "diff_95": ci.get(f"lead_minus_within.{n}")}
     return out
 
 

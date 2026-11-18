@@ -59,7 +59,7 @@ def test_bootstrap_ranges_bracket_a_perfect_and_a_useless_signal():
     ci = bootstrap(scores, y, np.ones(800, bool), groups)
     assert ci["probe.auroc"][0] > 0.99
     assert ci["noise.auroc"][0] < 0.5 < ci["noise.auroc"][1]
-    assert ci["probe_minus.noise"][0] > 0.3
+    assert ci["lead_minus.noise"][0] > 0.3
 
 
 def test_more_certain_answers_get_lower_doubt():
