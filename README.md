@@ -183,7 +183,7 @@ This matters for the probe. Because the mistakes cluster so tightly, a signal ca
 good just by recognising the kind of invoice. Most of the extra tests below are there to
 separate that from anything deeper.
 
-### The model's own confidence is no use
+### Qwen's own confidence is no use
 
 - It was asked for a confidence from 0 to 100. It said 100 on 1,990 invoices, and 378 of
   those were wrong.
