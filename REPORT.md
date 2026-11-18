@@ -9,10 +9,13 @@ whether you can tell which ones, so a person checks those and the rest go straig
 through.
 
 I modelled the test around the accounts team at a small chain of cafes. I gave a small
-AI model 2,000 made-up supplier invoices, each with its purchase order, delivery note,
-any credit notes, and a written invoice policy.
+AI model 2,000 made-up supplier invoices. Each came with:
 
-For each one it had to approve or hold the invoice, give the reason, and say how
+- its purchase order and delivery note
+- any credit notes from the supplier
+- a written invoice policy
+
+For each one, the model had to approve or hold the invoice, give the reason, and say how
 confident it was. I knew the right answer for every invoice, because I built each one
 with a known problem, or none.
 
@@ -20,17 +23,20 @@ Then I tested different ways of predicting which of its answers would be wrong.
 
 ## What happened
 
-It got 388 of the 2,000 wrong, about 1 in 5. Those split three ways:
+It got 388 of the 2,000 wrong, about 1 in 5:
 
-- 221 invoices had a problem and it approved them anyway. These are the expensive ones,
-  because they get paid.
-- 154 invoices were fine and it held them. These cost clerk time, not money.
-- The other 13 it held, but for the wrong reason.
+- **221 bad invoices approved.** These are the expensive ones, because they get paid.
+- **154 good invoices held.** These cost clerk time.
+- **13 bad invoices held for the wrong reason.**
 
-Its mistakes were very repetitive. It mostly got VAT rates wrong, for example plain
-biscuits charged at 20% when they're zero-rated. It also held invoices over price rises
-that had already been agreed or were within tolerance, and treated a standing weekly
-order as a duplicate.
+Its mistakes were very repetitive. It mostly:
+
+- got VAT rates wrong, for example charging plain biscuits at 20% when they're zero-rated
+- held invoices over price rises that were agreed or within tolerance
+- treated a standing weekly order as a duplicate
+
+A typical example: a supplier put the price of tea up 1.6%. The policy allows 2%. The
+model held the invoice and said it was 100% sure.
 
 When the automated checks set a problem out plainly, such as a changed bank account or
 VAT that didn't add up, it caught every one.
@@ -49,14 +55,15 @@ Yes, with a catch. I trained a separate checker that looks inside the model whil
 works, and learns from past examples what it looks like when it's about to be wrong.
 
 Used as a filter, the checker would have let the model handle 1,228 of the 2,000
-invoices (61%) on its own. Of those, 24 were wrong, about 2 in 100. Only 14 were bad
-invoices that would have been paid.
+invoices (61%) on its own:
 
-The other 772 invoices would go to a person, and they include 207 of the 221 bad
-invoices the model approved.
+- 24 of those were wrong, about 2 in 100.
+- Only 14 were bad invoices that would have been paid.
+- The other 772 invoices would go to a person, and they include 207 of the 221 bad
+  invoices the model approved.
 
-That's a big improvement on the model's own confidence, which couldn't safely hand over
-any invoices at all.
+The model's own confidence couldn't safely hand over a single invoice, so that's a big
+step up.
 
 ## The catch
 
@@ -76,10 +83,10 @@ improvement, mainly on invoices held over price rises that were actually fine.
 
 1. Don't use an AI model's own confidence to decide what to automate. Here it was
    useless.
-2. Where a rule can be written down, put it in ordinary software rather than leaving it
-   to the AI. VAT rates by product and the price tolerance are both simple lookups. The
-   model got those wrong far more than anything else, and caught every problem the
-   automated checks had already spelled out.
+2. Where a rule can be written down, put it in ordinary software. VAT rates by product
+   and the price tolerance are both simple lookups. The model got those wrong far more
+   than anything else, and caught every problem the automated checks had already spelled
+   out.
 3. If you use a checker to decide what goes straight through, always send a random
    sample of the "safe" invoices to a person too. That's how you'd notice a new kind of
    mistake before it costs money.
@@ -89,9 +96,11 @@ improvement, mainly on invoices held over price rises that were actually fine.
 
 ## How far to trust this
 
-The invoices, suppliers and policy are all made up, and the model is a small one that
-runs on a laptop. A larger model would make fewer mistakes, and real invoices are
-messier.
+- The invoices, suppliers and policy are all made up.
+- The model is a small one that runs on a laptop. A larger model would make fewer
+  mistakes.
+- Real invoices are messier.
 
-The numbers show how these warning signs behave, not what you'd see on your own
-invoices. The next step is to run the same test on a larger commercial model (Claude).
+So treat the numbers as a guide to how these warning signs behave. Your own invoices
+would give different numbers. The next step is to run the same test on a larger
+commercial model (Claude).
