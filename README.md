@@ -25,6 +25,9 @@ For a non-technical version of the results, see [REPORT.md](REPORT.md).
 
 ## The short version
 
+> A model can't tell you when it's wrong, and a checker trained on its past mistakes only
+> catches the kinds of mistake it has already seen.
+
 I ran a small open model (Qwen3-4B-Instruct) over 2,000 synthetic invoices on my laptop,
 and saved its internal state just before it gave each answer.
 
@@ -45,9 +48,9 @@ answer the model is about to give.
 - Trained without any tax errors and then tested on them, it got them almost exactly
   backwards.
 
-> There is a tell. It's mostly the model's own decision showing through, plus the
-> pattern of mistakes the probe has already seen. A new kind of mistake gets straight
-> past it.
+So there is a tell. It's mostly the model's own decision showing through, plus the
+pattern of mistakes the probe has already seen. A new kind of mistake gets straight past
+it.
 
 ![Risk-coverage chart](results/qwen3-4b-full_risk_coverage_label.png)
 
