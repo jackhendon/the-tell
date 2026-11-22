@@ -23,6 +23,9 @@ model, and which need a person?
 
 For a non-technical version of the results, see [REPORT.md](REPORT.md).
 
+Built with [Claude Code](https://claude.com/claude-code). I set the question, made the
+calls along the way and checked the results. Claude wrote the code.
+
 ## The short version
 
 > Claude Haiku 5.5's confidence was a useful warning sign of its mistakes, while Qwen3-4B's
